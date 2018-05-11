@@ -77,13 +77,14 @@ Your Neuron Bot should already have proper SEMA installed. Please go to **TODO: 
         `sudo apt-get install gtkterm`
         * OBS
         * SSH server
+	`sudo apt-get install openssh-server`
   
 
 4. Set up SEMA soft link
 Change to any node that uses SEMA library, find the SEMA include library header location, and run the auto shell command file. 
     ```
     cd ${project_root}/lib
-        e.g.: cd ros2_ws/src/ros2/neuron_demo_gpio/lib
+        e.g.: cd catkin_ws/src/neuron_omnibot/neuron_demo_gpio/lib
     ./setlink.sh
     ```  
     Note: If you get some error like _`error: no such file as...`_, you'll need to make the setlink.sh executable by `chmod +x setlink.sh` after you've changed the command prompt to that directory.      
@@ -144,7 +145,7 @@ We use [teleop_twist_keyboard](http://wiki.ros.org/teleop_twist_keyboard) as our
     ```
     Now, use the "File -> Open Config" or `ctrl + o` to  open base  visualization settings located at `$(omni_base_driver)/rviz_config/omni_driver_laser.rviz`. One should note that despite it is easier to simply use the gui provided to open the rviz config file, it is possible to use command line by adding **absolute path**:
     ```
-     rviz -d "/home/ros/catkin_ws/src/omni_base_slam/rviz_config/omni_slam.rviz"
+     rviz -d "/home/ros/catkin_ws/src/neuron_omnibot/omni_base_slam/rviz_config/omni_slam.rviz"
      ```
 
 ### b)Laser Slam  
@@ -156,7 +157,7 @@ In this section, we'll build our map with our 2D laser scanner.
 3. Setup rviz correctly so we can see everything:
    you can open `($ omni_base_slam)/rviz_config/omni_slam.rviz` manually, or by running the following command:
    ```
-   rviz -d "/home/ros/catkin_ws/src/omni_base_slam/rviz_config/omni_slam.rviz"
+   rviz -d "/home/ros/catkin_ws/src/neuron_omnibot/omni_base_slam/rviz_config/omni_slam.rviz"
    ```
 4. Let's start the laser localization and mapping procedure with [gmapping](http://wiki.ros.org/gmapping) by the following command:
     ```
@@ -170,7 +171,8 @@ In this section, we'll build our map with our 2D laser scanner.
     A map file(.x)  and a config file (.xxx) will be saved under your user home `~/`, make sure to move both of these files to `($ omni_base_slam)/map/`
 7. Stop the gmapping by `ctrl + c` on the gmapping terminal (terminal of the step.4).
 
-### c)Robot Localization
+### c)Robot Localization  
+After we acquired a static map, it is often that we do not run a SLAM package all the time due to its comutational load. In this step, we'll uses the the AMCL package to help us find the robot's location given previously generated map and current laser scan.
 <p align="center"><img src="doc/screenshots/localize.jpg?raw=true" height="350"></p>  
 <p align="center"><img src="doc/ROS%20graphs/nodegraph_localize.svg" height="150"><img src="doc/ROS%20graphs/frames_localize.svg" height="150"></p>
 
@@ -179,10 +181,10 @@ In this section, we'll build our map with our 2D laser scanner.
 2. Setup rviz correctly so we can see everything:
    you can open `($ omni_base_nav)/rviz_config/omni_amcl.rviz` with rviz gui, or by running the following command:
        ```
-     rviz -d "/home/ros/catkin_ws/src/omni_base_nav/rviz_config/omni_amcl.rviz"
+     rviz -d "/home/ros/catkin_ws/src/neuron_omnibot/omni_base_nav/rviz_config/omni_amcl.rviz"
      ```
-3. Put the map file and its config file to `($ omni_base_slam)/map/` as stated in the previous section. Modify line x of `($ omni_base_nav)/omni_lxxxxx.launch`  to reflect the correct file name.
-3. Now, we'll start our localization package [amcl](http://wiki.ros.org/amcl) with our pre-define settings:
+3. Put the map file and its config file to `($ omni_base_slam)/map/` as stated in the previous section. Modify line 4 of `($ omni_base_nav)/omni_localize.launch`,, the `args=` tags in the map server, to reflect the correct file name.
+3. Now, we'll start our localization package [amcl](http://wiki.ros.org/amcl) with our costumized settings:
     ```
     roslaunch omni_base_nav omni_localize.launch
     ```
@@ -200,6 +202,7 @@ In this section, we'll build our map with our 2D laser scanner.
 
 
 ### d)Navigation  
+With OmniBot localized, we can now do our planning. In this demonstratino, we utilize the [move base](http://wiki.ros.org/move_base) structure in the ROS [navigation stack](http://wiki.ros.org/navigation). This is a very textbook and complete structure of such system.
 <p align="center"><img src="doc/screenshots/nav.jpg?raw=true" height="350"></p>  
 <p align="center"><img src="doc/ROS%20graphs/nodegraph_nav.svg" height="150"><img src="doc/ROS%20graphs/frames_nav.svg" height="150"></p>  
   
@@ -217,6 +220,39 @@ In this section, we'll build our map with our 2D laser scanner.
 The background gray map is the global map, while the colorful blue-pink-red one is the 1.5x1.5 meter local map. The global path is drawn in cyan while the local planner is draw in blue. Different local planner will have different representation.
 
 # Multiple Machines
+Typically, it is not so convenient to have your mouse, keyboard and monitor connect to the robot while the robot move around. Fortunately, ROS is constructed in such a way that running the same ROS across multiple machines is very easy. In fact, there is a [simple official tutorial](http://wiki.ros.org/ROS/Tutorials/MultipleMachines) about it.  
+The physical Networking can be easily achieved (and expanded) with a single wifi router as shown below:
+<p align="center"><img src="doc/TwoMachines.jpg?raw=true" height="200"></p>  
+
+1. First, findout the OmniBot's IP address. This can be done with linux command `ifconfg`.
+2. setup environmental variable. We'll add the variable to the hidden file "**.bashrc**". You can `ctrl+h` to show hidden file, and edit the "**.bashrc**" manually or by following command:
+    ```
+    echo 'export ROS_IP=YOUR_OMNIBOT_IP' >> ~/.bashrc
+    echo 'export ROS_MASTER_URI=http://$ROS_IP:11311' >> ~/.bashrc
+    ```
+    This step should be done on both station and the OmniBot.  
+3. Since we don't have monitor nor keyboard connected, everything will be executed remotely. First, Let's make sure our machines can reach each other by
+    ```
+    ping NeuronBot.local
+    # or
+    ping YOUR_OMNIBOT_IP
+    ```
+4. We'll setup the SSH connection. (In case you don't have that on the OmniBot, do that now as this [previous section](#software-setup) has said). This can be easily done by:
+    ```
+    ssh NeuronBot.local
+    # or
+    ssh YOUR_OMNIBOT_IP
+    ```
+
+5. At the OmniBot SSH connection, start byobu so we can have multiple terminal in a single SSH connection
+    ```
+    byobu
+    ```
+    now, you can add new terminal with `F2`, switch between terminals with `F3` and `F4`, exit with command `exit`
+6. Run omniBot nodes on the Omni Bot through SSH terminal. 
+7. RVIZ and all the other things on the station machine
+8. Play and fun!
+
 
 # Useful tricks
 ### Linux/Ubuntu terminal
