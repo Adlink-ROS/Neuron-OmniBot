@@ -29,18 +29,27 @@ You'll need the ADLINK SEMA library and a compatible motherboard to run this exa
 5. Wires properly connected (see [hardware setup section](#hardware-setup) below)
 
 ## Installing
-### hardware setup 
+### a) hardware setup 
+Connect all the wire properly according to this diagram: (click to download raw)
 <p align="center"><img src="doc/OmniBot%20wiring.jpg" width="500"></p>  
 
-1. <abbr title="Vehicle Dynamic and Motor Controller">VDMC</abbr>
-2. Laser scanner (for YDLidar)
-3. SEMA GPIOs
+1. <abbr title="Vehicle Dynamic and Motor Controller">VDMC</abbr> <sup>[manual](#reference)</sup>
+    1. connect 12V power from Neuron PSU
+    2. Connect UART port to MAX232 or any equivilant UART-RS232 bridge chip (**NOTE: some manufacture may have their RX/TX label reversed**)
+    3. connect to Neuron serial port 2
+2. Laser scanner (ex. YDLidar)
+    1. USB wire
+    2. 5v power (from SEMA feature connector SB5V is recommand)
+3. SEMA peripherals (collision detection, state indication LEDs)
+    * LEDs: positive to GPIO, Negative to GND
+    * switches: across GPIO and GND
 4. Other recommandations
     * It is recommanded to have your robot's sharp edges wraped
     * DO NOT obstruct the view of laser scanner
     * Your two wifi antennas should be pointing perpendicular(i.e. 90 degrees) to each other
+    * ALWAYS put on your balance lead monitor if your using Li-Po batteries
 
-### software setup
+### b) software setup
 1. Install ADLINK SEMA
 Your Neuron Bot should already have proper SEMA installed. Please go to **TODO: EMPTY PROJECT** if you have any questions.
 
@@ -100,12 +109,12 @@ Now, we'll use the Catkin, the ROS build management tool to build our nodes. We'
 ## Run the demo
 The Neuron Omnibot demo can be divided into four part:
 * [Omnibot IO](#omnibot-driver): motor controller, laser scanner, LED indecators, and servos
-* [SLAM](#laser-slam): simultaneous localization and mapping
-* [Localization](#robot-localization): after we build our 2D map
-* [Move!](#navigation): Obstacle detecting, planning, trajectory generation, and vehicle control  
+* [SLAM](#blaser-slam): simultaneous localization and mapping
+* [Localization](#crobot-localization): after we build our 2D map
+* [Move!](#dnavigation): Obstacle detecting, planning, trajectory generation, and vehicle control  
 
 Each of the above function is wraped as a single ROS launch file for user's easy execution. We'll have a step-by-step tutorial below. For each launch file, we'll open a new terminal. You can do that by pressing _`ctrl + alt + t`_  
-### OmniBot driver  
+### a)OmniBot driver  
 In this section, we'll start our ROS omnibot driver. The driver includes all the IO and sensory device including motor controller, encoder odometry, laser scanner, and IMU state estimation.
 <p align="center"><img src="doc/ROS%20graphs/nodegraph_omni_base_driver.svg" height="200"><img src="doc/ROS%20graphs/frames_omni_base_driver.svg" height="200"></p>
 
@@ -136,7 +145,7 @@ We use [teleop_twist_keyboard](http://wiki.ros.org/teleop_twist_keyboard) as our
      rviz -d "/home/ros/catkin_ws/src/omni_base_slam/rviz_config/omni_slam.rviz"
      ```
 
-### Laser Slam  
+### b)Laser Slam  
 In this section, we'll build our map with our 2D laser scanner. 
 <p align="center"><img src="doc/ROS%20graphs/nodegraph_omni_slam.svg" height="200"><img src="doc/ROS%20graphs/frames_omni_slam.svg" height="200"></p>
  
@@ -158,7 +167,7 @@ In this section, we'll build our map with our 2D laser scanner.
     A map file(.x)  and a config file (.xxx) will be saved under your user home `~/`, make sure to move both of these files to `($ omni_base_slam)/map/`
 7. Stop the gmapping by `ctrl + c` on the gmapping terminal (terminal of the step.4).
 
-### Robot Localization
+### c)Robot Localization
 <p align="center"><img src="doc/ROS%20graphs/nodegraph_localize.svg" height="200"><img src="doc/ROS%20graphs/frames_localize.svg" height="200"></p>
 
 
@@ -185,7 +194,7 @@ In this section, we'll build our map with our 2D laser scanner.
     ```
 
 
-### Navigation  
+### d)Navigation  
 <p align="center"><img src="doc/ROS%20graphs/nodegraph_nav.svg" height="200"><img src="doc/ROS%20graphs/frames_nav.svg" height="200"></p>  
   
 1. [base driver](#omni-bot-driver) is started
@@ -217,7 +226,7 @@ The background gray map is the global map, while the colorful blue-pink-red one 
 
 # More Info
 ## Reference
-[Neuron VDMC Communication and operation manual](doc/OmniBot%20VDMC%20Manual.pdf)
+[Neuron VDMC Communication and operation manual](doc/Neuron%20OmniBot%20VDMC%20Manual.pdf)
 ## Notice
 1. This application **MUST** be running under **SUDO -E** since the SEMA driver need both root privilege and the user-exported variables.
 
