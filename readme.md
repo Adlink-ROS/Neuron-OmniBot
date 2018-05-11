@@ -116,7 +116,7 @@ The Neuron Omnibot demo can be divided into four part:
 Each of the above function is wraped as a single ROS launch file for user's easy execution. We'll have a step-by-step tutorial below. For each launch file, we'll open a new terminal. You can do that by pressing _`ctrl + alt + t`_  
 ### a)OmniBot driver  
 In this section, we'll start our ROS omnibot driver. The driver includes all the IO and sensory device including motor controller, encoder odometry, laser scanner, and IMU state estimation.
-<p align="center"><img src="doc/ROS%20graphs/nodegraph_omni_base_driver.svg?raw=true" height="200"><img src="doc/ROS%20graphs/frames_omni_base_driver.svg?raw=true" height="200"></p>
+<p align="center"><img src="doc/ROS%20graphs/nodegraph_omni_base_driver.svg" height="200"><img src="doc/ROS%20graphs/frames_omni_base_driver.svg" height="200"></p>
 
 1. roscore  
 roscore is the core of the ROS as its name suggest. We encourage you to manually start the core on a seperate window because it gives user the power and responsibility to control everything.
@@ -147,7 +147,7 @@ We use [teleop_twist_keyboard](http://wiki.ros.org/teleop_twist_keyboard) as our
 
 ### b)Laser Slam  
 In this section, we'll build our map with our 2D laser scanner. 
-<p align="center"><img src="doc/ROS%20graphs/nodegraph_omni_slam.svg?raw=true" height="200"><img src="doc/ROS%20graphs/frames_omni_slam.svg?raw=true" height="200"></p>
+<p align="center"><img src="doc/ROS%20graphs/nodegraph_omni_slam.svg" height="200"><img src="doc/ROS%20graphs/frames_omni_slam.svg" height="200"></p>
  
 1. Make sure you have everything in the [base driver](#omni-bot-driver)  launched. This includes all the robot TF, motor driver, and laser scanner. 
 3. Setup rviz correctly so we can see everything:
@@ -168,7 +168,7 @@ In this section, we'll build our map with our 2D laser scanner.
 7. Stop the gmapping by `ctrl + c` on the gmapping terminal (terminal of the step.4).
 
 ### c)Robot Localization
-<p align="center"><img src="doc/ROS%20graphs/nodegraph_localize.svg?raw=true" height="200"><img src="doc/ROS%20graphs/frames_localize.svg?raw=true" height="200"></p>
+<p align="center"><img src="doc/ROS%20graphs/nodegraph_localize.svg" height="200"><img src="doc/ROS%20graphs/frames_localize.svg" height="200"></p>
 
 
 1.  Make sure you have everything in the [base driver](#omni-bot-driver)  launched. This includes all the robot TF, motor driver, and laser scanner. 
@@ -195,7 +195,7 @@ In this section, we'll build our map with our 2D laser scanner.
 
 
 ### d)Navigation  
-<p align="center"><img src="doc/ROS%20graphs/nodegraph_nav.svg?raw=true" height="200"><img src="doc/ROS%20graphs/frames_nav.svg?raw=true" height="200"></p>  
+<p align="center"><img src="doc/ROS%20graphs/nodegraph_nav.svg" height="200"><img src="doc/ROS%20graphs/frames_nav.svg" height="200"></p>  
   
 1. [base driver](#omni-bot-driver) is started
 2. [localization](#robot-loclization) is initilized
@@ -247,5 +247,3 @@ This project is licensed under the Apache License, Version 2.0
 - [x] task list 1
 - [ ] task list 3
     - [ ] task list 3-1
-- [ ] ask list 4
-    - [ ] ask list 4-1
