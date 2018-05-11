@@ -1,10 +1,12 @@
 ﻿# Neuron Omni Bot
-This is a demo package of Neuron Omni Bot's autonomous and fast integration capability using ROS
+This is a demo package of Neuron Omni Bot's autonomous and fast integration capability using ROS  
+<p align="center"><img src="doc/Neuron%20OmniBot.jpg" width="500"></p>
+
 ### Features
 - Fully integration between SEMA library and ROS2
-- Three omni-directional poly wheels with **TODO**watts electrical motor on each wheel
+- Three omni-directional poly wheels with a 12V 4.32 watt DC motor on each wheel
 - Quadrature hall effect encoder provide 390 pulses (1560 count) per wheel revolution
-- Fully customized moving controller and motor driver using STM32F103 chip
+- Fully customized <abbr title="Vehicle Dynamic and Motor Controller">VDMC</abbr> using STM32F103 chip
 - Fully customized ROS motor driver node that utilize standard ROS convension
 - MPU6050 6-axis IMU and it's corresponding ROS publisher with standard ROS state estimator
 - Easy to use ROS launch file with maximum custimization capabilities
@@ -17,22 +19,24 @@ These instructions will get you a copy of this demo and running on your local ma
 ## Prerequisites
 1. Neuron hardware and SEMA library  
 You'll need the ADLINK SEMA library and a compatible motherboard to run this example. You can conatct **TODO: SOMEONE** for more information.
-2. **TODO** Download the source of this project to your ROS2 workspace  
+2. Download the source of this project to your ROS (catkin) workspace  
     ```
     cd catkin_ws/src
-    git clone https://github.com/EwingKang/neuron_demo_gpio.git
+    git clone https://github.com/EwingKang/Neuron-OmniBot.git neuron_omnibot
     ```  
-3. Some electronics hardware: **TODO** 4 LEDs, 2 switches(one tactile, one contact)
+3. Some electronics hardware: 3 LEDs, 3 contact switches, 1 tactile(push) switch
 4. Laser scanner with its corresponding ROS node properly installed.
-5. Wires properly connected (see **TODO some section** below)
+5. Wires properly connected (see [hardware setup section](#hardware-setup) below)
 
 ## Installing
 ### hardware setup 
-1. STM32 3-Motor driver
+<p align="center"><img src="doc/OmniBot%20wiring.jpg" width="500"></p>  
+
+1. <abbr title="Vehicle Dynamic and Motor Controller">VDMC</abbr>
 2. Laser scanner (for YDLidar)
 3. SEMA GPIOs
 4. Other recommandations
-    *  It is recommanded you have your robot's sharp edges wraped
+    * It is recommanded to have your robot's sharp edges wraped
     * DO NOT obstruct the view of laser scanner
     * Your two wifi antennas should be pointing perpendicular(i.e. 90 degrees) to each other
 
@@ -100,10 +104,11 @@ The Neuron Omnibot demo can be divided into four part:
 * [Localization](#robot-localization): after we build our 2D map
 * [Move!](#navigation): Obstacle detecting, planning, trajectory generation, and vehicle control  
 
-Each of the above function is wraped as a single ROS launch file for user's easy execution. We'll have a step-by-step tutorial below. For each launch file, we'll open a new terminal. You can do that by pressing _`ctrl + alt + t`  
-### OmniBot driver
+Each of the above function is wraped as a single ROS launch file for user's easy execution. We'll have a step-by-step tutorial below. For each launch file, we'll open a new terminal. You can do that by pressing _`ctrl + alt + t`_  
+### OmniBot driver  
 In this section, we'll start our ROS omnibot driver. The driver includes all the IO and sensory device including motor controller, encoder odometry, laser scanner, and IMU state estimation.
-![](graphwith links) 
+<p align="center"><img src="doc/ROS%20graphs/nodegraph_omni_base_driver.svg" height="200"><img src="doc/ROS%20graphs/frames_omni_base_driver.svg" height="200"></p>
+
 1. roscore  
 roscore is the core of the ROS as its name suggest. We encourage you to manually start the core on a seperate window because it gives user the power and responsibility to control everything.
     ```
@@ -133,7 +138,7 @@ We use [teleop_twist_keyboard](http://wiki.ros.org/teleop_twist_keyboard) as our
 
 ### Laser Slam  
 In this section, we'll build our map with our 2D laser scanner. 
-![](graphwith links)
+<p align="center"><img src="doc/ROS%20graphs/nodegraph_omni_slam.svg" height="200"><img src="doc/ROS%20graphs/frames_omni_slam.svg" height="200"></p>
  
 1. Make sure you have everything in the [base driver](#omni-bot-driver)  launched. This includes all the robot TF, motor driver, and laser scanner. 
 3. Setup rviz correctly so we can see everything:
@@ -154,8 +159,8 @@ In this section, we'll build our map with our 2D laser scanner.
 7. Stop the gmapping by `ctrl + c` on the gmapping terminal (terminal of the step.4).
 
 ### Robot Localization
+<p align="center"><img src="doc/ROS%20graphs/nodegraph_localize.svg" height="200"><img src="doc/ROS%20graphs/frames_localize.svg" height="200"></p>
 
-![](graphwith links) 
 
 1.  Make sure you have everything in the [base driver](#omni-bot-driver)  launched. This includes all the robot TF, motor driver, and laser scanner. 
 2. Setup rviz correctly so we can see everything:
@@ -180,8 +185,9 @@ In this section, we'll build our map with our 2D laser scanner.
     ```
 
 
-### Path Finding
-![](graphwith links) 
+### Navigation  
+<p align="center"><img src="doc/ROS%20graphs/nodegraph_nav.svg" height="200"><img src="doc/ROS%20graphs/frames_nav.svg" height="200"></p>  
+  
 1. [base driver](#omni-bot-driver) is started
 2. [localization](#robot-loclization) is initilized
 3. RVIZ is set to `($ omni_base_nav)/rviz_config/omni_nav.rviz`
@@ -209,293 +215,28 @@ The background gray map is the global map, while the colorful blue-pink-red one 
     * `rostopic echo /SOME_TOPIC` to print the topic directly.
 * `rosservice`  : ROS service server functions
 
-### TBDDBTTBDDBT What should happened?
-Besides the information you see on each terminal, proper ROS2 topic is published. 
-* **neuron_demo_gpio** node  
-Subscribes to topic _neuron_gpio_cmd_ from _talker_  
-Publishes topic _neuron_gpio_data_ of type _std_msgs::String_  
-* **neuron_omni_io** node  
-Subscribes to topic _neuron_gpio_cmd_ from _talker_  
-Controls the LEDs and read from switches  
-**INSERT NODE GRAPH HERE**
-
-
-# Code explained
-**TBD**
-**ANY** kind of std_msgs data from **TOPIC_CMD** will trigger the node to
-publish the next hardware monitor data to **TOPOC_DATA** topic.
-**1.** The setting of **TOPIC_CMD** and **TOPIC_DATA** can be found in ***reuronHwmNode.hpp***
-
-
-
 # More Info
+## Reference
+[Neuron VDMC Communication and operation manual](doc/OmniBot%20VDMC%20Manual.pdf)
 ## Notice
 1. This application **MUST** be running under **SUDO -E** since the SEMA driver need both root privilege and the user-exported variables.
 
-
 ## Version
-0.1.0
+0.3.0
 
 ## Authors
-* **Alan Chen** - *Initial library* - (alan.chen@adlinktech.com)
-* **Ewing Kang** - *Demo implementation* - (https://github.com/EwingKang)
+* **Ewing Kang** - *VDMC algorithm developer/ ROS implementation* - (https://github.com/EwingKang)
+* **Alan Chen** - *SEMA library example* - (alan.chen@adlinktech.com)
 
 ## License
 This project is licensed under the Apache License, Version 2.0
 
 ## Acknowledgments
 
-## Running the tests
-
-
-  
-========================================================    ========================================================    ========================================================    ========================================================    ========================================================    ========================================================    ========================================================    ========================================================    ========================================================    ========================================================    ========================================================    ========================================================    
-    
-
-
-
-
-![](https://pandao.github.io/editor.md/images/logos/editormd-logo-180x180.png)
-
-![](https://img.shields.io/github/stars/pandao/editor.md.svg) ![](https://img.shields.io/github/forks/pandao/editor.md.svg) ![](https://img.shields.io/github/tag/pandao/editor.md.svg) ![](https://img.shields.io/github/release/pandao/editor.md.svg) ![](https://img.shields.io/github/issues/pandao/editor.md.svg) ![](https://img.shields.io/bower/v/editor.md.svg)
-
-
-**Table of Contents**
-
-[TOCM]
-
-[TOC]
-
-#H1 header
-######H6 header
-#Heading 1 link [Heading link](https://github.com/pandao/editor.md "Heading link")
-######Heading 6 link [Heading link](https://github.com/pandao/editor.md "Heading link")
-
-##Headers (Underline)
-
-H1 Header (Underline)
-=============
-
-H2 Header (Underline)
--------------
-
-###Characters
-                
-----
-
-~~Strikethrough~~ <s>Strikethrough (when enable html tag decode.)</s>
-*Italic*      _Italic_
-**Emphasis**  __Emphasis__
-***Emphasis Italic*** ___Emphasis Italic___
-
-Superscript: X<sub>2</sub>，Subscript: O<sup>2</sup>
-
-**Abbreviation(link HTML abbr tag)**
-
-The <abbr title="Hyper Text Markup Language">HTML</abbr> specification is maintained by the <abbr title="World Wide Web Consortium">W3C</abbr>.
-
-###Blockquotes
-
-> Blockquotes
-
-Paragraphs and Line Breaks
-                    
-> "Blockquotes Blockquotes", [Link](http://localhost/)。
-
-###Links
-
-[Links](http://localhost/)
-
-[Links with title](http://localhost/ "link title")
-
-`<link>` : <https://github.com>
-
-[Reference link][id/name] 
-
-[id/name]: http://link-url/
-
-GFM a-tail link @pandao
-
-###Code Blocks (multi-language) & highlighting
-
-####Inline code
-
-`$ npm install marked`
-
-####Code Blocks (Indented style)
-
-Indented 4 spaces, like `<pre>` (Preformatted Text).
-
-    <?php
-        echo "Hello world!";
-    ?>
-    
-Code Blocks (Preformatted text):
-
-    | First Header  | Second Header |
-    | ------------- | ------------- |
-    | Content Cell  | Content Cell  |
-    | Content Cell  | Content Cell  |
-
-####Javascript　
-
-```javascript
-function test(){
-			return this;
-		},
-    window.box =box;
-})();
-
-var testBox = box();
-testBox.add("jQuery").remove("jQuery");
-```
-
-####HTML code
-
-```html
-<!DOCTYPE html>
-<html>
-    <head>
-        <h1>Hello world!</h1>
-    </body>
-</html>
-----
-
-###Lists
-
-####Unordered list (-)
-
-- Item A
-- Item B
-- Item C
-     
-####Unordered list (*)
-
-* Item A
-* Item B
-* Item C
-
-####Unordered list (plus sign and nested)
-                
-+ Item A
-+ Item B
-    + Item B 1
-    + Item B 2
-    + Item B 3
-+ Item C
-    * Item C 1
-    * Item C 2
-    * Item C 3
-
-####Ordered list
-                
-1. Item A
-2. Item B
-3. Item C
-                
-----
-                    
-###Tables
-                    
-First Header  | Second Header
-------------- | -------------
-Content Cell  | Content Cell
-Content Cell  | Content Cell 
-
-| First Header  | Second Header |
-| ------------- | ------------- |
-| Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  |
-
-| Function name | Description                    |
-| ------------- | ------------------------------ |
-| `help()`      | Display the help window.       |
-| `destroy()`   | **Destroy your computer!**     |
-
-| Item      | Value |
-| --------- | -----:|
-| Computer  | $1600 |
-| Phone     |   $12 |
-| Pipe      |    $1 |
-
-| Left-Aligned  | Center Aligned  | Right Aligned |
-| :------------ |:---------------:| -----:|
-| col 3 is      | some wordy text | $1600 |
-| col 2 is      | centered        |   $12 |
-| zebra stripes | are neat        |    $1 |
-                
-----
-
-####HTML entities
-
-&copy; &  &uml; &trade; &iexcl; &pound;
-&amp; &lt; &gt; &yen; &euro; &reg; &plusmn; &para; &sect; &brvbar; &macr; &laquo; &middot; 
-
-X&sup2; Y&sup3; &frac34; &frac14;  &times;  &divide;   &raquo;
-
-18&ordm;C  &quot;  &apos;
-
-##Escaping for Special Characters
-
-\*literal asterisks\*
-
-##Markdown extras
-
-###GFM task list
-
-- [x] GFM task list 1
-- [x] GFM task list 2
-- [ ] GFM task list 3
-    - [ ] GFM task list 3-1
-    - [ ] GFM task list 3-2
-    - [ ] GFM task list 3-3
-- [ ] GFM task list 4
-    - [ ] GFM task list 4-1
-    - [ ] GFM task list 4-2
-
-###Emoji mixed :smiley:
-
-> Blockquotes :star:
-
-####GFM task lists & Emoji & fontAwesome icon emoji & editormd logo emoji :editormd-logo-5x:
-
-- [x] :smiley: @mentions, :smiley: #refs, [links](), **formatting**, and <del>tags</del> supported :editormd-logo:;
-- [x] list syntax required (any unordered or ordered list supported) :editormd-logo-3x:;
-- [x] [ ] :smiley: this is a complete item :smiley:;
-- [ ] []this is an incomplete item [test link](#) :fa-star: @pandao; 
-- [ ] [ ]this is an incomplete item :fa-star: :fa-gear:;
-    - [ ] :smiley: this is an incomplete item [test link](#) :fa-star: :fa-gear:;
-    - [ ] :smiley: this is  :fa-star: :fa-gear: an incomplete item [test link](#);
-            
-###TeX(LaTeX)
-   
-$$E=mc^2$$
-
-Inline $$E=mc^2$$ Inline，Inline $$E=mc^2$$ Inline。
-
-$$\(\sqrt{3x-1}+(1+x)^2\)$$
-                    
-$$\sin(\alpha)^{\theta}=\sum_{i=0}^{n}(x^i + \cos(f))$$
-                
-###FlowChart
-
-```flow
-st=>start: Login
-op=>operation: Login operation
-cond=>condition: Successful Yes or No?
-e=>end: To admin
-
-st->op->cond
-cond(yes)->e
-cond(no)->op
-```
-
-###Sequence Diagram
-                    
-```seq
-Andrew->China: Says Hello 
-Note right of China: China thinks\nabout it 
-China-->Andrew: How are you? 
-Andrew->>China: I am good thanks!
-```
-
+## future implementation
+
+- [x] task list 1
+- [ ] task list 3
+    - [ ] task list 3-1
+- [ ] ask list 4
+    - [ ] ask list 4-1
