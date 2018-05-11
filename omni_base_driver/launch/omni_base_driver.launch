@@ -1,0 +1,38 @@
+<launch>
+  <arg name="imu_frame" value="base_imu"/>
+  
+  <node name="omni_base_driver"  pkg="omni_base_driver"  type="omni_base_driver.py" output="screen">
+      
+    <!-- serial config -->
+    <param name="port"             type="string" value="/dev/ttyS2"/>  
+    <param name="baudrate"         type="int"    value="115200"/>
+    <param name="serial_timeout"   type="double"    value="10"/>
+
+    <!-- topic names -->
+    <param name="cmd_vel"  type="string"   value="cmd_vel"/>
+    <param name="odom_topic"  type="string"   value="odom"/>
+    <param name="imu_topic"    type="string" value="imu" />
+    
+    <!-- tf id -->
+    <param name="base_id"    type="string" value="base_link" />
+    <param name="odom_id"    type="string" value="odom" />
+    <param name="imu_id"    type="string" value="$(arg imu_frame)" />
+    <param name="enable_tf" type="bool" value="true" />
+    
+    <!-- frequencies -->
+    <param name="odom_freq" type="double" value="30" />
+    <param name="imu_freq" type="double" value="120" />
+    <param name="tx_freq" type="double" value="5" />
+    
+    <!-- control config -->
+    <param name="vel_gain" type="double" value="70" />
+    <param name="omg_gain" type="double" value="500" />
+    
+    <param name="cmd_vel_timeout" type="double" value="10" />
+
+  </node>
+  
+  <node pkg="tf" type="static_transform_publisher" name="base_link_to_imu"
+  args="-0.01 -0.06 -0.10 -2.0944 0.0  0.0 /base_link /$(arg imu_frame) 100" />
+  
+</launch>

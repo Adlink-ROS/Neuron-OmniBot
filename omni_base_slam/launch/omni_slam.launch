@@ -1,0 +1,9 @@
+<launch>
+    
+	<include file="$(find omni_base_driver)/launch/omni_base_driver.launch"/>
+	<include file="$(find ydlidar)/launch/omni_laser.launch"/>
+	<include file="$(find omni_base_slam)/launch/omni_gmapping.launch"/>
+	
+	<node name="rviz"  pkg="rviz"  type="rviz" output="screen" args="-d $(find omni_base_slam)/rviz_config/omni_slam.rviz"/>
+	
+</launch>
