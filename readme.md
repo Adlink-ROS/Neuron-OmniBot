@@ -1,6 +1,6 @@
 ﻿# Neuron Omni Bot
 This is a demo package of Neuron Omni Bot's autonomous and fast integration capability using ROS  
-<p align="center"><img src="doc/Neuron%20OmniBot.jpg" width="500"></p>
+<p align="center"><img src="doc/Neuron%20OmniBot.jpg?raw=true" width="500"></p>
 
 ### Features
 - Fully integration between SEMA library and ROS2
@@ -30,8 +30,8 @@ You'll need the ADLINK SEMA library and a compatible motherboard to run this exa
 
 ## Installing
 ### a) hardware setup 
-Connect all the wire properly according to this diagram: (click to download raw)
-<p align="center"><img src="doc/OmniBot%20wiring.jpg" width="500"></p>  
+Connect all the wire properly according to this diagram: ([click to download](doc/OmniBot%20wiring.jpg?raw=true))
+<p align="center"><img src="doc/OmniBot%20wiring.jpg?raw=true" width="500"></p>  
 
 1. <abbr title="Vehicle Dynamic and Motor Controller">VDMC</abbr> <sup>[manual](#reference)</sup>
     1. connect 12V power from Neuron PSU
@@ -116,7 +116,7 @@ The Neuron Omnibot demo can be divided into four part:
 Each of the above function is wraped as a single ROS launch file for user's easy execution. We'll have a step-by-step tutorial below. For each launch file, we'll open a new terminal. You can do that by pressing _`ctrl + alt + t`_  
 ### a)OmniBot driver  
 In this section, we'll start our ROS omnibot driver. The driver includes all the IO and sensory device including motor controller, encoder odometry, laser scanner, and IMU state estimation.
-<p align="center"><img src="doc/ROS%20graphs/nodegraph_omni_base_driver.svg" height="200"><img src="doc/ROS%20graphs/frames_omni_base_driver.svg" height="200"></p>
+<p align="center"><img src="doc/ROS%20graphs/nodegraph_omni_base_driver.svg?raw=true" height="200"><img src="doc/ROS%20graphs/frames_omni_base_driver.svg?raw=true" height="200"></p>
 
 1. roscore  
 roscore is the core of the ROS as its name suggest. We encourage you to manually start the core on a seperate window because it gives user the power and responsibility to control everything.
@@ -147,7 +147,7 @@ We use [teleop_twist_keyboard](http://wiki.ros.org/teleop_twist_keyboard) as our
 
 ### b)Laser Slam  
 In this section, we'll build our map with our 2D laser scanner. 
-<p align="center"><img src="doc/ROS%20graphs/nodegraph_omni_slam.svg" height="200"><img src="doc/ROS%20graphs/frames_omni_slam.svg" height="200"></p>
+<p align="center"><img src="doc/ROS%20graphs/nodegraph_omni_slam.svg?raw=true" height="200"><img src="doc/ROS%20graphs/frames_omni_slam.svg?raw=true" height="200"></p>
  
 1. Make sure you have everything in the [base driver](#omni-bot-driver)  launched. This includes all the robot TF, motor driver, and laser scanner. 
 3. Setup rviz correctly so we can see everything:
@@ -168,7 +168,7 @@ In this section, we'll build our map with our 2D laser scanner.
 7. Stop the gmapping by `ctrl + c` on the gmapping terminal (terminal of the step.4).
 
 ### c)Robot Localization
-<p align="center"><img src="doc/ROS%20graphs/nodegraph_localize.svg" height="200"><img src="doc/ROS%20graphs/frames_localize.svg" height="200"></p>
+<p align="center"><img src="doc/ROS%20graphs/nodegraph_localize.svg?raw=true" height="200"><img src="doc/ROS%20graphs/frames_localize.svg?raw=true" height="200"></p>
 
 
 1.  Make sure you have everything in the [base driver](#omni-bot-driver)  launched. This includes all the robot TF, motor driver, and laser scanner. 
@@ -195,7 +195,7 @@ In this section, we'll build our map with our 2D laser scanner.
 
 
 ### d)Navigation  
-<p align="center"><img src="doc/ROS%20graphs/nodegraph_nav.svg" height="200"><img src="doc/ROS%20graphs/frames_nav.svg" height="200"></p>  
+<p align="center"><img src="doc/ROS%20graphs/nodegraph_nav.svg?raw=true" height="200"><img src="doc/ROS%20graphs/frames_nav.svg?raw=true" height="200"></p>  
   
 1. [base driver](#omni-bot-driver) is started
 2. [localization](#robot-loclization) is initilized
@@ -226,7 +226,7 @@ The background gray map is the global map, while the colorful blue-pink-red one 
 
 # More Info
 ## Reference
-[Neuron VDMC Communication and operation manual](doc/Neuron%20OmniBot%20VDMC%20Manual.pdf)
+[Neuron VDMC Communication and operation manual](doc/Neuron%20OmniBot%20VDMC%20Manual.pdf?raw=true)
 ## Notice
 1. This application **MUST** be running under **SUDO -E** since the SEMA driver need both root privilege and the user-exported variables.
 
