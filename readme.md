@@ -114,9 +114,11 @@ The Neuron Omnibot demo can be divided into four part:
 * [Move!](#dnavigation): Obstacle detecting, planning, trajectory generation, and vehicle control  
 
 Each of the above function is wraped as a single ROS launch file for user's easy execution. We'll have a step-by-step tutorial below. For each launch file, we'll open a new terminal. You can do that by pressing _`ctrl + alt + t`_  
+
 ### a)OmniBot driver  
-In this section, we'll start our ROS omnibot driver. The driver includes all the IO and sensory device including motor controller, encoder odometry, laser scanner, and IMU state estimation.
-<p align="center"><img src="doc/ROS%20graphs/nodegraph_omni_base_driver.svg" height="200"><img src="doc/ROS%20graphs/frames_omni_base_driver.svg" height="200"></p>
+In this section, we'll start our ROS omnibot driver. The driver includes all the IO and sensory device including motor controller, encoder odometry, laser scanner, and IMU state estimation.  
+<p align="center"><img src="doc/screenshots/omni_base_driver.jpg" height="350?raw=true"></p>  
+<p align="center"><img src="doc/ROS%20graphs/nodegraph_omni_base_driver.svg" height="150"><img src="doc/ROS%20graphs/frames_omni_base_driver.svg" height="150"></p>
 
 1. roscore  
 roscore is the core of the ROS as its name suggest. We encourage you to manually start the core on a seperate window because it gives user the power and responsibility to control everything.
@@ -146,8 +148,9 @@ We use [teleop_twist_keyboard](http://wiki.ros.org/teleop_twist_keyboard) as our
      ```
 
 ### b)Laser Slam  
-In this section, we'll build our map with our 2D laser scanner. 
-<p align="center"><img src="doc/ROS%20graphs/nodegraph_omni_slam.svg" height="200"><img src="doc/ROS%20graphs/frames_omni_slam.svg" height="200"></p>
+In this section, we'll build our map with our 2D laser scanner.  
+<p align="center"><img src="doc/screenshots/omni_slam.jpg?raw=true" height="350"></p>  
+<p align="center"><img src="doc/ROS%20graphs/nodegraph_omni_slam.svg" height="150"><img src="doc/ROS%20graphs/frames_omni_slam.svg" height="150"></p>
  
 1. Make sure you have everything in the [base driver](#omni-bot-driver)  launched. This includes all the robot TF, motor driver, and laser scanner. 
 3. Setup rviz correctly so we can see everything:
@@ -168,7 +171,8 @@ In this section, we'll build our map with our 2D laser scanner.
 7. Stop the gmapping by `ctrl + c` on the gmapping terminal (terminal of the step.4).
 
 ### c)Robot Localization
-<p align="center"><img src="doc/ROS%20graphs/nodegraph_localize.svg" height="200"><img src="doc/ROS%20graphs/frames_localize.svg" height="200"></p>
+<p align="center"><img src="doc/screenshots/localize.jpg?raw=true" height="350"></p>  
+<p align="center"><img src="doc/ROS%20graphs/nodegraph_localize.svg" height="150"><img src="doc/ROS%20graphs/frames_localize.svg" height="150"></p>
 
 
 1.  Make sure you have everything in the [base driver](#omni-bot-driver)  launched. This includes all the robot TF, motor driver, and laser scanner. 
@@ -182,7 +186,8 @@ In this section, we'll build our map with our 2D laser scanner.
     ```
     roslaunch omni_base_nav omni_localize.launch
     ```
-    By default, the localization package will initialize the robot at (x,y)=(0,0), i.e. same as the starting pose when we started the mapping process. However, we can manually assign the starting position by using "set 2D pose estimation" function in the RVIZ if it's not the case. Select the tool, click on the position and drag the arrow for its initial heading.
+    By default, the localization package will initialize the robot at (x,y)=(0,0), i.e. same as the starting pose when we started the mapping process. However, we can manually assign the starting position by using "set 2D pose estimation" function in the RVIZ if it's not the case. Select the tool, click on the position and drag the arrow for its initial heading. This is shown in the picture below, the "2D pose estimation" is marked by a red square at the upper banner.
+    <p align="center"><img src="doc/screenshots/localize_arrow.jpg?raw=true" height="200"></p>
 4. Now we've initialize the robot pose, we can see many arrows in the RVIZ world. These arrows are the particles used to localize the robot. Because of how the Monte Carlo method (AMCL) works, those poses will not update nor converge if the robot remains still. With that being said, we can still ask the localization to try to update by:
     ```
     rosservice call /request_nomotion_update
@@ -190,12 +195,13 @@ In this section, we'll build our map with our 2D laser scanner.
     And you'll see the arrows become more unison and your laser scaning pattern will gradually match with the map.
 5. It is often possible for robot to identify it's initial location without manually set the initiali pose. You can call this service so the localization package will evenly distribute the pose particle. After the global initialization, you can perform multiple no-motion-update mentioned above  and the package will localize itself.
     ```
-    rosservice call /request_xxxxxxxxx
+    rosservice call /global_localization
     ```
 
 
 ### d)Navigation  
-<p align="center"><img src="doc/ROS%20graphs/nodegraph_nav.svg" height="200"><img src="doc/ROS%20graphs/frames_nav.svg" height="200"></p>  
+<p align="center"><img src="doc/screenshots/nav.jpg?raw=true" height="350"></p>  
+<p align="center"><img src="doc/ROS%20graphs/nodegraph_nav.svg" height="150"><img src="doc/ROS%20graphs/frames_nav.svg" height="150"></p>  
   
 1. [base driver](#omni-bot-driver) is started
 2. [localization](#robot-loclization) is initilized
@@ -207,8 +213,8 @@ In this section, we'll build our map with our 2D laser scanner.
     roslaunch omni_base_nav omni_nav_eband.launch
     ```
 5. After the planner is started, you should see something like the graph below in the RVIZ. You can choose the "2D nav goal" tools on the top banner of the RVIZ. Click on the map and drage to specify the target orientation. The robot should drive toward the goal by itself.
-![](graphwith links) 
-The background gray map is the global map, while the colorful blue-pink-red one is the 1.5x1.5 meter local map. The global path is drawn in xxx while the local planner is draw in green. Different local planner will have different representation.
+<p align="center"><img src="doc/screenshots/nav_arrow.jpg?raw=true" height="350"></p>  
+The background gray map is the global map, while the colorful blue-pink-red one is the 1.5x1.5 meter local map. The global path is drawn in cyan while the local planner is draw in blue. Different local planner will have different representation.
 
 # Multiple Machines
 
