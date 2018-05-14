@@ -270,7 +270,7 @@ The physical Networking can be easily achieved (and expanded) with a single wifi
 ## Reference
 [Neuron VDMC Communication and operation manual](doc/Neuron%20OmniBot%20VDMC%20Manual.pdf?raw=true)
 ## Notice
-1. This application **MUST** be running under **SUDO -E** since the SEMA driver need both root privilege and the user-exported variables.
+1. SEMA requries root access since it needs to talk to the hardware. Execute `SUDO -sE` before program launch to retain proper shell environment variable.
 
 ## Version
 0.3.0
@@ -283,9 +283,11 @@ The physical Networking can be easily achieved (and expanded) with a single wifi
 This project is licensed under the Apache License, Version 2.0
 
 ## Acknowledgments
+The development of this project is under support and collabration of ADLINK Advanced Robotic Platform Group(ARPG). 
 
-## future implementation
-
-- [x] task list 1
-- [ ] task list 3
-    - [ ] task list 3-1
+## future roadmap
+- [x] Object recgonition and tracking using movidius
+- [x] Peripheral sensors and robot casing (with fully SEMA integration)
+- [x] VDMC 
+    - [ ] On-board Kalman filter with full state omniBot dynamics estimater
+    - [ ] High performance nonlinear-dynamic inversion controller
