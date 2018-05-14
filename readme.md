@@ -286,8 +286,8 @@ This project is licensed under the Apache License, Version 2.0
 The development of this project is under support and collabration of ADLINK Advanced Robotic Platform Group(ARPG). 
 
 ## future roadmap
-- [x] Object recgonition and tracking using movidius
-- [x] Peripheral sensors and robot casing (with fully SEMA integration)
-- [x] VDMC 
+- [ ] Object recgonition and tracking using movidius
+- [ ] Peripheral sensors and robot casing (with fully SEMA integration)
+- [ ] VDMC 
     - [ ] On-board Kalman filter with full state omniBot dynamics estimater
     - [ ] High performance nonlinear-dynamic inversion controller
