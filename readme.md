@@ -1,6 +1,6 @@
 ﻿# Neuron Omni Bot
 This is a demo package of Neuron Omni Bot's autonomous and fast integration capability using ROS  
-<p align="center"><img src="doc/Neuron%20OmniBot.jpg?raw=true" width="500"></p>
+<p align="center"><img src="doc/Omnibot_bare.jpg?raw=true" height="450"></p>
 
 ### Features
 - Fully integration between SEMA library and ROS2
@@ -16,6 +16,8 @@ This is a demo package of Neuron Omni Bot's autonomous and fast integration capa
 
 # Getting Started
 These instructions will get you a copy of this demo and running on your local machine. If you're unfamiliar with ROS operation, there are some usefull trick you may want to try in the [section below](#useful-tricks) For multiple machine remote control, please visit [multi-machines](#multiple-machines) section below.
+<p align="center"><img src="doc/Neuron%20OmniBot.jpg?raw=true" width="500"></p>  
+
 ## Prerequisites
 1. Neuron hardware and SEMA library  
 You'll need the ADLINK SEMA library and a compatible motherboard to run this example. You can conatct **TODO: SOMEONE** for more information.
