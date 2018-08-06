@@ -36,7 +36,9 @@
 	<node pkg="tf" type="static_transform_publisher" name="base_link_to_imu"
 		args="-0.01 -0.06 -0.10 -2.0944 0.0  0.0 /base_link /$(arg imu_frame) 100" />
 
-	<include file="$(find ydlidar)/launch/omni_laser.launch"/>
+	<!--<include file="$(find ydlidar)/launch/omni_laser.launch"/>-->
+	<include file="$(find omni_base_driver)/launch/omni_laser.launch"/>
+	
  
 	<node pkg="robot_localization" type="ekf_localization_node" name="ekf_se" clear_params="true" output="screen">
             <rosparam command="load" file="$(find omni_base_driver)/param/omni_imu_ekf_params.yaml" />
