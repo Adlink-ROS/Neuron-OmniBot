@@ -13,6 +13,12 @@ This is a demo package of Neuron Omni Bot's autonomous and fast integration capa
 - Finely tuned ROS navigation, guidance, and control algorithms with full list of parameters provided
 - Multiple user interfaing methods using the SEMA library
 
+### Tutorial Videos
+ - [NeuronBot ROS AutoNav tutorial 1: OmniBot base driver](https://youtu.be/pYMr5YRR5LI)
+ - [NeuronBot ROS AutoNav tutorial 2: OmniBot laser SLAM](https://youtu.be/IMlv532riwM)
+ - [NeuronBot ROS AutoNav tutorial 3: OmniBot localization](https://youtu.be/TjXuXB9_rKE)
+ - [NeuronBot ROS AutoNav tutorial 4: OmniBot autonomous navigation](https://youtu.be/Go_nopTUil0)
+
 
 # Getting Started
 These instructions will get you a copy of this demo and running on your local machine. If you're unfamiliar with ROS operation, there are some usefull trick you may want to try in the [section below](#useful-tricks) For multiple machine remote control, please visit [multi-machines](#multiple-machines) section below.
