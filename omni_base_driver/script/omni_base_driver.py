@@ -279,7 +279,7 @@ if __name__ == "__main__":
 		#thread.daemon=True
 		thread.start()
 	except:
-		rospy.signal_shutdown("serial err")
+		rospy.signal_shutdown("serial thread err")
 		omni_com.stopThread()
 		sys.exit(0)
 
