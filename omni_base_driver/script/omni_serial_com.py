@@ -26,6 +26,8 @@ class OmniSerialCom:
 		self._first_odom = True
 		self._first_cmd = True
 		
+		self.error_flag = False
+		
 		self.t_stop = threading.Event()
 		try:
 			rospy.loginfo("Opening serial port: "+ self.port)
@@ -71,6 +73,7 @@ class OmniSerialCom:
 		
 		# continuous packet recieve
 		while (not self.t_stop.is_set()): 
+			try:
 				reading = self.serial.read(2)
 			except Exception:
 				self.error_flag = True
@@ -80,6 +83,7 @@ class OmniSerialCom:
 			#========= imu data packet =========#
 			if reading[0] == '\xFF' and reading[1] == '\xFA':
 				#ser_in = self.serial.read(12)
+				try:
 					ser_in = self.serial.read(12)
 				except Exception:
 					self.error_flag = True
@@ -214,7 +218,7 @@ class OmniSerialCom:
 		Module communication from outside
 	*******************************************************************'''		
 	def serialOK(self):
-		return self._serialOK:
+		return self._serialOK
 		
 	def imu_new_data(self):
 		return self._imu_new_data
