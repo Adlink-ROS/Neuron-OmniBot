@@ -65,10 +65,14 @@ Your Neuron Bot should already have proper SEMA installed. Please go to **TODO: 
     sudo apt-get install ros-kinetic-robot-localization 
     
     #laser slam
-	sudo apt-get install ros-kinetic-gmapping ros-kinetic-scan-tools\ ros-kinetic-navigation # laser slam
+	sudo apt-get install ros-kinetic-gmapping ros-kinetic-scan-tools \
+						 ros-kinetic-navigation # laser slam
     
     #navigation and planning
-    sudo apt-get install ros-kinetic-teb-local-planner ros-kinetic-teb-local-planner-tutorials\ ros-kinetic-eband-local-planner
+    sudo apt-get install ros-kinetic-global-planner \
+           ros-kinetic-dwa-local-planner \
+           ros-kinetic-teb-local-planner ros-kinetic-teb-local-planner-tutorials \
+		   ros-kinetic-eband-local-planner
      ```
     * Recommanded
         * KATE: text editor (very similar to Notepad++)
