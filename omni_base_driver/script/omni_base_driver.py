@@ -88,9 +88,9 @@ class Omni_base_node:
 		self.imu.angular_velocity_covariance[0] = math.radians(0.05)	# P.12 of the MPU6050 datasheet
 		self.imu.angular_velocity_covariance[4] = math.radians(0.05)
 		self.imu.angular_velocity_covariance[8] = math.radians(0.05)
-		self.imu.linear_acceleration_covariance[0] = 400*10**-6*9.81	# in m/s**2
-		self.imu.linear_acceleration_covariance[4] = 400*10**-6*9.81
-		self.imu.linear_acceleration_covariance[8] = 400*10**-6*9.81
+		self.imu.linear_acceleration_covariance[0] = 4000*10**-6*9.81	# in m/s**2
+		self.imu.linear_acceleration_covariance[4] = 4000*10**-6*9.81
+		self.imu.linear_acceleration_covariance[8] = 4000*10**-6*9.81
 		
 		self.x_e = float(0)
 		self.y_e = float(0)
@@ -99,7 +99,7 @@ class Omni_base_node:
 		self.enc_count_per_revo = (390*4)
 		self.wheel_radius = 0.029
 		self.base_radius = 0.140 		# 14.3 cm radius
-		self.accel_sensitivity = 2*9.81	# 2g
+		self.accel_sensitivity = 1.8*9.81	# 2g
 		self.gyro_sensitivity = math.radians(250) 	# 250deg/sec
 		self.last_odom_time = time.time()
 		self.last_cmd_vel_time = self.last_odom_time
@@ -150,7 +150,7 @@ class Omni_base_node:
 				# sanity check
 				if (xyt_rtn["seq"] != ((self.odom_last_seq + 1)%256) ):
 					if (not self.first_odom):
-						rospy.logwarn("callback sequence mismatch, prev: %d, now:%d", 
+						rospy.logwarn("odom callback sequence mismatch, prev: %d, now:%d", 
 														self.odom_last_seq, xyt_rtn["seq"] )
 						self.odom_last_seq = xyt_rtn["seq"]
 						return		# disregard first data
@@ -279,7 +279,7 @@ if __name__ == "__main__":
 		#thread.daemon=True
 		thread.start()
 	except:
-		rospy.signal_shutdown("serial err")
+		rospy.signal_shutdown("serial thread err")
 		omni_com.stopThread()
 		sys.exit(0)
 
