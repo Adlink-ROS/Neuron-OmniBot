@@ -1,3 +1,4 @@
+from __future__ import print_function
 import rospy
 
 import time
@@ -38,8 +39,11 @@ class OmniSerialCom:
 			return
 
 		self.imu = {"accel":[0, 0, 0], "gyro":[0, 0, 0]}
+		self.imu_bfr = {"accel":[0, 0, 0], "gyro":[0, 0, 0]}
 		self.odom = [0, 0, 0]
+		self.odom_bfr = [0, 0, 0]
 		self.cmd = [0, 0, 0]
+		self.cmd_bfr = [0, 0, 0]
 		self.odom_seq = 0
 		self.cmd_seq = 0
 		self.last_odom_seq = 0
@@ -78,7 +82,6 @@ class OmniSerialCom:
 			except Exception:
 				self.error_flag = True
 				break
-
 			
 			#========= imu data packet =========#
 			if reading[0] == '\xFF' and reading[1] == '\xFA':
@@ -128,8 +131,8 @@ class OmniSerialCom:
 				print(toHex(b'\x03\xac23\n'))
 
 				bfr = self.serial.read(1)
-				toHex = lambda x: "".join("{:02X}".format(ord(c)) for c in bfr)
-				print(toHex(b' '))
+				toHex = lambda x: " ".join("{:02X}".format(ord(c)) for c in bfr)
+				print(toHex(b' '), end='')
 				self._is_synced = False
 	
 		# if loop breaks with an error flag 
@@ -162,14 +165,15 @@ class OmniSerialCom:
 	*******************************************************************'''
 	def imu_decode(self, data, size):
 		#https://docs.python.org/3/library/struct.html
-		self.imu["accel"][0] = struct.unpack('>h', data[0:2])[0] 		# signed short, 2B
-		self.imu["accel"][1] = struct.unpack('>h', data[2:4])[0]
-		self.imu["accel"][2] = struct.unpack('>h', data[4:6])[0]
-		self.imu["gyro"][0] = struct.unpack('>h', data[6:8])[0]
-		self.imu["gyro"][1] = struct.unpack('>h', data[8:10])[0]
-		self.imu["gyro"][2] = struct.unpack('>h', data[10:12])[0]
+		self.imu_bfr["accel"][0] = struct.unpack('>h', data[0:2])[0] 		# signed short, 2B
+		self.imu_bfr["accel"][1] = struct.unpack('>h', data[2:4])[0]
+		self.imu_bfr["accel"][2] = struct.unpack('>h', data[4:6])[0]
+		self.imu_bfr["gyro"][0] = struct.unpack('>h', data[6:8])[0]
+		self.imu_bfr["gyro"][1] = struct.unpack('>h', data[8:10])[0]
+		self.imu_bfr["gyro"][2] = struct.unpack('>h', data[10:12])[0]
 		#debug
 		#print("imu", self.seq, " t_micro:", self.t_micro)
+		self.imu = self.imu_bfr
 		self._imu_new_data = True
 	
 	'''*******************************************************************
@@ -177,9 +181,9 @@ class OmniSerialCom:
 	*******************************************************************'''
 	def odom_decode(self, data, size):
 		#https://docs.python.org/3/library/struct.html
-		self.odom[0] = struct.unpack('>h', data[0:2])[0] 	# signed short 2B
-		self.odom[1] = struct.unpack('>h', data[2:4])[0]
-		self.odom[2] = struct.unpack('>h', data[4:6])[0]
+		self.odom_bfr[0] = struct.unpack('>h', data[0:2])[0] 	# signed short 2B
+		self.odom_bfr[1] = struct.unpack('>h', data[2:4])[0]
+		self.odom_bfr[2] = struct.unpack('>h', data[4:6])[0]
 		self.odom_seq = struct.unpack('B', data[6:7])[0]	# unsigned byte	
 		
 		#debug
@@ -190,6 +194,7 @@ class OmniSerialCom:
 		if self._first_odom:										   
 			self._first_odom = False	
 		self.last_odom_seq = self.odom_seq
+		self.odom = self.odom_bfr
 		self._odom_new_data = True
 	
 	'''*******************************************************************
@@ -197,9 +202,9 @@ class OmniSerialCom:
 	*******************************************************************'''
 	def cmd_decode(self, data, size):
 		#https://docs.python.org/3/library/struct.html
-		self.cmd[0] = struct.unpack('>f', data[0:4])[0] 	# int 4B
-		self.cmd[1] = struct.unpack('>f', data[4:8])[0]
-		self.cmd[2] = struct.unpack('>f', data[8:12])[0]
+		self.cmd_bfr[0] = struct.unpack('>f', data[0:4])[0] 	# int 4B
+		self.cmd_bfr[1] = struct.unpack('>f', data[4:8])[0]
+		self.cmd_bfr[2] = struct.unpack('>f', data[8:12])[0]
 		self.cmd_seq = struct.unpack('B', data[12:13])[0]	# unsigned byte	
 		
 		#debug
@@ -211,8 +216,8 @@ class OmniSerialCom:
 			self._first_cmd = False
 				
 		self.last_cmd_seq = self.cmd_seq
+		self.cmd = self.cmd_bfr
 		self._cmd_new_data = True
-		self._pos_new_data = True
 
 	'''*******************************************************************
 		Module communication from outside
@@ -228,10 +233,7 @@ class OmniSerialCom:
 	
 	def cmd_new_data(self):
 		return self._cmd_new_data
-	
-	def pos_new_data(self):
-		return self._pos_new_data
-		
+			
 	def get_imu_data(self):
 		if self._imu_new_data:
 			# data assign
