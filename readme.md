@@ -71,7 +71,7 @@ Your Neuron Bot should already have proper SEMA installed. Please go to **TODO: 
     sudo apt-get install ros-kinetic-robot-localization 
     
     #laser slam
-	sudo apt-get install ros-kinetic-gmapping ros-kinetic-scan-tools \
+	sudo apt-get install ros-kinetic-gmapping ros-kinetic-slam-gmapping ros-kinetic-scan-tools \
 						 ros-kinetic-navigation # laser slam
     
     #navigation and planning
@@ -102,22 +102,29 @@ Change to any node that uses SEMA library, find the SEMA include library header 
     Note: If you get some error like _`error: no such file as...`_, you'll need to make the setlink.sh executable by `chmod +x setlink.sh` after you've changed the command prompt to that directory.      
 
 5. Compile the source code  
-Now, we'll use the Catkin, the ROS build management tool to build our nodes. We'll need root access for library linking for anything that uses SEMA. Root access is gained by the second step below. Great power comes with great responsibility, **it is strongly recommanded you to exit root mode** since you can to terrible stuff with that much of power.
+    Now, we'll use the Catkin, the ROS build management tool to build our nodes. We'll need root access for library linking for anything that uses SEMA. Root access is gained by the second step below. Great power comes with great responsibility, **it is strongly recommanded you to exit root mode** since you can to terrible stuff with that much of power.
     ```
     cd ~/catkin_ws
     sudo -sE
     catkin_make
     exit   #exit root mode
     ```  
-6. Setup Laser scanner port (from [YDLidar github](https://github.com/EAIBOT/ydlidar))
+6. (If you are using YDLidar)
+    Clone the YDLidar repository to your roskspace source:
+    ```
+    cd ~/catkin_ws/src
+    git clone https://github.com/EAIBOT/ydlidar.git
+    ```
+    Setup Laser scanner port (from [YDLidar github](https://github.com/EAIBOT/ydlidar))
     ```
     roscd ydlidar/startup
     sudo chmod 777 ./*
     sudo sh initenv.sh
     ```
-
+    Build the code by `catkin_make` at ~/catkin_ws.
 7.  Add serial access
     `sudo adduser ros dialout`
+    You need to logout and login to your computer again afterwards.
 
 ## Run the demo
 The Neuron Omnibot demo can be divided into four part:
