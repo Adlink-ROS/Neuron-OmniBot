@@ -33,7 +33,7 @@ class Omni_base_node:
 		self.param["baudrate"] = int( rospy.get_param('~baudrate', '115200') ) # baudrate
 		self.param["timeout"] = float( rospy.get_param('~serial_timeout', '10') ) #
 		self.param["odom_freq"] = float( rospy.get_param('~odom_freq', '30') ) # hz of communication
-		self.param["imu_freq"] = float( rospy.get_param('~imu_freq', '120') )  # hz of communication
+		self.param["imu_freq"] = float( rospy.get_param('~imu_freq', '250') )  # hz of communication
 		self.param["tx_freq"] = float( rospy.get_param('~tx_freq', '5') )      # hz of communication
 		self.param["cmd_timeout"] = float( rospy.get_param('~cmd_vel_timeout', '3') ) #
 		self.param["vel_gain"] = float( rospy.get_param('~vel_gain', '70') ) # hz of communication
@@ -53,8 +53,8 @@ class Omni_base_node:
 		self.enc_sub = rospy.Subscriber(self.param["vel_cmd"], Twist, self.velcmd_cb, queue_size=10) 
 		self.odom_pub = rospy.Publisher(self.param["odom_topic"], Odometry, queue_size=10)		# pubisher
 		self.imu_pub = rospy.Publisher(self.param["imu_topic"], Imu, queue_size=10)
-		self.timer_odom = rospy.Timer(rospy.Duration(1.0/self.param["odom_freq"]), self.odomPub) # timer
-		self.timer_imu = rospy.Timer(rospy.Duration(1.0/self.param["imu_freq"]), self.imuPub)
+		#self.timer_odom = rospy.Timer(rospy.Duration(1.0/self.param["odom_freq"]), self.odomPub) # timer
+		#self.timer_imu = rospy.Timer(rospy.Duration(1.0/self.param["imu_freq"]), self.imuPub)
 		self.timer_txcmd = rospy.Timer( rospy.Duration(1.0/self.param["tx_freq"]),
 														self.tx_vel_cmd)
 		
@@ -108,9 +108,30 @@ class Omni_base_node:
 		
 		self.veh_cmd = {"Vx":0, "Vy":0, "Omega":0}
 	
+	'''*******************************************************************
+		initial: recieve serial port handle from serial thread
+	*******************************************************************'''
 	def set_data_port(self, _serial_handle):
 		self.data_handle = _serial_handle
 		self.data_handle_ok = True
+
+	def spin_listen(self):
+		time.sleep(4) #wait for serial to boot
+		try:
+			while not self.data_handle_ok:
+				print("no serial handler")
+				time.sleep(1)
+			while not self.data_handle.serialOK():
+				print("serial not OK")
+				time.sleep(1)
+			
+
+			while True:
+				self.odomPub()
+				self.imuPub()
+				time.sleep(1.0/self.param["imu_freq"])
+		except KeyboardInterrupt:
+			print("ctrlC kill")
 
 	'''*******************************************************************
 		ROS cmd_vel Subscriber callback
@@ -126,135 +147,96 @@ class Omni_base_node:
 		send velocity command to serial handler
 	*******************************************************************'''
 	def tx_vel_cmd(self, event):
-		if( (time.time()-self.last_cmd_vel_time) > self.param["cmd_timeout"] and 
-														not self.no_cmd_received ):
-			self.veh_cmd["Vx"] = 0
-			self.veh_cmd["Vy"] = 0
-			self.veh_cmd["Omega"] = 0
-			self.no_cmd_received = True
-			rospy.logwarn("no topic \"%s\" received, base stop.", self.param["vel_cmd"])
-			
-		cmd = [ int(self.veh_cmd["Vx"]), int(self.veh_cmd["Vy"]), int(self.veh_cmd["Omega"]) ]
-		self.data_handle.send_vel_cmd(cmd)
+		if self.data_handle_ok:
+			if( (time.time()-self.last_cmd_vel_time) > self.param["cmd_timeout"] and 
+															not self.no_cmd_received ):
+				self.veh_cmd["Vx"] = 0
+				self.veh_cmd["Vy"] = 0
+				self.veh_cmd["Omega"] = 0
+				self.no_cmd_received = True
+				rospy.logwarn("no topic \"%s\" received, base stop.", self.param["vel_cmd"])
+				
+			cmd = [ int(self.veh_cmd["Vx"]), int(self.veh_cmd["Vy"]), int(self.veh_cmd["Omega"]) ]
+			self.data_handle.send_vel_cmd(cmd)
 	
 
 	'''*******************************************************************
 		ROS Odometry topic publisher, called by timer
 	*******************************************************************'''	
-	def odomPub(self, event):
-		if self.data_handle_ok and self.data_handle.serialOK():
-			if self.data_handle.odom_new_data():
-				xyt_rtn = self.data_handle.get_odom_data()
-				if xyt_rtn is None:
-					return
-				# sanity check
-				if (xyt_rtn["seq"] != ((self.odom_last_seq + 1)%256) ):
-					if (not self.first_odom):
-						rospy.logwarn("odom callback sequence mismatch, prev: %d, now:%d", 
-														self.odom_last_seq, xyt_rtn["seq"] )
-						self.odom_last_seq = xyt_rtn["seq"]
-						return		# disregard first data
-					else:
-						self.first_odom = False
-						self.odom_last_seq = xyt_rtn["seq"]
-						return		# disregard first data
-				self.odom_last_seq = xyt_rtn["seq"]
-
-				#debug
-				#self.temp += xyt_rtn["enc_dt"][1]
-				#print(self.temp)
-				#print(" A: {} B: {} C: {}".format( xyt_rtn["enc_dt"][0], 
-				#								   xyt_rtn["enc_dt"][1], 
-				#								   xyt_rtn["enc_dt"][2]  ) )
-				'''
-				dx = float(0)
-				dy = float(0)
-				dth = float(0)
-				dx_e = float(0)
-				dy_e = float(0)
-				
-				dx = float(-xyt_rtn["enc_dt"][0]+xyt_rtn["enc_dt"][1]) / (2* math.cos(math.radians(30)))
-				dy = float(-xyt_rtn["enc_dt"][0]-xyt_rtn["enc_dt"][1] + 2*xyt_rtn["enc_dt"][2]) / 3
-				dth = float(-xyt_rtn["enc_dt"][0]-xyt_rtn["enc_dt"][1] - xyt_rtn["enc_dt"][2]) / 3
-				time_now = time.time()
-				dt = time_now - self.last_odom_time
-				
-				dx = dx/self.enc_count_per_revo * 2 * math.pi * self.wheel_radius
-				dy = dy/self.enc_count_per_revo * 2 * math.pi * self.wheel_radius
-				dth = dth/self.enc_count_per_revo * 2 * math.pi * self.wheel_radius / self.base_radius
-				#print("dx",dx,"dy",dy,"dth",dth)
-				
-				# convert to earth frame
-				dx_e = dx * math.cos(self.th + dth/2) - dy * math.sin(self.th + dth/2)
-				dy_e = dx * math.sin(self.th + dth/2) + dy * math.cos(self.th + dth/2)
-
-				if self.data_handle.pos_new_data():
-					pos = self.data_handle.get_pos_data()
-					self.x_e = pos["x"]
-					self.y_e = pos["y"]
-					self.th = pos["th"]
+	def odomPub(self):
+		if self.data_handle.odom_new_data():
+			xyt_rtn = self.data_handle.get_odom_data()
+			if xyt_rtn is None:
+				return
+			# sanity check
+			if (xyt_rtn["seq"] != ((self.odom_last_seq + 1)%256) ):
+				if (not self.first_odom):
+					rospy.logwarn("odom callback sequence mismatch, prev: %d, now:%d", 
+													self.odom_last_seq, xyt_rtn["seq"] )
+					self.odom_last_seq = xyt_rtn["seq"]
+					return		# disregard first data
 				else:
-					self.x_e += dx_e
-					self.y_e += dy_e
-					self.th += d_th'''
-				dx_e = float(xyt_rtn["pos_dt"][0])/10000
-				dy_e = float(xyt_rtn["pos_dt"][1])/10000
-				d_th = float(xyt_rtn["pos_dt"][2])/10000
-				vx = dx_e * math.cos(self.th + d_th/2) + dy_e * math.sin(self.th + d_th/2)
-				vy = -dx_e * math.sin(self.th + d_th/2) + dy_e * math.cos(self.th + d_th/2)
-				time_now = time.time()
-				self.x_e += dx_e
-				self.y_e += dy_e
-				self.th += d_th
-				dt = time_now - self.last_odom_time
-				
-				#======= ROS topic publisher =======#
-				self.odom.header.seq += 1
-				self.odom.header.stamp = rospy.Time.now()
-				self.odom.pose.pose.position = geometry_msgs.msg.Point(self.x_e, self.y_e, 0.0)
-				quat = tf.transformations.quaternion_from_euler(0, 0, self.th);
-				self.odom.pose.pose.orientation.x = quat[0]
-				self.odom.pose.pose.orientation.y = quat[1]
-				self.odom.pose.pose.orientation.z = quat[2]
-				self.odom.pose.pose.orientation.w = quat[3]
-				self.odom.twist.twist.linear = Vector3(vx / dt, vy / dt, 0.0)
-				self.odom.twist.twist.angular = Vector3(0.0, 0.0, d_th/dt)
-				
-				self.odom_pub.publish(self.odom)
-				
-				if self.param["enable_tf"]:
-					self.tf_br.sendTransform((self.x_e, self.y_e, 0),
-									quat,
-									self.odom.header.stamp,
-									self.param["baseId"],
-									self.param["odomId"]			)
-				
-				self.last_odom_time = time_now;
-			#else:
-				#rospy.logerr('data not available')
+					self.first_odom = False
+					self.odom_last_seq = xyt_rtn["seq"]
+					return		# disregard first data
+			self.odom_last_seq = xyt_rtn["seq"]
+			dx_e = float(xyt_rtn["pos_dt"][0])/10000
+			dy_e = float(xyt_rtn["pos_dt"][1])/10000
+			d_th = float(xyt_rtn["pos_dt"][2])/10000
+			vx = dx_e * math.cos(self.th + d_th/2) + dy_e * math.sin(self.th + d_th/2)
+			vy = -dx_e * math.sin(self.th + d_th/2) + dy_e * math.cos(self.th + d_th/2)
+			time_now = time.time()
+			self.x_e += dx_e
+			self.y_e += dy_e
+			self.th += d_th
+			dt = time_now - self.last_odom_time
+			
+			#======= ROS topic publisher =======#
+			self.odom.header.seq += 1
+			self.odom.header.stamp = rospy.Time.now()
+			self.odom.pose.pose.position = geometry_msgs.msg.Point(self.x_e, self.y_e, 0.0)
+			quat = tf.transformations.quaternion_from_euler(0, 0, self.th);
+			self.odom.pose.pose.orientation.x = quat[0]
+			self.odom.pose.pose.orientation.y = quat[1]
+			self.odom.pose.pose.orientation.z = quat[2]
+			self.odom.pose.pose.orientation.w = quat[3]
+			self.odom.twist.twist.linear = Vector3(vx / dt, vy / dt, 0.0)
+			self.odom.twist.twist.angular = Vector3(0.0, 0.0, d_th/dt)
+			
+			self.odom_pub.publish(self.odom)
+			
+			if self.param["enable_tf"]:
+				self.tf_br.sendTransform((self.x_e, self.y_e, 0),
+								quat,
+								self.odom.header.stamp,
+								self.param["baseId"],
+								self.param["odomId"]			)
+			
+			self.last_odom_time = time_now;
+		#else: #if new_data
+			#rospy.logerr('data not available')
 	
 	'''*******************************************************************
 		ROS Imu topic publisher, called by timer
 	*******************************************************************'''	
-	def imuPub(self, event):
-		if self.data_handle_ok and self.data_handle.serialOK():
-			if self.data_handle.imu_new_data():
-				imu_rtn = self.data_handle.get_imu_data()
-				if imu_rtn is None:
-					return
-				self.imu.linear_acceleration.x = imu_rtn["accel"][0] * self.accel_sensitivity / 32768
-				self.imu.linear_acceleration.y = imu_rtn["accel"][1] * self.accel_sensitivity / 32768
-				self.imu.linear_acceleration.z = imu_rtn["accel"][2] * self.accel_sensitivity / 32768
-				self.imu.angular_velocity.x = imu_rtn["gyro"][0] * self.gyro_sensitivity / 32768
-				self.imu.angular_velocity.y = imu_rtn["gyro"][1] * self.gyro_sensitivity / 32768
-				self.imu.angular_velocity.z = imu_rtn["gyro"][2] * self.gyro_sensitivity / 32768
-				
-				self.imu.header.seq += 1
-				self.imu.header.stamp = rospy.Time.now()
+	def imuPub(self):
+		if self.data_handle.imu_new_data():
+			imu_rtn = self.data_handle.get_imu_data()
+			if imu_rtn is None:
+				return
+			self.imu.linear_acceleration.x = imu_rtn["accel"][0] * self.accel_sensitivity / 32768
+			self.imu.linear_acceleration.y = imu_rtn["accel"][1] * self.accel_sensitivity / 32768
+			self.imu.linear_acceleration.z = imu_rtn["accel"][2] * self.accel_sensitivity / 32768
+			self.imu.angular_velocity.x = imu_rtn["gyro"][0] * self.gyro_sensitivity / 32768
+			self.imu.angular_velocity.y = imu_rtn["gyro"][1] * self.gyro_sensitivity / 32768
+			self.imu.angular_velocity.z = imu_rtn["gyro"][2] * self.gyro_sensitivity / 32768
+			
+			self.imu.header.seq += 1
+			self.imu.header.stamp = rospy.Time.now()
 
-				self.imu_pub.publish(self.imu)
-			#else:
-				#rospy.logerr('data not available')
+			self.imu_pub.publish(self.imu)
+		#else: #if new_data
+			#rospy.logerr('data not available')
 			
 		
 if __name__ == "__main__":
@@ -284,7 +266,8 @@ if __name__ == "__main__":
 		sys.exit(0)
 
 	node.set_data_port(omni_com)
-	rospy.spin()
+	node.spin_listen()
+	#rospy.spin() no need, use while loop in node
 	
 	print("SIGINT, stopping...")
 	omni_com.stopThread()
