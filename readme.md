@@ -7,11 +7,11 @@ This is a demo package of Neuron Omni Bot's autonomous and fast integration capa
 - Three omni-directional poly wheels with a 12V 4.32 watt DC motor on each wheel
 - Quadrature hall effect encoder provide 390 pulses (1560 count) per wheel revolution
 - Fully customized <abbr title="Vehicle Dynamic and Motor Controller">VDMC</abbr> using STM32F103 chip
-- Fully customized ROS motor driver node that utilize standard ROS convension
+- Fully customized ROS motor driver node that utilize standard ROS convention
 - MPU6050 6-axis IMU and it's corresponding ROS publisher with standard ROS state estimator
-- Easy to use ROS launch file with maximum custimization capabilities
+- Easy to use ROS launch file with maximum customization capabilities
 - Finely tuned ROS navigation, guidance, and control algorithms with full list of parameters provided
-- Multiple user interfaing methods using the SEMA library
+- Multiple io interfacing methods using the SEMA library
 
 ### Tutorial Videos
  - [NeuronBot ROS AutoNav tutorial 1: OmniBot base driver](https://youtu.be/pYMr5YRR5LI)
