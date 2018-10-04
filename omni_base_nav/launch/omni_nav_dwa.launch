@@ -12,6 +12,7 @@
 		<!-- local planner -->   
         <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS"/>      
         <rosparam file="$(find omni_base_nav)/cfg/dwa_local_planner_params.yaml" command="load"/>
+		<remap from="odom" to="/odometry/filtered"/>
 		
         <!-- params for move_base -->
         <param name="planner_frequency" value="0.5" />

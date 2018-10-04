@@ -1,7 +1,7 @@
 #http://wiki.ros.org/teb_local_planner/Tutorials/Configure%20and%20run%20Robot%20Navigation
 TebLocalPlannerROS:
 
- odom_topic: odom
+ odom_topic: /base_odom
  map_frame: /map
 
  # Trajectory
@@ -15,10 +15,10 @@ TebLocalPlannerROS:
     
  # Robot
          
- max_vel_x: 1.0
- max_vel_y: 1.0
- max_vel_x_backwards: 1.0
- max_vel_y_backwards: 1.0
+ max_vel_x: 0.3
+ max_vel_y: 0.3
+ max_vel_x_backwards: 0.3
+ max_vel_y_backwards: 0.3
  max_vel_theta: 0.6
  acc_lim_x: 0.8
  acc_lim_y: 0.8
