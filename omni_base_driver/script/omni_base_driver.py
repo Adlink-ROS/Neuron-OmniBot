@@ -32,12 +32,12 @@ class Omni_base_node:
 		self.param["device_port"] = rospy.get_param('~port', '/dev/ttyS2') # port
 		self.param["baudrate"] = int( rospy.get_param('~baudrate', '115200') ) # baudrate
 		self.param["timeout"] = float( rospy.get_param('~serial_timeout', '10') ) #
-		self.param["odom_freq"] = float( rospy.get_param('~odom_freq', '30') ) # hz of communication
-		self.param["imu_freq"] = float( rospy.get_param('~imu_freq', '250') )  # hz of communication
+		self.param["odom_freq"] = float( rospy.get_param('~odom_freq', '10') ) # hz of communication
+		self.param["imu_freq"] = float( rospy.get_param('~imu_freq', '100') )  # hz of communication
 		self.param["tx_freq"] = float( rospy.get_param('~tx_freq', '5') )      # hz of communication
 		self.param["cmd_timeout"] = float( rospy.get_param('~cmd_vel_timeout', '3') ) #
-		self.param["vel_gain"] = float( rospy.get_param('~vel_gain', '70') ) # hz of communication
-		self.param["omg_gain"] = float( rospy.get_param('~omg_gain', '500') ) # hz of communication
+		self.param["vel_gain"] = float( rospy.get_param('~vel_gain', '70') ) # to match physical world
+		self.param["omg_gain"] = float( rospy.get_param('~omg_gain', '500') ) #
 		
 		rospy.set_param("omni_base_driver", self.param)
 		
@@ -101,8 +101,12 @@ class Omni_base_node:
 		self.base_radius = 0.140 		# 14.3 cm radius
 		self.accel_sensitivity = 1.8*9.81	# 2g
 		self.gyro_sensitivity = math.radians(250) 	# 250deg/sec
+		
 		self.last_odom_time = time.time()
 		self.last_cmd_vel_time = self.last_odom_time
+		self.odom_timeout = 1/self.param["odom_freq"] * 2
+		self.imu_timeout = 1/self.param["imu_freq"] * 2
+		
 		self.no_cmd_received = True
 		self.first_odom = True
 		
@@ -118,7 +122,7 @@ class Omni_base_node:
 	def spin_listen(self):
 		time.sleep(4) #wait for serial to boot
 		try:
-			while not self.data_handle_ok:
+			while not self.data_handle_ok:	# block before serial is alive
 				print("no serial handler")
 				time.sleep(1)
 			while not self.data_handle.serialOK():
@@ -213,8 +217,15 @@ class Omni_base_node:
 								self.param["odomId"]			)
 			
 			self.last_odom_time = time_now;
-		#else: #if new_data
-			#rospy.logerr('data not available')
+		elif (time.time() - self.last_odom_time)>self.odom_timeout : 
+			# if no new_data
+			self.odom.header.seq += 1
+			self.odom.header.stamp = rospy.Time.now()
+			self.odom.twist.twist.linear = Vector3(0.0, 0.0, 0.0)
+			self.odom.twist.twist.angular = Vector3(0.0, 0.0, 0.0)
+			self.odom_pub.publish(self.odom)
+			self.last_odom_time = time.time();
+			rospy.logerr('odom not available for %f seconds',self.odom_timeout)
 	
 	'''*******************************************************************
 		ROS Imu topic publisher, called by timer
@@ -235,8 +246,11 @@ class Omni_base_node:
 			self.imu.header.stamp = rospy.Time.now()
 
 			self.imu_pub.publish(self.imu)
-		#else: #if new_data
-			#rospy.logerr('data not available')
+			self.last_imu_time = time.time() 
+		elif (time.time() - self.last_imu_time)>self.imu_timeout : 
+			#if new_data
+			self.last_imu_time = time.time();
+			rospy.logerr('imu data not available for %f seconds',self.imu_timeout)
 			
 		
 if __name__ == "__main__":
