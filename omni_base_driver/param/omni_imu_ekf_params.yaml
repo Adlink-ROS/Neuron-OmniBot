@@ -16,9 +16,9 @@ publish_tf: true
 publish_acceleration: false
 
 #map_frame: /map              # Defaults to "map" if unspecified
-odom_frame: /base_odom            # Defaults to "odom" if unspecified
-base_link_frame: /base_link  # Defaults to "base_link" if unspecified
-world_frame: /base_odom           # Defaults to the value of odom_frame if unspecified
+odom_frame: /base_odom          # Defaults to "odom" if unspecified
+base_link_frame: /base_link     # Defaults to "base_link" if unspecified
+world_frame: /base_odom         # Defaults to the value of odom_frame if unspecified
 
 # The filter accepts an arbitrary number of inputs from each input message type (nav_msgs/Odometry,
 # geometry_msgs/PoseWithCovarianceStamped, geometry_msgs/TwistWithCovarianceStamped,
@@ -82,7 +82,7 @@ imu0_relative: true
 # required. Data is specified at the level of pose and twist variables, rather than for each variable in isolation.
 # For messages that have both pose and twist data, the parameter specifies to which part of the message we are applying
 # the thresholds. 
-odom0_pose_rejection_threshold: 1.0
+odom0_pose_rejection_threshold: 100
 odom0_twist_rejection_threshold: 1.0
 
 imu0_angular_velocity_regection_threshold: 3.0
@@ -107,8 +107,8 @@ process_noise_covariance: [0.05, 0,    0,    0,    0,    0,    0,     0,     0, 
                            0,    0,    0,    0.03, 0,    0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
                            0,    0,    0,    0,    0.03, 0,    0,     0,     0,    0,    0,    0,    0,    0,    0,
                            0,    0,    0,    0,    0,    0.3,  0,     0,     0,    0,    0,    0,    0,    0,    0,
-                           0,    0,    0,    0,    0,    0,    0.5,   0,     0,    0,    0,    0,    0,    0,    0,
-                           0,    0,    0,    0,    0,    0,    0,     0.5,   0,    0,    0,    0,    0,    0,    0,
+                           0,    0,    0,    0,    0,    0,    0.1,   0,     0,    0,    0,    0,    0,    0,    0,
+                           0,    0,    0,    0,    0,    0,    0,     0.1,   0,    0,    0,    0,    0,    0,    0,
                            0,    0,    0,    0,    0,    0,    0,     0,     0.04, 0,    0,    0,    0,    0,    0,
                            0,    0,    0,    0,    0,    0,    0,     0,     0,    0.01, 0,    0,    0,    0,    0,
                            0,    0,    0,    0,    0,    0,    0,     0,     0,    0,    0.01, 0,    0,    0,    0,

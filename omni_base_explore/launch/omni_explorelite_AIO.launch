@@ -13,7 +13,7 @@ Software License Agreement (BSD)
   <!--- Run Move Base -->
   <include file="$(find omni_base_explore)/launch/omni_exp_movebase.launch" />
   
-  <param name="move_base/DWAPlannerROS/max_trans_vel" value="0.3"/>
+  <param name="move_base/DWAPlannerROS/max_trans_vel" value="0.5"/>
   <param name="move_base/DWAPlannerROS/min_trans_vel" value="0.05"/>
 
   <!-- Run Frontier Exploration -->

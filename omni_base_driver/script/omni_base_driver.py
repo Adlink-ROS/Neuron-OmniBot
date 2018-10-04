@@ -105,7 +105,7 @@ class Omni_base_node:
 		self.last_odom_time = time.time()
 		self.last_cmd_vel_time = self.last_odom_time
 		self.odom_timeout = 1/self.param["odom_freq"] * 2
-		self.imu_timeout = 1/self.param["imu_freq"] * 2
+		self.imu_timeout = 1/self.param["imu_freq"] * 10
 		
 		self.no_cmd_received = True
 		self.first_odom = True
@@ -178,10 +178,11 @@ class Omni_base_node:
 					rospy.logwarn("odom callback sequence mismatch, prev: %d, now:%d", 
 													self.odom_last_seq, xyt_rtn["seq"] )
 					self.odom_last_seq = xyt_rtn["seq"]
-					return		# disregard first data
+					return
 				else:
 					self.first_odom = False
 					self.odom_last_seq = xyt_rtn["seq"]
+					self.last_odom_time = time.time();
 					return		# disregard first data
 			self.odom_last_seq = xyt_rtn["seq"]
 			dx_e = float(xyt_rtn["pos_dt"][0])/10000
@@ -217,15 +218,18 @@ class Omni_base_node:
 								self.param["odomId"]			)
 			
 			self.last_odom_time = time_now;
-		elif (time.time() - self.last_odom_time)>self.odom_timeout : 
+		elif self.first_odom:
+			self.last_odom_time = time.time();
+			return
+		elif (time.time() - self.last_odom_time)>self.odom_timeout:
 			# if no new_data
 			self.odom.header.seq += 1
 			self.odom.header.stamp = rospy.Time.now()
 			self.odom.twist.twist.linear = Vector3(0.0, 0.0, 0.0)
 			self.odom.twist.twist.angular = Vector3(0.0, 0.0, 0.0)
 			self.odom_pub.publish(self.odom)
+			rospy.logerr('odom not available for %f seconds',(time.time() - self.last_odom_time))
 			self.last_odom_time = time.time();
-			rospy.logerr('odom not available for %f seconds',self.odom_timeout)
 	
 	'''*******************************************************************
 		ROS Imu topic publisher, called by timer
@@ -249,8 +253,8 @@ class Omni_base_node:
 			self.last_imu_time = time.time() 
 		elif (time.time() - self.last_imu_time)>self.imu_timeout : 
 			#if new_data
+			rospy.logerr('imu data not available for %f seconds',(time.time() - self.last_imu_time))
 			self.last_imu_time = time.time();
-			rospy.logerr('imu data not available for %f seconds',self.imu_timeout)
 			
 		
 if __name__ == "__main__":
