@@ -1,3 +1,4 @@
+from __future__ import print_function
 import rospy
 
 import time
@@ -19,25 +20,30 @@ class OmniSerialCom:
 		
 		self._serialOK = False
 
-		self.is_synced = False
+		self._is_synced = False
 		self._imu_new_data = False
 		self._odom_new_data = False
 		self._cmd_new_data = False
 		self._first_odom = True
 		self._first_cmd = True
 		
+		self.error_flag = False
+		
 		self.t_stop = threading.Event()
 		try:
 			rospy.loginfo("Opening serial port: "+ self.port)
 			self.serial = serial.Serial(self.port, self.baudrate, timeout=self.timeout)
 		except:
-			rospy.logerr("serial err")
-			raise Exception('error')
+			rospy.logerr("Failed to open serial port")
+			raise
 			return
 
 		self.imu = {"accel":[0, 0, 0], "gyro":[0, 0, 0]}
+		self.imu_bfr = {"accel":[0, 0, 0], "gyro":[0, 0, 0]}
 		self.odom = [0, 0, 0]
+		self.odom_bfr = [0, 0, 0]
 		self.cmd = [0, 0, 0]
+		self.cmd_bfr = [0, 0, 0]
 		self.odom_seq = 0
 		self.cmd_seq = 0
 		self.last_odom_seq = 0
@@ -57,10 +63,10 @@ class OmniSerialCom:
 			for x in range(0, 3):
 				init_msg = self.serial.readline()	### Note: try restart motor board if error ###
 				print( init_msg.encode('ascii')[0:(len(init_msg)-1)] )
-		except serial.serialutil.SerialException:
+		except Exception:
 			rospy.logerr("Port timeout after %d seconds at: %s", self.timeout, self.port)
-			self.serial.close
-			raise Exception('timeout')
+			self.serial.close()
+			raise
 			return
 		
 		# sent start signal
@@ -71,45 +77,83 @@ class OmniSerialCom:
 		
 		# continuous packet recieve
 		while (not self.t_stop.is_set()): 
-			reading = self.serial.read(2)
+			try:
+				reading = self.serial.read(2)
+			except Exception:
+				self.error_flag = True
+				break
 			
 			#========= imu data packet =========#
-			if reading[0] == '\xFF' and reading[1] == '\xFA':		
-				ser_in = self.serial.read(12)
+			if reading[0] == '\xFF' and reading[1] == '\xFA':
+				#ser_in = self.serial.read(12)
+				try:
+					ser_in = self.serial.read(12)
+				except Exception:
+					self.error_flag = True
+					break	 
 				self.imu_decode(ser_in, 12)
-				self.is_synced = True
+				self._is_synced = True
 				#debug
 				#toHex = lambda x: "".join("{:02X}".format(ord(c)) for c in reading)
 				#print(toHex(b'\x03\xac23\n'))
 				
 			#========= encoder data packet =========#
 			elif reading[0] == '\xFF' and reading[1] == '\xFB':
-				ser_in = self.serial.read(7)
+				#ser_in = self.serial.read(7)
+				try:
+					ser_in = self.serial.read(7)
+				except Exception:
+					self.error_flag = True
+					break	
 				self.odom_decode(ser_in, 7)
-				self.is_synced = True
+				self._is_synced = True
 			
 			#========= command data packet =========#
 			elif reading[0] == '\xFF' and reading[1] == '\xFC':
-				ser_in = self.serial.read(13)
+				#ser_in = self.serial.read(13)
+				try:
+					ser_in = self.serial.read(13)
+				except Exception:
+					self.error_flag = True
+					break
 				self.cmd_decode(ser_in, 13)
-				self.is_synced = True
+				self._is_synced = True
 				
 			#=========  lost sync =========#
 			else:
+				if self._is_synced:
+					if self._first_odom or self._first_cmd:
+						rospy.loginfo("Initial syncing...")
+						self._is_synced = False
+						continue	
 				rospy.logerr('Out of sync:')
 				toHex = lambda x: "".join("{:02X}".format(ord(c)) for c in reading)
 				print(toHex(b'\x03\xac23\n'))
 
 				bfr = self.serial.read(1)
-				toHex = lambda x: "".join("{:02X}".format(ord(c)) for c in bfr)
-				print(toHex(b' '))
-				self.is_synced = False
-
+				toHex = lambda x: " ".join("{:02X}".format(ord(c)) for c in bfr)
+				print(toHex(b' '), end='')
+				self._is_synced = False
+	
+		# if loop breaks with an error flag 
+		if self.error_flag:
+			rospy.logerr('serial read error')
+			self.serial.write( 'RRR'.encode('ascii') )
+			self.serial.close()
+			self._serialOK = False
+			self._is_synced = False
+			self._odom_new_data = False
+			self._cmd_new_data = False
+			print("thread ends")
+			raise
+			return		
+				
 		# if threads ends here
-		print("Sending stop signal to motor control")
+		print("Sending stoping signal to motor controller")
 		self.serial.write( 'R'.encode('ascii') )
+		self.serial.close()	 
 		self._serialOK = False
-		self.is_synced = False
+		self._is_synced = False
 		self._odom_new_data = False
 		self._imu_new_data = False
 		self._cmd_new_data = False
@@ -121,14 +165,15 @@ class OmniSerialCom:
 	*******************************************************************'''
 	def imu_decode(self, data, size):
 		#https://docs.python.org/3/library/struct.html
-		self.imu["accel"][0] = struct.unpack('>h', data[0:2])[0] 		# signed short, 2B
-		self.imu["accel"][1] = struct.unpack('>h', data[2:4])[0]
-		self.imu["accel"][2] = struct.unpack('>h', data[4:6])[0]
-		self.imu["gyro"][0] = struct.unpack('>h', data[6:8])[0]
-		self.imu["gyro"][1] = struct.unpack('>h', data[8:10])[0]
-		self.imu["gyro"][2] = struct.unpack('>h', data[10:12])[0]
+		self.imu_bfr["accel"][0] = struct.unpack('>h', data[0:2])[0] 		# signed short, 2B
+		self.imu_bfr["accel"][1] = struct.unpack('>h', data[2:4])[0]
+		self.imu_bfr["accel"][2] = struct.unpack('>h', data[4:6])[0]
+		self.imu_bfr["gyro"][0] = struct.unpack('>h', data[6:8])[0]
+		self.imu_bfr["gyro"][1] = struct.unpack('>h', data[8:10])[0]
+		self.imu_bfr["gyro"][2] = struct.unpack('>h', data[10:12])[0]
 		#debug
 		#print("imu", self.seq, " t_micro:", self.t_micro)
+		self.imu = self.imu_bfr
 		self._imu_new_data = True
 	
 	'''*******************************************************************
@@ -136,9 +181,9 @@ class OmniSerialCom:
 	*******************************************************************'''
 	def odom_decode(self, data, size):
 		#https://docs.python.org/3/library/struct.html
-		self.odom[0] = struct.unpack('>h', data[0:2])[0] 	# signed short 2B
-		self.odom[1] = struct.unpack('>h', data[2:4])[0]
-		self.odom[2] = struct.unpack('>h', data[4:6])[0]
+		self.odom_bfr[0] = struct.unpack('>h', data[0:2])[0] 	# signed short 2B
+		self.odom_bfr[1] = struct.unpack('>h', data[2:4])[0]
+		self.odom_bfr[2] = struct.unpack('>h', data[4:6])[0]
 		self.odom_seq = struct.unpack('B', data[6:7])[0]	# unsigned byte	
 		
 		#debug
@@ -146,9 +191,10 @@ class OmniSerialCom:
 		if (self.odom_seq != ((self.last_odom_seq + 1)%256) ):
 			if not self._first_odom:
 				rospy.logwarn("odom seq mismatch, prev: %d, now:%d", self.last_odom_seq, self.odom_seq)
-			else:
-				self._first_odom = False	
+		if self._first_odom:										   
+			self._first_odom = False	
 		self.last_odom_seq = self.odom_seq
+		self.odom = self.odom_bfr
 		self._odom_new_data = True
 	
 	'''*******************************************************************
@@ -156,9 +202,9 @@ class OmniSerialCom:
 	*******************************************************************'''
 	def cmd_decode(self, data, size):
 		#https://docs.python.org/3/library/struct.html
-		self.cmd[0] = struct.unpack('>f', data[0:4])[0] 	# int 4B
-		self.cmd[1] = struct.unpack('>f', data[4:8])[0]
-		self.cmd[2] = struct.unpack('>f', data[8:12])[0]
+		self.cmd_bfr[0] = struct.unpack('>f', data[0:4])[0] 	# int 4B
+		self.cmd_bfr[1] = struct.unpack('>f', data[4:8])[0]
+		self.cmd_bfr[2] = struct.unpack('>f', data[8:12])[0]
 		self.cmd_seq = struct.unpack('B', data[12:13])[0]	# unsigned byte	
 		
 		#debug
@@ -166,20 +212,18 @@ class OmniSerialCom:
 		if (self.cmd_seq != ((self.last_cmd_seq + 1)%256) ):
 			if not self._first_cmd:
 				rospy.logwarn("cmd seq mismatch, prev: %d, now:%d", self.last_cmd_seq, self.cmd_seq)
-			else:
-				self._first_cmd = False
+		if self._first_cmd:
+			self._first_cmd = False
+				
 		self.last_cmd_seq = self.cmd_seq
+		self.cmd = self.cmd_bfr
 		self._cmd_new_data = True
-		self._pos_new_data = True
 
 	'''*******************************************************************
 		Module communication from outside
 	*******************************************************************'''		
 	def serialOK(self):
-		if self._serialOK:		# and self.is_synced
-			return True
-		else:
-			return False
+		return self._serialOK
 		
 	def imu_new_data(self):
 		return self._imu_new_data
@@ -189,10 +233,7 @@ class OmniSerialCom:
 	
 	def cmd_new_data(self):
 		return self._cmd_new_data
-	
-	def pos_new_data(self):
-		return self._pos_new_data
-		
+			
 	def get_imu_data(self):
 		if self._imu_new_data:
 			# data assign
