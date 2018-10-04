@@ -26,7 +26,7 @@ These instructions will get you a copy of this demo and running on your local ma
 
 ## Prerequisites
 1. Neuron hardware and SEMA library  
-You'll need the ADLINK SEMA library and a compatible motherboard to run this example. You can conatct **TODO: SOMEONE** for more information.
+You'll need the ADLINK SEMA library and a compatible motherboard to run this example. You can visit [https://neuron.adlinktech.com](https://neuron.adlinktech.com) for more information.
 2. Download the source of this project to your ROS (catkin) workspace  
     ```
     cd catkin_ws/src
@@ -59,7 +59,7 @@ Connect all the wire properly according to this diagram: ([click to download](do
 
 ### b) software setup
 1. Install ADLINK SEMA
-Your Neuron Bot should already have proper SEMA installed. Please go to **TODO: EMPTY PROJECT** if you have any questions.
+Your Neuron Bot should already have proper SEMA installed. Please go to [https://neuron.adlinktech.com](https://neuron.adlinktech.com) if you have any questions.
 
 2. Install ROS kinetic and setup workspace
 	Your Neuron Bot should already have ROS set. If not, you mar refer to [the install guide](http://wiki.ros.org/kinetic/Installation/Ubuntu), and [catkin_ws setup guide](http://wiki.ros.org/catkin/Tutorials/create_a_workspace). Make sure you have environmental path add to .bashrc to save time
