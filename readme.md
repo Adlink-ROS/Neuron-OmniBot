@@ -149,7 +149,7 @@ roscore is the core of the ROS as its name suggest. We encourage you to manually
 2. Robot Base driver
     This launch file include multiple node. It launches the communication between STM32 motor controller, laser slam, as well as all the robot TF definition. Please note that if you're ending the node by `ctrl + c`, you only have to hit once and give it a seconds for it to shutdown automatically. The LaserScan node requies some time to shutdown the serial port.
     ```
-    roslaunch omni_base_driver omni_localization.launch
+    roslaunch omni_base_driver omni_ekf.launch
     ```
 3. Keyboard controller node
 We use [teleop_twist_keyboard](http://wiki.ros.org/teleop_twist_keyboard) as our manual driver. The default command is a little too fast, so use `x` and `c` to reduce velocity to around 0.3. 
