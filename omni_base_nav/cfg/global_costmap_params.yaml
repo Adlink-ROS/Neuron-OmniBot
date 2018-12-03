@@ -30,5 +30,5 @@ global_costmap:
     #    laser: {sensor_frame: base_laser, data_type: LaserScan, topic: scan, marking: true, clearing: true}
 
     inflation:
-        inflation_radius: 0.33
-        cost_scaling_factor: 8
+        inflation_radius: 1
+        cost_scaling_factor: 5

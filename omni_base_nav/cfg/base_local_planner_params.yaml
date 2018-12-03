@@ -1,40 +1,40 @@
 TrajectoryPlannerROS:
   #Set the acceleration limits of the robot
-  acc_lim_theta: 1.0 
-  acc_lim_x: 0.8
-  acc_lim_y: 0.8
+  acc_lim_theta: 0.3
+  acc_lim_x: 0.5
+  acc_lim_y: 0.5
 
   #Set the velocity limits of the robot
-  max_vel_x: 1
-  min_vel_x: 0.28
-  max_vel_theta: 1
-  min_vel_theta: -1
-  min_in_place_rotational_vel: 0.6
-  y_vels: [-1, -0.28, 0.28, 1]
+  max_vel_x: 0.6
+  min_vel_x: 0.15 # make sure min_vel_x * sim_time <2 * xy_goal_tolerance
+  max_vel_theta: 0.6
+  min_vel_theta: -0.6
+  min_in_place_rotational_vel: 0.2
+  y_vels: [-0.6, -0.24, 0.24, 0.6]
 
   #The velocity the robot will command when trying to escape from a stuck situation
-  escape_vel: -0.1
+  escape_vel: -0.2
   
   #For this example, we'll use a holonomic robot
   holonomic_robot: true
 
   #Set the tolerance on achieving a goal
-  xy_goal_tolerance: 0.08 # m
-  yaw_goal_tolerance: 0.5 # rad
-  latch_xy_goal_tolerance: true
+  xy_goal_tolerance: 0.15 # m
+  yaw_goal_tolerance: 0.08 # rad
+  latch_xy_goal_tolerance: false
 
   #We'll configure how long and with what granularity we'll forward simulate trajectories
-  sim_time: 4.0
-  sim_granularity: 0.02 # meter
-  vx_samples: 50
-  vtheta_samples: 20
+  sim_time: 1.5
+  sim_granularity: 0.025 # meter
+  vx_samples: 10
+  vtheta_samples: 25
 
   #Parameters for scoring trajectories
   meter_scoring: true # true: unit is meter, false: cell
-  pdist_scale: 2 # max is 5
-  gdist_scale: 3 # max is 5
+  pdist_scale: 1.0 # max is 5
+  gdist_scale: 1.0 # max is 5
   heading_scoring: false
-  heading_lookahead: 0.2 # meter
+  heading_lookahead: 0.3 # meter
   heading_scoring_timestep: 0.5 # secs
 
   #We'll use the Dynamic Window Approach to control instead of Trajectory Rollout for this example

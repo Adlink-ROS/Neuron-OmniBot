@@ -28,8 +28,8 @@
     <param name="enable_tf" type="bool" value="$(arg enable_tf_arg)" />
     
     <!-- frequencies -->
-    <param name="odom_freq" type="double" value="50" />
-    <param name="imu_freq" type="double" value="120" />
+    <param name="odom_freq" type="double" value="25" />
+    <param name="imu_freq" type="double" value="200" />
     <param name="tx_freq" type="double" value="5" />
     
     <!-- control config -->
