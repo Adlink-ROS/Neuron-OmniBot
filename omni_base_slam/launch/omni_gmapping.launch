@@ -30,7 +30,7 @@
       <param name="ymin" value="-15.0"/>
       <param name="xmax" value="15.0"/>
       <param name="ymax" value="15.0"/>
-      <param name="delta" value="0.025"/>
+	  <param name="delta" value="0.025"/>			<!-- map resolution -->
       <param name="llsamplerange" value="0.01"/>
       <param name="llsamplestep" value="0.01"/>
       <param name="lasamplerange" value="0.005"/>

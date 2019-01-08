@@ -1,0 +1,10 @@
+<launch>
+	
+	<include file="$(find omni_base_driver)/launch/omni_base_driver_ewbot.launch"/>
+	<include file="$(find omni_base_driver)/launch/omni_laser_ewbot.launch"/>
+ 
+	<!--
+	<node name="keyboard_driver" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" output="screen"/>-->
+
+  
+</launch>

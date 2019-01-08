@@ -1,7 +1,7 @@
  <launch>
  
 	<!--======== map server ========-->
-	<node name="map_server" pkg="map_server" type="map_server" args="$(find omni_base_slam)/map/my_map.yaml">
+	<node name="map_server" pkg="map_server" type="map_server" args="$(find omni_base_slam)/map/map.yaml">
 		<!--<remap from="map" to="map_amcl"/>-->
     </node>
     <!-- Map server (for nav)
@@ -27,9 +27,9 @@
         <param name="initial_pose_x" value="0"/>
         <param name="initial_pose_y" value="0"/>
         <param name="initial_pose_a" value="0"/>
-        <param name="initial_cov_xx" value="0.05" />
-        <param name="initial_cov_yy" value="0.05" />
-		<param name="initial_cov_aa" value="0.2" />
+        <param name="initial_cov_xx" value="0.5" />
+        <param name="initial_cov_yy" value="0.5" />
+		<param name="initial_cov_aa" value="0.5" />
 		
         <param name="transform_tolerance" value="0.05" />
         <param name="gui_publish_rate" value="5.0"/>
@@ -49,10 +49,10 @@
 		-->
         <param name="odom_model_type" value="omni-corrected"/>
 		<param name="odom_alpha1" value="0.15"/>
-        <param name="odom_alpha2" value="0.15"/>
+        <param name="odom_alpha2" value="0.18"/>
         <param name="odom_alpha3" value="0.08"/>
         <param name="odom_alpha4" value="0.08"/>
-		<param name="odom_alpha5" value="0.05"/>
+		<param name="odom_alpha5" value="0.06"/>
 		
         <param name="laser_z_hit" value="0.7"/>
         <param name="laser_z_short" value="0.05"/>
