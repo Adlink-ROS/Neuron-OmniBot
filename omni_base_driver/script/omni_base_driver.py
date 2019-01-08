@@ -85,12 +85,12 @@ class Omni_base_node:
 			self.imu.angular_velocity_covariance[i] = 0
 			self.imu.linear_acceleration_covariance[i] = 0
 		self.imu.orientation_covariance[0] = -1
-		self.imu.angular_velocity_covariance[0] = math.radians(0.05)	# P.12 of the MPU6050 datasheet
-		self.imu.angular_velocity_covariance[4] = math.radians(0.05)
-		self.imu.angular_velocity_covariance[8] = math.radians(0.05)
-		self.imu.linear_acceleration_covariance[0] = 4000*10**-6*9.81	# in m/s**2
-		self.imu.linear_acceleration_covariance[4] = 4000*10**-6*9.81
-		self.imu.linear_acceleration_covariance[8] = 4000*10**-6*9.81
+		self.imu.angular_velocity_covariance[0] = math.radians(0.05)**2		# P.12 of the MPU6050 datasheet
+		self.imu.angular_velocity_covariance[4] = math.radians(0.05)**2
+		self.imu.angular_velocity_covariance[8] = math.radians(0.05)**2
+		self.imu.linear_acceleration_covariance[0] = (400*10**-6*9.81)**2		# in m/s**2
+		self.imu.linear_acceleration_covariance[4] = (400*10**-6*9.81)**2
+		self.imu.linear_acceleration_covariance[8] = (400*10**-6*9.81)**2
 		
 		self.x_e = float(0)
 		self.y_e = float(0)
@@ -102,9 +102,10 @@ class Omni_base_node:
 		self.accel_sensitivity = 1.8*9.81	# 2g
 		self.gyro_sensitivity = math.radians(250) 	# 250deg/sec
 		
-		self.last_odom_time = time.time()
+		self.last_odom_time = time.time()+3		# 3 sec for VDMC initialization
 		self.last_cmd_vel_time = self.last_odom_time
-		self.odom_timeout = 1/self.param["odom_freq"] * 2
+		self.last_imu_time = self.last_odom_time
+		self.odom_timeout = 1/self.param["odom_freq"] * 3
 		self.imu_timeout = 1/self.param["imu_freq"] * 10
 		
 		self.no_cmd_received = True
@@ -219,7 +220,9 @@ class Omni_base_node:
 			
 			self.last_odom_time = time_now;
 		elif self.first_odom:
-			self.last_odom_time = time.time();
+			if (time.time() - self.last_odom_time)>5:
+				rospy.logerr('First odom not arrived %f seconds',(time.time() - self.last_odom_time))
+				self.last_odom_time = time.time()
 			return
 		elif (time.time() - self.last_odom_time)>self.odom_timeout:
 			# if no new_data

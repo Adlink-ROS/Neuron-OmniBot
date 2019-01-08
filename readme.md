@@ -26,7 +26,7 @@ These instructions will get you a copy of this demo and running on your local ma
 
 ## Prerequisites
 1. Neuron hardware and SEMA library  
-You'll need the ADLINK SEMA library and a compatible motherboard to run this example. You can conatct **TODO: SOMEONE** for more information.
+You'll need the ADLINK SEMA library and a compatible motherboard to run this example. You can visit [https://neuron.adlinktech.com](https://neuron.adlinktech.com) for more information.
 2. Download the source of this project to your ROS (catkin) workspace  
     ```
     cd catkin_ws/src
@@ -59,7 +59,7 @@ Connect all the wire properly according to this diagram: ([click to download](do
 
 ### b) software setup
 1. Install ADLINK SEMA
-Your Neuron Bot should already have proper SEMA installed. Please go to **TODO: EMPTY PROJECT** if you have any questions.
+Your Neuron Bot should already have proper SEMA installed. Please go to [https://neuron.adlinktech.com](https://neuron.adlinktech.com) if you have any questions.
 
 2. Install ROS kinetic and setup workspace
 	Your Neuron Bot should already have ROS set. If not, you mar refer to [the install guide](http://wiki.ros.org/kinetic/Installation/Ubuntu), and [catkin_ws setup guide](http://wiki.ros.org/catkin/Tutorials/create_a_workspace). Make sure you have environmental path add to .bashrc to save time
@@ -149,7 +149,7 @@ roscore is the core of the ROS as its name suggest. We encourage you to manually
 2. Robot Base driver
     This launch file include multiple node. It launches the communication between STM32 motor controller, laser slam, as well as all the robot TF definition. Please note that if you're ending the node by `ctrl + c`, you only have to hit once and give it a seconds for it to shutdown automatically. The LaserScan node requies some time to shutdown the serial port.
     ```
-    roslaunch omni_base_driver omni_localization.launch
+    roslaunch omni_base_driver omni_ekf.launch
     ```
 3. Keyboard controller node
 We use [teleop_twist_keyboard](http://wiki.ros.org/teleop_twist_keyboard) as our manual driver. The default command is a little too fast, so use `x` and `c` to reduce velocity to around 0.3. 
