@@ -1,0 +1,52 @@
+<launch>
+    <!-- ***************** -->
+    <!-- Common Parameters -->
+    <!-- ***************** -->
+    <!-- host/client -->
+    <arg name="host_robot"  default="true" />
+    <arg name="dummy_transforms" default="false" />
+    <!-- camera type -->
+    <arg name="camera_type" default="D435" /> <!-- opt: Astra, Astra_Pro, D435 -->
+    <!-- following mode -->    
+    <arg name="pure_legs"   default="true" />
+    <!-- init pose -->    
+    <arg name="init_x" default="0.662" />
+    <arg name="init_y" default="0.427" />
+    <arg name="init_a" default="2.612" />
+    <!-- swarm mode -->
+    <arg name="swarm_mode" default="false" />
+
+
+    <!-- **************** -->
+    <!-- All Launch Files -->
+    <!-- **************** -->
+    <!-- All Drivers -->    
+    <include file="$(find omni_base_demo)/launch/OmniBot_Demo_HWDrivers.launch">
+        <arg name="dummy_transforms" value="$(arg dummy_transforms)" />
+        <arg name="camera_type" value="$(arg camera_type)" />
+    </include>
+
+    <!-- Detection -->
+    <include file="$(find omni_base_demo)/launch/OmniBot_Demo_Detection.launch">
+        <arg name="dummy_transforms" value="$(arg dummy_transforms)" />
+        <arg name="camera_type" value="$(arg camera_type)" />
+    </include>
+
+    <!-- Following -->
+    <include file="$(find omni_base_demo)/launch/OmniBot_Demo_Following.launch">
+        <arg name="pure_legs" value="$(arg pure_legs)"/>
+        <arg name="init_x"    value="$(arg init_x)"/>
+        <arg name="init_y"    value="$(arg init_y)"/>
+        <arg name="init_a"    value="$(arg init_a)"/>
+    </include>
+
+    <!-- Localization (amcl) -->
+    <include file="$(find omni_base_demo)/launch/OmniBot_Demo_Localization.launch">
+        <arg name="init_x" value="$(arg init_x)"/>
+        <arg name="init_y" value="$(arg init_y)"/>
+        <arg name="init_a" value="$(arg init_a)"/>
+    </include>
+
+    <!-- ROS2/DDS params -->
+    <!--<include file="$(find omni_base_demo)/launch/host/NeuronBot_Demo_Host_ROS2_Bridge.launch" if="$(arg swarm_mode)"/>-->
+</launch>

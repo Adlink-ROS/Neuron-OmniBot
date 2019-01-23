@@ -1,0 +1,10 @@
+<launch>
+    <!-- for amcl -->    
+    <arg name="init_x" default="0.662" />
+    <arg name="init_y" default="0.427" />
+    <arg name="init_a" default="2.612" />
+	
+    <!-- Localization (amcl) -->
+    <include file="$(find omni_base_nav)/launch/omni_localize.launch"></include>
+
+</launch>

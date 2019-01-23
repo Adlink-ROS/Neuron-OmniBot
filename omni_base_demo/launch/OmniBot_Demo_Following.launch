@@ -1,0 +1,72 @@
+<launch>
+    <arg name="pure_legs" default="true"/>
+	<arg name="vision_tracking" default="true"/>
+    <!-- init pose -->
+    <arg name="init_x" default="0.662" />
+    <arg name="init_y" default="0.427" />
+    <arg name="init_a" default="2.612" />
+
+	
+	<!-- Following based on fused detection outputs -->
+    <group if="$(arg vision_tracking)" ns="tf_ai_tracker">		
+		
+		<!-- Target exactor from image and depth -->
+		<param name="target_type" value="person"/>
+        <param name="target_threshold" value="0.85"/>
+		<node pkg="tf_ai_tracker" type="target_extractor" name="target_extractor" output="screen" respawn="true"/>
+		
+		<!-- Target filter from exactor -->
+		<param name="max_target_dist" value="3.0"/>
+		<param name="target_filter_threshold" value="8"/>
+        <node pkg="tf_ai_tracker" type="target_filter" name="target_filter"  output="screen"/>
+		
+		<!-- Tracking controller -->
+		<param name="dist_target" value="1.2"/>
+		<param name="ang_target" value="0.0"/>
+		<param name="dist_Kp" value="1.5"/>
+		<param name="ang_Kp" value="0.8"/>
+		<param name="vel_max" value="0.5"/>
+		<param name="omega_max" value="1.8"/>
+		<param name="dist_min" value="0.25"/>
+		<param name="decay_factor_lin" value="5"/>
+		<param name="inject_factor_lin" value="15"/>
+		<param name="decay_factor_ang" value="60"/>
+		<param name="inject_factor_ang" value="15"/>
+        <node pkg="tf_ai_tracker" type="target_tracker" name="target_tracker"  output="screen" >
+          <remap from="cmd_vel" to="/cmd_vel"/>
+        </node>
+    </group>
+    
+    <!-- Following based on fused detection outputs -->
+	<group unless="$(arg vision_tracking)">
+		<group unless="$(arg pure_legs)">
+			<node pkg="adlink_neuronbot" type="neuronbot_following_fused.py" name="neuronbot_following"  output="screen">
+				<param name="following_distance" value="0.9" type="double"/>
+				<param name="debug_info" value="True"/>
+				<remap from="/following/persons" to="/spencer/perception/tracked_persons"/>
+				<remap from="/following/cmd_vel" to="/cmd_vel_mux/input/follow"/>
+			</node>
+		</group>
+
+		<!-- Following based on leg detection output -->
+		<group if="$(arg pure_legs)">
+			<node pkg="adlink_neuronbot" type="neuronbot_following_legs.py" name="neuronbot_following"  output="screen">
+				<param name="following_distance" value="0.7" type="double"/>
+				<param name="debug_info" value="True"/>
+				<param name="initPosX"  value="$(arg init_x)" />
+				<param name="initPosY"  value="$(arg init_y)" />
+				<param name="initPosA"  value="$(arg init_a)" />
+				<param name="Kp_linear"  value="1.0"/>
+				<param name="Kp_angular" value="1.0"/>
+				<param name="Ki_linear"  value="0.0"/>
+				<param name="Ki_angular" value="0.0"/>
+				<param name="initCovX"  value="0.5" />
+				<param name="initCovY"  value="0.5" />
+				<param name="initCovA"  value="0.1" />
+				<param name="map_frame" value="map" />
+				<remap from="/following/legs"    to="/people_tracked"/>
+				<remap from="/following/cmd_vel" to="/cmd_vel_mux/input/follow"/>
+			</node>
+		</group>
+	</group>
+</launch>

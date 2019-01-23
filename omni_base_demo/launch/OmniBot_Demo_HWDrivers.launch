@@ -1,0 +1,41 @@
+<launch>
+    <arg name="robot_base"       default="omnibot" />
+    <arg name="dummy_transforms" default="false" />
+    <arg name="host_robot"       default="true" />
+    <arg name="camera_type"      default="D435" /> <!-- opt: Astra, Astra_Pro, D435 -->
+	<arg name="height_above_ground" default="0.88"/>    <!-- in meters, assumes a horizontally oriented RGB-D sensor; important for accurate detection -->
+	<arg name="use_state_publisher" default="false" />
+	
+	<group if="$(eval robot_base == 'omnibot')">
+		
+		<!-- Robot Base -->
+		<include file="$(find omni_base_driver)/launch/omni_ekf.launch" />
+
+		<!-- Robot TF -->
+		<include  if="$(arg use_state_publisher)" file="$(find omnibot_description)/launch/robot_state_manager_neuronbot.launch"/>
+
+		<group unless="$(arg use_state_publisher)">
+			<!--<include file="$(find adlink_neuronbot)/launch/include/neuronbot_tf.launch.xml">
+			<arg name="fake_odom_link" value="$(arg dummy_transforms)" />
+			<arg name="host_robot"     value="$(arg host_robot)" />
+			</include>-->
+				
+			<!-- Robot TF -->
+			<node name="tf_base2footprint"   pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 base_link base_footprint 100"/>
+			<node name="tf_base2top"   pkg="tf" type="static_transform_publisher" args="0 0 $(arg height_above_ground) 0 0 0 base_link top_base_link 100"/>
+			<node name="tf_top2camera" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0.087266 0 top_base_link camera_link 100"/>        
+			<!--<node name="tf_odom2base"  pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 odom base_footprint 10"/>-->
+		</group>
+
+		<!-- Camera Driver -->    
+		<include file="$(find realsense2_camera)/launch/rs_rgbd.launch"/>
+		<!--<arg name="color_width" default="640" />
+		<arg name="color_height" default="480" />
+		<include file="$(find realsense2_camera)/launch/rs_camera.launch">
+			<arg name="color_width" value="$(arg color_width)" />
+			<arg name="color_height" value="$(arg color_height)" />
+		</include>-->
+
+		
+	</group>
+</launch>
