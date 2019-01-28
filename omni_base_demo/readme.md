@@ -1,10 +1,22 @@
 # OmniBot Demonstration
-
+<p align="center"><img src="../doc/screenshots/omni_ai_tracking.png?raw=true" height="450"></p>
+  
 # Prerequisite
-### Hardware
+### OmniBot
 * OmniBot  
     Please install all the necessary packages for the omniBot. See its coresponding [readme](../readme.md)
-   
+       
+* tf_ai_tracker (branch: [NeuronBot](https://github.com/Adlink-ROS/tf_ai_tracker/tree/NeuronBot))
+    Tracking filter and controller for ai person tracking
+    ```bash
+    cd ~/catkin_ws/src  
+    git clone -b NeuronBot https://github.com/Adlink-ROS/tf_ai_tracker.git
+    
+    # **NOTE** AFTER YOU HAVE BUILD THE REALSENSE AND NCS BELOW **NOTE** 
+    cd ~/catkin_ws/
+    catkin_make
+    ```  
+    
 ### Intel RealSense
 * Intel Realsense SDK 2.0 (librealsense)   
   Source: https://github.com/IntelRealSense/librealsense/releases/tag/v2.17.1  
@@ -56,7 +68,8 @@
 
 
 # Demonstration
-Please also check https://github.com/Adlink-ROS/Neuron-OmniBot, branch [v3.0-ncs](https://github.com/Adlink-ROS/adlink_neuronbot/tree/v3.0-ncs)
+<p align="center"><img src="../doc/ROS%20graphs/rosgraph_omni_ai_tracking.svg" height="500"></p>  
+
 * Mapping  
   ```bash
   $ roslaunch omni_base_driver omni_base_ekf.launch
@@ -73,3 +86,10 @@ Please also check https://github.com/Adlink-ROS/Neuron-OmniBot, branch [v3.0-ncs
 * For AI viewing with detection bounding box  
   `$ roslaunch movidius_ncs_launch ncs_stream_detection_example.launch camera_topic:=/camera/color/image_raw`
  
+# Related Links
+* Github **[Neuron-OmniBot](https://github.com/Adlink-ROS/Neuron-OmniBot)**
+* Github **[Neuron-NeuronBot](https://github.com/Adlink-ROS/adlink_neuronbot/)**, branch [v3.0-ncs](https://github.com/Adlink-ROS/adlink_neuronbot/tree/v3.0-ncs)
+* Github **tf_ai_tracker**, branch [NeuronBot](https://github.com/Adlink-ROS/tf_ai_tracker/tree/NeuronBot)
+* Github **[adlink_tegrabot](https://github.com/Adlink-ROS/adlink_tegrabot)** - Cloth tracking robot using TensorFlow ROS on TX2
+* Github **[tensorflow_object_detector](https://github.com/Adlink-ROS/tensorflow_object_detector)** - TensorFlow ROS node for the cloth tracking robot above
+* Github **[tegrabot_description](https://github.com/Adlink-ROS/tegrabot_description)** - Robot model in RVIZ
