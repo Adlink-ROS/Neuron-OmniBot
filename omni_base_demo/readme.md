@@ -1,5 +1,7 @@
 # OmniBot Demonstration
-<p align="center"><img src="../doc/screenshots/omni_ai_tracking.png?raw=true" height="450"></p>
+
+* [Quick Demo Video](https://youtu.be/FjVcfNeeSCg)
+<p align="center"><img src="../doc/screenshots/omni_ai_tracking.png?raw=true" height="400"></p>
   
 # Prerequisite
 ### OmniBot
