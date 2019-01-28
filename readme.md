@@ -1,6 +1,6 @@
 ﻿# Neuron Omni Bot
 This is a demo package of Neuron Omni Bot's autonomous and fast integration capability using ROS  
-<p align="center"><img src="doc/Omnibot_bare.jpg?raw=true" height="450"></p>
+<p align="center"><img src="doc/omniBot__FRONT-45-left.png?raw=true" height="450"></p>
 
 ### Features
 - Fully integration between SEMA library and ROS2
@@ -12,6 +12,7 @@ This is a demo package of Neuron Omni Bot's autonomous and fast integration capa
 - Easy to use ROS launch file with maximum customization capabilities
 - Finely tuned ROS navigation, guidance, and control algorithms with full list of parameters provided
 - Multiple io interfacing methods using the SEMA library
+- [AI person tracking](omni_base_demo)
 
 ### Tutorial Videos
  - [NeuronBot ROS AutoNav tutorial 1: OmniBot base driver](https://youtu.be/pYMr5YRR5LI)
