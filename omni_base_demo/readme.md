@@ -45,8 +45,8 @@
     Clone the NC APP Zoo to _/opt/movidius_ directly
     * `make all` will fail due to (a) v4l unable to use realsense as video0 
     * Remove ../tensorflow/topcoder_maups that causes build failure
-    * ` make compile'
-        
+    * `make compile`
+    
 3. [Movidius NCS ROS package](https://github.com/intel/ros_intel_movidius_ncs/tree/devel)     
     Install movidius ncs ROS package with branch "devel"  
     ```bash
