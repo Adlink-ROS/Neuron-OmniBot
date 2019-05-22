@@ -12,5 +12,5 @@
     <param name="ignore_array" type="string" value="" />
   </node>
   <node pkg="tf" type="static_transform_publisher" name="base_link_to_laser"
-    args="0.0 0.0 0.135 0 0.0  0.0 /base_link /base_laser 100" />
+    args="0.0 0.0 0.125 0.0 0.0  0.0 /base_link /base_laser 100" />
 </launch>
