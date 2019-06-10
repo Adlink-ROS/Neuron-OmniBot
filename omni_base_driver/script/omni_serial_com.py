@@ -38,12 +38,12 @@ class OmniSerialCom:
 			raise
 			return
 
-		self.imu = {"accel":[0, 0, 0], "gyro":[0, 0, 0]}
-		self.imu_bfr = {"accel":[0, 0, 0], "gyro":[0, 0, 0]}
+		self.imu = {"accel":[0, 0, 0], "gyro":[0, 0, 0], "mag":[0, 0, 0]}
+		self.imu_bfr = {"accel":[0, 0, 0], "gyro":[0, 0, 0], "mag":[0, 0, 0]}
 		self.odom = [0, 0, 0]
 		self.odom_bfr = [0, 0, 0]
 		self.cmd = [0, 0, 0]
-		self.cmd_bfr = [0, 0, 0]
+		self.cmd_bfr = [0, 0, 0, 0]
 		self.odom_seq = 0
 		self.cmd_seq = 0
 		self.last_odom_seq = 0
@@ -70,10 +70,10 @@ class OmniSerialCom:
 			return
 		
 		# sent start signal
-		self._serialOK = True
 		rospy.loginfo("Sending starting signal \"SSSS\"")
-		self.serial.write( "SSSS".encode('ascii') )
-		# time.sleep(0.01)		# for Arduino to reboot
+		self.serial.write( "ADLG02".encode('ascii') )
+		time.sleep(0.1)		# for init command to be effective
+		self._serialOK = True # Start cmd TX
 		
 		# continuous packet recieve
 		while (not self.t_stop.is_set()): 
@@ -84,40 +84,41 @@ class OmniSerialCom:
 				break
 			
 			#========= imu data packet =========#
-			if reading[0] == '\xFF' and reading[1] == '\xFA':
+			if reading[0] == '\xFF' and reading[1] == '\xE1':
 				#ser_in = self.serial.read(12)
 				try:
-					ser_in = self.serial.read(12)
+					ser_in = self.serial.read(21)
 				except Exception:
 					self.error_flag = True
 					break	 
-				self.imu_decode(ser_in, 12)
+				self.imu_decode(ser_in, 21)
 				self._is_synced = True
 				#debug
 				#toHex = lambda x: "".join("{:02X}".format(ord(c)) for c in reading)
 				#print(toHex(b'\x03\xac23\n'))
 				
-			#========= encoder data packet =========#
-			elif reading[0] == '\xFF' and reading[1] == '\xFB':
+			#========= odom data packet =========#
+			elif reading[0] == '\xFF' and reading[1] == '\xE0':
 				#ser_in = self.serial.read(7)
 				try:
-					ser_in = self.serial.read(7)
+					ser_in = self.serial.read(15)
 				except Exception:
 					self.error_flag = True
 					break	
-				self.odom_decode(ser_in, 7)
+				self.odom_decode(ser_in, 15)
 				self._is_synced = True
 			
-			#========= command data packet =========#
-			elif reading[0] == '\xFF' and reading[1] == '\xFC':
+			#========= quaternion packet =========#
+			elif reading[0] == '\xFF' and reading[1] == '\xE2':
 				#ser_in = self.serial.read(13)
 				try:
-					ser_in = self.serial.read(13)
+					ser_in = self.serial.read(11)
 				except Exception:
 					self.error_flag = True
 					break
-				self.cmd_decode(ser_in, 13)
+				self.quat_decode(ser_in, 11)
 				self._is_synced = True
+				
 				
 			#=========  lost sync =========#
 			else:
@@ -138,7 +139,7 @@ class OmniSerialCom:
 		# if loop breaks with an error flag 
 		if self.error_flag:
 			rospy.logerr('serial read error')
-			self.serial.write( 'RRR'.encode('ascii') )
+			self.serial.write( 'ADLR01'.encode('ascii') )
 			self.serial.close()
 			self._serialOK = False
 			self._is_synced = False
@@ -171,6 +172,9 @@ class OmniSerialCom:
 		self.imu_bfr["gyro"][0] = struct.unpack('>h', data[6:8])[0]
 		self.imu_bfr["gyro"][1] = struct.unpack('>h', data[8:10])[0]
 		self.imu_bfr["gyro"][2] = struct.unpack('>h', data[10:12])[0]
+		self.imu_bfr["mag"][0] = struct.unpack('>h', data[12:14])[0]
+		self.imu_bfr["mag"][1] = struct.unpack('>h', data[14:16])[0]
+		self.imu_bfr["mag"][2] = struct.unpack('>h', data[16:18])[0]
 		#debug
 		#print("imu", self.seq, " t_micro:", self.t_micro)
 		self.imu = self.imu_bfr
@@ -181,10 +185,10 @@ class OmniSerialCom:
 	*******************************************************************'''
 	def odom_decode(self, data, size):
 		#https://docs.python.org/3/library/struct.html
-		self.odom_bfr[0] = struct.unpack('>h', data[0:2])[0] 	# signed short 2B
-		self.odom_bfr[1] = struct.unpack('>h', data[2:4])[0]
-		self.odom_bfr[2] = struct.unpack('>h', data[4:6])[0]
-		self.odom_seq = struct.unpack('B', data[6:7])[0]	# unsigned byte	
+		self.odom_bfr[0] = struct.unpack('>f', data[0:4])[0] 	# signed short 4B
+		self.odom_bfr[1] = struct.unpack('>f', data[4:8])[0]
+		self.odom_bfr[2] = struct.unpack('>f', data[8:12])[0]
+		#self.odom_seq = struct.unpack('B', data[6:7])[0]	# unsigned byte	
 		
 		#debug
 		#print("odom", self.odom_seq, self.odom[0:3])
@@ -200,12 +204,13 @@ class OmniSerialCom:
 	'''*******************************************************************
 		Decode 5hz data
 	*******************************************************************'''
-	def cmd_decode(self, data, size):
+	def quat_decode(self, data, size):
 		#https://docs.python.org/3/library/struct.html
-		self.cmd_bfr[0] = struct.unpack('>f', data[0:4])[0] 	# int 4B
-		self.cmd_bfr[1] = struct.unpack('>f', data[4:8])[0]
-		self.cmd_bfr[2] = struct.unpack('>f', data[8:12])[0]
-		self.cmd_seq = struct.unpack('B', data[12:13])[0]	# unsigned byte	
+		self.cmd_bfr[0] = struct.unpack('>h', data[0:2])[0] 	# int 4B
+		self.cmd_bfr[1] = struct.unpack('>h', data[2:4])[0]
+		self.cmd_bfr[2] = struct.unpack('>h', data[4:6])[0]
+		self.cmd_bfr[3] = struct.unpack('>h', data[6:8])[0]
+		#self.cmd_seq = struct.unpack('B', data[12:13])[0]	# unsigned byte	
 		
 		#debug
 		#print("cmdA", self.cmd[0], "cmdB", self.cmd[1], "cmdC", self.cmd[2])
@@ -262,18 +267,21 @@ class OmniSerialCom:
 	*******************************************************************'''
 	def send_vel_cmd(self, veh_cmd):
 		if self._serialOK:
-			serial_cmd = bytearray(b'\xFF\xFE')
-			serial_cmd.append(0x01)			# base vector mode
+			serial_cmd = bytearray(b'\xFF\xF0')
+			#serial_cmd.append(0x01)			# base vector mode
 			
 			clamp = lambda n, minn, maxn: max(min(maxn, n), minn)
 			serial_cmd += struct.pack('>h',clamp( veh_cmd[0], -37268, 32767 ) ) #2-bytes 
 			serial_cmd += struct.pack('>h',clamp( veh_cmd[1], -37268, 32767 ) )
 			serial_cmd += struct.pack('>h',clamp( veh_cmd[2], -37268, 32767 ) )
 			
+			serial_cmd.append(0xEE)			# base vector mode
 			#debug
 			#print(binascii.hexlify(serial_cmd))
 
 			self.serial.write( serial_cmd )	
+			
+			
 	
 	def stopThread(self):
 		self.t_stop.set()

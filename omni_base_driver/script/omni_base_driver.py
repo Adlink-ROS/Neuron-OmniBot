@@ -29,15 +29,15 @@ class Omni_base_node:
 		self.param["odomId"] = rospy.get_param('~odom_id', 'odom') # odom frame id
 		self.param["imuId"] = rospy.get_param('~imu_id', 'imu') # odom frame id
 		self.param["enable_tf"] = rospy.get_param("~enable_tf", True)
-		self.param["device_port"] = rospy.get_param('~port', '/dev/ttyS2') # port
-		self.param["baudrate"] = int( rospy.get_param('~baudrate', '115200') ) # baudrate
+		self.param["device_port"] = rospy.get_param('~port', '/dev/ttyUSB0') # port
+		self.param["baudrate"] = int( rospy.get_param('~baudrate', '57600') ) # baudrate
 		self.param["timeout"] = float( rospy.get_param('~serial_timeout', '10') ) #
 		self.param["odom_freq"] = float( rospy.get_param('~odom_freq', '10') ) # hz of communication
 		self.param["imu_freq"] = float( rospy.get_param('~imu_freq', '100') )  # hz of communication
 		self.param["tx_freq"] = float( rospy.get_param('~tx_freq', '5') )      # hz of communication
 		self.param["cmd_timeout"] = float( rospy.get_param('~cmd_vel_timeout', '3') ) #
-		self.param["vel_gain"] = float( rospy.get_param('~vel_gain', '70') ) # to match physical world
-		self.param["omg_gain"] = float( rospy.get_param('~omg_gain', '500') ) #
+		self.param["vel_gain"] = float( rospy.get_param('~vel_gain', '10000') ) # to match physical world
+		self.param["omg_gain"] = float( rospy.get_param('~omg_gain', '10000') ) #
 		
 		rospy.set_param("omni_base_driver", self.param)
 		
