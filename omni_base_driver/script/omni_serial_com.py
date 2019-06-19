@@ -40,8 +40,8 @@ class OmniSerialCom:
 
 		self.imu = {"accel":[0, 0, 0], "gyro":[0, 0, 0], "mag":[0, 0, 0]}
 		self.imu_bfr = {"accel":[0, 0, 0], "gyro":[0, 0, 0], "mag":[0, 0, 0]}
-		self.odom = [0, 0, 0]
-		self.odom_bfr = [0, 0, 0]
+		self.odom = [0, 0, 0, 0, 0, 0]
+		self.odom_bfr = [0, 0, 0, 0, 0, 0]
 		self.cmd = [0, 0, 0]
 		self.cmd_bfr = [0, 0, 0, 0]
 		self.odom_seq = 0
@@ -87,11 +87,11 @@ class OmniSerialCom:
 			if reading[0] == '\xFF' and reading[1] == '\xE1':
 				#ser_in = self.serial.read(12)
 				try:
-					ser_in = self.serial.read(21)
+					ser_in = self.serial.read(22)
 				except Exception:
 					self.error_flag = True
 					break	 
-				self.imu_decode(ser_in, 21)
+				self.imu_decode(ser_in, 22)
 				self._is_synced = True
 				#debug
 				#toHex = lambda x: "".join("{:02X}".format(ord(c)) for c in reading)
@@ -101,22 +101,22 @@ class OmniSerialCom:
 			elif reading[0] == '\xFF' and reading[1] == '\xE0':
 				#ser_in = self.serial.read(7)
 				try:
-					ser_in = self.serial.read(15)
+					ser_in = self.serial.read(28)
 				except Exception:
 					self.error_flag = True
 					break	
-				self.odom_decode(ser_in, 15)
+				self.odom_decode(ser_in, 28)
 				self._is_synced = True
 			
 			#========= quaternion packet =========#
 			elif reading[0] == '\xFF' and reading[1] == '\xE2':
 				#ser_in = self.serial.read(13)
 				try:
-					ser_in = self.serial.read(11)
+					ser_in = self.serial.read(12)
 				except Exception:
 					self.error_flag = True
 					break
-				self.quat_decode(ser_in, 11)
+				self.quat_decode(ser_in, 12)
 				self._is_synced = True
 				
 				
@@ -151,7 +151,7 @@ class OmniSerialCom:
 				
 		# if threads ends here
 		print("Sending stoping signal to motor controller")
-		self.serial.write( 'R'.encode('ascii') )
+		self.serial.write( 'ADLR01'.encode('ascii') )
 		self.serial.close()	 
 		self._serialOK = False
 		self._is_synced = False
@@ -188,7 +188,10 @@ class OmniSerialCom:
 		self.odom_bfr[0] = struct.unpack('>f', data[0:4])[0] 	# signed short 4B
 		self.odom_bfr[1] = struct.unpack('>f', data[4:8])[0]
 		self.odom_bfr[2] = struct.unpack('>f', data[8:12])[0]
-		#self.odom_seq = struct.unpack('B', data[6:7])[0]	# unsigned byte	
+		self.odom_bfr[3] = struct.unpack('>f', data[12:16])[0] 	# signed short 4B
+		self.odom_bfr[4] = struct.unpack('>f', data[16:20])[0]
+		self.odom_bfr[5] = struct.unpack('>f', data[20:24])[0]
+		self.odom_seq = struct.unpack('B', data[24:25])[0]	# unsigned byte	
 		
 		#debug
 		#print("odom", self.odom_seq, self.odom[0:3])
@@ -210,7 +213,7 @@ class OmniSerialCom:
 		self.cmd_bfr[1] = struct.unpack('>h', data[2:4])[0]
 		self.cmd_bfr[2] = struct.unpack('>h', data[4:6])[0]
 		self.cmd_bfr[3] = struct.unpack('>h', data[6:8])[0]
-		#self.cmd_seq = struct.unpack('B', data[12:13])[0]	# unsigned byte	
+		self.cmd_seq = struct.unpack('B', data[8:9])[0]	# unsigned byte	
 		
 		#debug
 		#print("cmdA", self.cmd[0], "cmdB", self.cmd[1], "cmdC", self.cmd[2])

@@ -29,11 +29,11 @@ class Omni_base_node:
 		self.param["odomId"] = rospy.get_param('~odom_id', 'odom') # odom frame id
 		self.param["imuId"] = rospy.get_param('~imu_id', 'imu') # odom frame id
 		self.param["enable_tf"] = rospy.get_param("~enable_tf", True)
-		self.param["device_port"] = rospy.get_param('~port', '/dev/ttyUSB0') # port
-		self.param["baudrate"] = int( rospy.get_param('~baudrate', '57600') ) # baudrate
+		self.param["device_port"] = rospy.get_param('~port', '/dev/ttyUSB1') # port
+		self.param["baudrate"] = int( rospy.get_param('~baudrate', '115200') ) # baudrate
 		self.param["timeout"] = float( rospy.get_param('~serial_timeout', '10') ) #
-		self.param["odom_freq"] = float( rospy.get_param('~odom_freq', '10') ) # hz of communication
-		self.param["imu_freq"] = float( rospy.get_param('~imu_freq', '100') )  # hz of communication
+		self.param["odom_freq"] = float( rospy.get_param('~odom_freq', '20') ) # hz of communication
+		self.param["imu_freq"] = float( rospy.get_param('~imu_freq', '200') )  # hz of communication
 		self.param["tx_freq"] = float( rospy.get_param('~tx_freq', '5') )      # hz of communication
 		self.param["cmd_timeout"] = float( rospy.get_param('~cmd_vel_timeout', '3') ) #
 		self.param["vel_gain"] = float( rospy.get_param('~vel_gain', '10000') ) # to match physical world
@@ -186,16 +186,13 @@ class Omni_base_node:
 					self.last_odom_time = time.time();
 					return		# disregard first data
 			self.odom_last_seq = xyt_rtn["seq"]
-			dx_e = float(xyt_rtn["pos_dt"][0])/10000
-			dy_e = float(xyt_rtn["pos_dt"][1])/10000
-			d_th = float(xyt_rtn["pos_dt"][2])/10000
-			vx = dx_e * math.cos(self.th + d_th/2) + dy_e * math.sin(self.th + d_th/2)
-			vy = -dx_e * math.sin(self.th + d_th/2) + dy_e * math.cos(self.th + d_th/2)
-			time_now = time.time()
-			self.x_e += dx_e
-			self.y_e += dy_e
-			self.th += d_th
-			dt = time_now - self.last_odom_time
+			
+			self.x_e = xyt_rtn["pos_dt"][0]
+			self.y_e = xyt_rtn["pos_dt"][1]
+			self.th = xyt_rtn["pos_dt"][2]
+			vx = xyt_rtn["pos_dt"][3]
+			vy = xyt_rtn["pos_dt"][4]
+			d_th = xyt_rtn["pos_dt"][5]
 			
 			#======= ROS topic publisher =======#
 			self.odom.header.seq += 1
@@ -206,8 +203,8 @@ class Omni_base_node:
 			self.odom.pose.pose.orientation.y = quat[1]
 			self.odom.pose.pose.orientation.z = quat[2]
 			self.odom.pose.pose.orientation.w = quat[3]
-			self.odom.twist.twist.linear = Vector3(vx / dt, vy / dt, 0.0)
-			self.odom.twist.twist.angular = Vector3(0.0, 0.0, d_th/dt)
+			self.odom.twist.twist.linear = Vector3(vx, vy, 0.0)
+			self.odom.twist.twist.angular = Vector3(0.0, 0.0, d_th)
 			
 			self.odom_pub.publish(self.odom)
 			
@@ -218,7 +215,7 @@ class Omni_base_node:
 								self.param["baseId"],
 								self.param["odomId"]			)
 			
-			self.last_odom_time = time_now;
+			self.last_odom_time = time.time();
 		elif self.first_odom:
 			if (time.time() - self.last_odom_time)>5:
 				rospy.logerr('First odom not arrived %f seconds',(time.time() - self.last_odom_time))
