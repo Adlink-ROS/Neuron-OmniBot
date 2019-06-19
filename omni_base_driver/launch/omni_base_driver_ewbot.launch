@@ -41,6 +41,6 @@
   </node>
   
   <node pkg="tf" type="static_transform_publisher" name="base_link_to_imu"
-		  args="-0.02 -0.06 -0.04 -2.61799388 0.0 0.0 /base_link /$(arg imu_id_arg) 100" />
+		  args="0.01 0.035 -0.08 -1.570796 3.1415927 0.0 /base_link /$(arg imu_id_arg) 100" />
   
 </launch>
