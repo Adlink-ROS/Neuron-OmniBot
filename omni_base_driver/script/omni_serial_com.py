@@ -139,7 +139,8 @@ class OmniSerialCom:
 		# if loop breaks with an error flag 
 		if self.error_flag:
 			rospy.logerr('serial read error')
-			self.serial.write( 'ADLR01'.encode('ascii') )
+			self.serial.write( "ADLR01\n".encode('ascii') )
+			time.sleep(0.1)		# for init command to be effective
 			self.serial.close()
 			self._serialOK = False
 			self._is_synced = False
@@ -151,7 +152,8 @@ class OmniSerialCom:
 				
 		# if threads ends here
 		print("Sending stoping signal to motor controller")
-		self.serial.write( 'ADLR01'.encode('ascii') )
+		self.serial.write( "ADLR01\n".encode('ascii') )
+		time.sleep(0.1)			# for stop command to be effective
 		self.serial.close()	 
 		self._serialOK = False
 		self._is_synced = False
