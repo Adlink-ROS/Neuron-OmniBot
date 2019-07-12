@@ -50,30 +50,30 @@
 		alpha4:[odom_m]/translation [robot_m]/rotational
 		alpha5:(omni only)tendency of the robot to translate (without rotating) perpendicular to the observed direction of travel
 		-->
-        <param name="odom_model_type" value="omni-corrected"/>
+		<param name="odom_model_type" value="omni-corrected"/>
 		<param name="odom_alpha1" value="0.01"/>
-        <param name="odom_alpha2" value="0.1"/>
-        <param name="odom_alpha3" value="0.05"/>
-        <param name="odom_alpha4" value="0.9"/>
+		<param name="odom_alpha2" value="0.1"/>
+		<param name="odom_alpha3" value="0.05"/>
+		<param name="odom_alpha4" value="0.9"/>
 		<param name="odom_alpha5" value="0.04"/>
-		
-        <param name="laser_z_hit" value="0.7"/>
-        <param name="laser_z_short" value="0.24"/>
-        <param name="laser_z_max" value="0.01"/>
-        <param name="laser_z_rand" value="0.05"/>
-        <param name="laser_sigma_hit" value="0.1"/>
-        <param name="laser_lambda_short" value="0.1"/>
-        <param name="laser_min_range" value="0.25"/>
-        <param name="laser_max_range" value="5.0"/>
+
+		<param name="laser_z_hit" value="0.7"/>
+		<param name="laser_z_short" value="0.24"/>
+		<param name="laser_z_max" value="0.001"/>
+		<param name="laser_z_rand" value="0.059"/>
+		<param name="laser_sigma_hit" value="0.02"/>
+		<param name="laser_lambda_short" value="0.1"/>
+		<param name="laser_min_range" value="0.25"/>
+		<param name="laser_max_range" value="5.0"/>
 		<param name="laser_model_type" value="beam"/>
-        
-        <param name="laser_likelihood_max_dist" value="2.0"/>
-        <param name="laser_max_beams"  value="200"/>
-        <param name="update_min_d" value="0.025"/>
-        <param name="update_min_a" value="0.06"/>
-        <param name="resample_interval" value="2"/>
-        <param name="recovery_alpha_slow" value="0.001"/>
-        <param name="recovery_alpha_fast" value="0.05"/>
+
+		<param name="laser_likelihood_max_dist" value="16.0"/>
+		<param name="laser_max_beams"  value="200"/>
+		<param name="update_min_d" value="0.025"/>
+		<param name="update_min_a" value="0.06"/>
+		<param name="resample_interval" value="2"/>
+		<param name="recovery_alpha_slow" value="0.001"/>
+		<param name="recovery_alpha_fast" value="0.05"/>
 
 		</node>
 

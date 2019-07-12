@@ -2,8 +2,6 @@
 
 <launch>
 	<!-- for nav -->
-
-	
     <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
         <!-- global planner -->
         <param name="base_global_planner" value="global_planner/GlobalPlanner" />
@@ -24,6 +22,10 @@
         <!-- params for costmap layers --> 
         <rosparam file="$(find omni_base_nav)/cfg/local_costmap_params.yaml" command="load"/>
         <rosparam file="$(find omni_base_nav)/cfg/global_costmap_params.yaml" command="load"/>
+		<!-- recovery behavior -->
+	    <rosparam file="$(find omni_base_nav)/cfg/recovery_params.yaml" command="load"/>
+		<param name="recovery_behavior_enabled" type="bool" value="true"/>	
+
     </node>
 	
 </launch>
