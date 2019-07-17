@@ -6,3 +6,9 @@ recovery_behaviors:
 
   # possible options
   # - {name: conservative_reset, type: clear_costmap_recovery/ClearCostmapRecovery}
+  #
+
+
+conservative_reset:
+  reset_distance: 5
+  layer_names: ["sensor"]
