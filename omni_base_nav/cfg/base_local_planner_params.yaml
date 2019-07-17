@@ -41,7 +41,7 @@ TrajectoryPlannerROS:
   dwa: false
 
   #How far the robot must travel before oscillation flags are reset
-  oscillation_reset_dist: 0.5
+  oscillation_reset_dist: 0.1
 
   #Eat up the plan as the robot moves along it
   prune_plan: true

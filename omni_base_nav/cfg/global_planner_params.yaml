@@ -9,6 +9,8 @@ GlobalPlanner:
     use_quadratic: true
     use_grid_path: false
     old_navfn_behavior: false
+    
+    cost_factor: 3.0
 
       
 
