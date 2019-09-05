@@ -23,6 +23,7 @@ global_costmap:
 
     static:        
         map_topic: /map/div2
+        #map_topic: /map
         subscribe_to_updates: true
 
     sensor:
