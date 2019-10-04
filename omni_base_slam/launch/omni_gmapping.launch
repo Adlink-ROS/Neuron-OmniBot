@@ -24,13 +24,16 @@
       <param name="angularUpdate" value="3.14"/>
       <param name="temporalUpdate" value="5.0"/>
       <param name="resampleThreshold" value="0.5"/>
-      <param name="particles" value="30"/>
       
-	  <param name="xmin" value="-15.0"/>
-      <param name="ymin" value="-15.0"/>
-      <param name="xmax" value="15.0"/>
-      <param name="ymax" value="15.0"/>
-      <param name="delta" value="0.025"/>
+	  <param name="particles" value="30"/>
+	  <!-- <param name="minimumScore" value="100"/> -->
+	  
+      
+	  <param name="xmin" value="-5.0"/>
+      <param name="ymin" value="-5.0"/>
+      <param name="xmax" value="5.0"/>
+      <param name="ymax" value="5.0"/>
+	  <param name="delta" value="0.015"/>
       <param name="llsamplerange" value="0.01"/>
       <param name="llsamplestep" value="0.01"/>
       <param name="lasamplerange" value="0.005"/>

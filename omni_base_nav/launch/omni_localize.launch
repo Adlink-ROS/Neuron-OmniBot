@@ -1,8 +1,11 @@
  <launch>
  
 	<!--======== map server ========-->
-	<node name="map_server" pkg="map_server" type="map_server" args="$(find omni_base_slam)/map/my_map.yaml">
-		<!--<remap from="map" to="map_amcl"/>-->
+	<node name="map_server" pkg="map_server" type="map_server" args="$(find omni_base_slam)/map/ting_test_map.yaml">
+    </node>
+	<node name="map_server_div2" pkg="map_server" type="map_server" args="$(find omni_base_slam)/map/ting_test_map_div2.yaml">
+		<remap from="map" to="/map/div2"/>
+		<remap from="map_metadata" to="/map/div2_metadata"/>
     </node>
     <!-- Map server (for nav)
 	<node name="map_server_nav" pkg="map_server" type="map_server" args="$(find hypharos_minibot)/map/map_nav.yaml"/>-->
@@ -27,9 +30,9 @@
         <param name="initial_pose_x" value="0"/>
         <param name="initial_pose_y" value="0"/>
         <param name="initial_pose_a" value="0"/>
-        <param name="initial_cov_xx" value="0.05" />
-        <param name="initial_cov_yy" value="0.05" />
-		<param name="initial_cov_aa" value="0.2" />
+        <param name="initial_cov_xx" value="0.4" />
+        <param name="initial_cov_yy" value="0.4" />
+		<param name="initial_cov_aa" value="0.6" />
 		
         <param name="transform_tolerance" value="0.05" />
         <param name="gui_publish_rate" value="5.0"/>
@@ -54,20 +57,20 @@
         <param name="odom_alpha4" value="0.08"/>
 		<param name="odom_alpha5" value="0.05"/>
 		
+		<param name="laser_model_type" value="beam"/>
         <param name="laser_z_hit" value="0.7"/>
-        <param name="laser_z_short" value="0.05"/>
-        <param name="laser_z_max" value="0.2"/>
-        <param name="laser_z_rand" value="0.05"/>
-        <param name="laser_sigma_hit" value="0.1"/>
+        <param name="laser_z_short" value="0.24"/>
+        <param name="laser_z_max" value="0.001"/>
+        <param name="laser_z_rand" value="0.059"/>
+        <param name="laser_sigma_hit" value="0.2"/>
         <param name="laser_lambda_short" value="0.1"/>
-        <param name="laser_min_range" value="0.2"/>
-        <param name="laser_max_range" value="2.8"/>
-
-        <param name="laser_model_type" value="likelihood_field"/>
-        <param name="laser_likelihood_max_dist" value="2.0"/>
-        <param name="laser_max_beams"  value="100"/>
-        <param name="update_min_d" value="0.02"/>
-        <param name="update_min_a" value="0.03"/>
+        <param name="laser_min_range" value="0.25"/>
+        <param name="laser_max_range" value="5"/>		
+        <param name="laser_max_beams"  value="200"/>
+		<!--<param name="laser_likelihood_max_dist" value="2.0"/>-->
+		
+        <param name="update_min_d" value="0.025"/>
+        <param name="update_min_a" value="0.06"/>
         <param name="resample_interval" value="2"/>
         <param name="recovery_alpha_slow" value="0.001"/>
         <param name="recovery_alpha_fast" value="0.05"/>
