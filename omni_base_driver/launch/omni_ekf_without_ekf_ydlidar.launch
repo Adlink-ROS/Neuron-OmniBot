@@ -11,12 +11,4 @@
 	<arg name="vel_timeout_arg" value="1" />
 </include>
 
-
-
-<node pkg="robot_localization" type="ekf_localization_node" name="ekf_se" clear_params="true" output="screen">
-	<rosparam command="load" file="$(find omni_base_driver)/param/omni_imu_ekf_params.yaml" />
-
-</node>
-
-
 </launch>
