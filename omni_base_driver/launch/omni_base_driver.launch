@@ -29,7 +29,7 @@
     
     <!-- frequencies -->
     <param name="odom_freq" type="double" value="20" />
-    <param name="imu_freq" type="double" value="200" />
+    <param name="imu_freq" type="double" value="100" /><!--200-->
     <param name="tx_freq" type="double" value="5" />
     
     
@@ -37,7 +37,5 @@
 
   </node>
   
-  <node pkg="tf" type="static_transform_publisher" name="base_link_to_imu"
-		  args="0.06152 0.01909 0.0 2.3562 0.0 0.0 /base_link /$(arg imu_id_arg) 100" />
   
 </launch>
