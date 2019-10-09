@@ -37,4 +37,6 @@
       <param name="lasamplerange" value="0.005"/>
       <param name="lasamplestep" value="0.005"/>
     </node>
+
+    <node pkg="rviz" type="rviz" name="rviz" output="screen" />
 </launch>

@@ -1,0 +1,10 @@
+<launch>
+    
+	<include file="$(find omni_base_driver)/launch/omni_ekf.launch"/>
+	<include file="$(find omni_base_slam)/launch/omni_gmapping.launch"/>
+	
+	<node name="joy_node"  pkg="joy"  type="joy_node" output="screen"/>
+	<node name="teleop_node"  pkg="teleop_twist_joy"  type="teleop_node" output="screen"/>
+	<node name="rviz"  pkg="rviz"  type="rviz" output="screen" args="-d $(find omni_base_slam)/rviz_config/omni_slam.rviz"/>
+	
+</launch>

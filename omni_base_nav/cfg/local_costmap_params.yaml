@@ -1,9 +1,9 @@
 local_costmap:
     #footprint: [[-0.1, -0.1], [-0.1, 0.1], [0.1, 0.1], [0.1, -0.1]]
-    robot_radius: 0.18
+    robot_radius: 0.20
     footprint_padding: 0.02
     transform_tolerance: 1.0
-    update_frequency: 5.0
+    update_frequency: 7.5
     publish_frequency: 2.0
 
     global_frame: map
@@ -25,5 +25,5 @@ local_costmap:
         
 
     inflation:
-        inflation_radius: 0.5
-        cost_scaling_factor: 10 # larger number = lower cost elevation
+        inflation_radius: 0.75
+        cost_scaling_factor: 4 # larger number = lower cost elevation

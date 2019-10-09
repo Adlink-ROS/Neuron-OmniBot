@@ -15,7 +15,7 @@
 		<remap from="odom" to="/odometry/filtered"/>
 		
         <!-- params for move_base -->
-        <param name="planner_frequency" value="0.5" />
+        <param name="planner_frequency" value="0.0" />
         <param name="controller_frequency" value="10.0" />
         <param name="controller_patience" value="3.0" />
         <param name="oscillation_timeout" value="5.0" />

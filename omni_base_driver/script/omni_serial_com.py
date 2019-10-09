@@ -65,6 +65,8 @@ class OmniSerialCom:
 				print( init_msg.encode('ascii')[0:(len(init_msg)-1)] )
 		except Exception:
 			rospy.logerr("Port timeout after %d seconds at: %s", self.timeout, self.port)
+			self.serial.write( "ADLR01\n".encode('ascii') )
+			time.sleep(0.1)		# for init command to be effective
 			self.serial.close()
 			raise
 			return
