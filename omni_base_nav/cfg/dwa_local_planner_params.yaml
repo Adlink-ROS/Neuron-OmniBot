@@ -29,7 +29,7 @@ DWAPlannerROS:
 
   goal_distance_bias: 10
   path_distance_bias: 32
-  occdist_scale: 2
+  occdist_scale: 0.05
 
   stop_time_buffer: 0.4
   oscillation_reset_dist: 0.5
