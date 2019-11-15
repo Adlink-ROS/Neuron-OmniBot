@@ -4,17 +4,14 @@
 #define NEURON_CMD_TOPIC "neuron_cmd_topic"
 
 enum {
-    MOVE = 0,
+    MOVE_F_B,
+    MOVE_L_R,
     TURN_AROUND,
 } ACTION;
 
 enum {
-    M_FORWARD_BACKWARD = 0,
-    M_LEFT_RIGHT,
-} MOVE_ACTION;
-
-enum {
-    T_LEFT_RIGHT = 0,
-} TURN_AROUND_ACTION;
+    RET_OK = 0,
+    RET_WRONG_CMD = -1,
+} RESULT;
 
 #endif
