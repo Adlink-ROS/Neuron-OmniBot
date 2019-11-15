@@ -1,0 +1,4 @@
+uint64 type
+uint64 action
+---
+int64 result
