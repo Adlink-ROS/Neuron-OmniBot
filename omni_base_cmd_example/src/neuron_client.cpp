@@ -44,11 +44,29 @@ private:
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "omni_base_cmd_client");
+    if (argc != 2) {
+        ROS_ERROR("Usage: rosrun omni_base_cmd_example neuron_client [action]");
+        ROS_ERROR("Action 1: Move forward and backward");
+        ROS_ERROR("Action 2: Move left and right");
+        ROS_ERROR("Action 3: Turn Around");
+        return 1;
+    }
 
     Neuron_CMD cmd;
-    cmd.move_forward_backward();
-    cmd.move_left_right();
-    cmd.turn_around();
+    switch (atoi(argv[1])) {
+        case 1:
+            cmd.move_forward_backward();
+            break;
+        case 2:
+            cmd.move_left_right();
+            break;
+        case 3:
+            cmd.turn_around();
+            break;
+        default:
+            ROS_ERROR("Wrong Action");
+            break;
+    }
 
     return 0;
 }
