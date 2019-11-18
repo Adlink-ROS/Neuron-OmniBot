@@ -1,4 +1,4 @@
-﻿# Neuron Omni Bot
+# Neuron Omni Bot
 This is a demo package of Neuron Omni Bot's autonomous and fast integration capability using ROS  
 <p align="center"><img src="doc/Omnibot_bare.jpg?raw=true" height="450"></p>
 
@@ -199,7 +199,7 @@ After we acquired a static map, it is often that we do not run a SLAM package al
 1.  Make sure you have everything in the [base driver](#omni-bot-driver)  launched. This includes all the robot TF, motor driver, and laser scanner. 
 2. Setup rviz correctly so we can see everything:
    you can open `($ omni_base_nav)/rviz_config/omni_amcl.rviz` with rviz gui, or by running the following command:
-       ```
+     ```
      rviz -d "/home/ros/catkin_ws/src/neuron_omnibot/omni_base_nav/rviz_config/omni_amcl.rviz"
      ```
 3. Put the map file and its config file to `($ omni_base_slam)/map/` as stated in the previous section. Modify line 4 of `($ omni_base_nav)/omni_localize.launch`,, the `args=` tags in the map server, to reflect the correct file name.
