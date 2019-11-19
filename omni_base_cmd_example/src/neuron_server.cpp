@@ -21,8 +21,8 @@ public:
     bool neuron_cmd_server(omni_base_cmd_example::BaseCmd::Request  &req,
                            omni_base_cmd_example::BaseCmd::Response &res);
 private:
-    ros::NodeHandle _nh;
-    ros::Publisher _pub;
+    ros::NodeHandle    _nh;
+    ros::Publisher     _pub;
     ros::ServiceServer _ser;
 };
 
@@ -71,5 +71,5 @@ int main(int argc, char **argv)
     NeuronCmdServer server;
     ros::spin();
 
-  return 0;
+    return 0;
 }

@@ -30,14 +30,14 @@ private:
     
         srv.request.action = action;
         if (client.call(srv)) {
-          ROS_INFO("Result: %ld", (long int)srv.response.result);
+            ROS_INFO("Result: %ld", (long int)srv.response.result);
         } else {
-          ROS_ERROR("Calling service error");
-          return 1;
+            ROS_ERROR("Calling service error");
+            return 1;
         }
     }
 
-    ros::NodeHandle n;
+    ros::NodeHandle    n;
     ros::ServiceClient client;
 };
 
