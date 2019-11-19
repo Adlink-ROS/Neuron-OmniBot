@@ -13,9 +13,11 @@
 
 class NeuronCmdServer {
 public:
-    NeuronCmdServer() {
+    NeuronCmdServer() : _nh("~") {
         _ser = _nh.advertiseService(NEURON_CMD_TOPIC, &NeuronCmdServer::neuron_cmd_server, this);
         _pub = _nh.advertise<geometry_msgs::Twist>("cmd_vel", 1000);
+        _nh.param("velocity", _velocity, 0.5);
+        ROS_INFO("Velocity is set to %f.", _velocity);
         ROS_INFO("Ready to accept command from client...");
     }
     bool neuron_cmd_server(omni_base_cmd_example::BaseCmd::Request  &req,
@@ -24,12 +26,13 @@ private:
     ros::NodeHandle    _nh;
     ros::Publisher     _pub;
     ros::ServiceServer _ser;
+    double _velocity;
 };
 
 bool NeuronCmdServer::neuron_cmd_server(omni_base_cmd_example::BaseCmd::Request  &req,
                                         omni_base_cmd_example::BaseCmd::Response &res)
 {
-    ROS_INFO("Receiving command.....");
+    ROS_INFO("Command received");
     geometry_msgs::Twist msg;
     ROS_INFO("Request: action=%ld", (long int)req.action);
 
@@ -37,22 +40,22 @@ bool NeuronCmdServer::neuron_cmd_server(omni_base_cmd_example::BaseCmd::Request 
         case MOVE_F_B:
             ROS_INFO("Try to move forward and backward...");
             ros::Duration(0.5).sleep();
-            MOVE_ONE_STEP( 0.5, 0, 0, 1);
-            MOVE_ONE_STEP(-0.5, 0, 0, 1);
+            MOVE_ONE_STEP( _velocity, 0, 0, 1);
+            MOVE_ONE_STEP(-_velocity, 0, 0, 1);
             res.result = RET_OK;
             break;
         case MOVE_L_R:
             ROS_INFO("Try to move left and right...");
             ros::Duration(1).sleep();
-            MOVE_ONE_STEP(0,  0.5, 0, 1);
-            MOVE_ONE_STEP(0, -0.5, 0, 1);
+            MOVE_ONE_STEP(0,  _velocity, 0, 1);
+            MOVE_ONE_STEP(0, -_velocity, 0, 1);
             res.result = RET_OK;
             break;
         case TURN_AROUND:
             ROS_INFO("Try to turn around...");
             ros::Duration(1).sleep();
-            MOVE_ONE_STEP(0, 0,  0.5, 1);
-            MOVE_ONE_STEP(0, 0, -0.5, 1);
+            MOVE_ONE_STEP(0, 0,  _velocity, 1);
+            MOVE_ONE_STEP(0, 0, -_velocity, 1);
             res.result = RET_OK;
             break;
         default:
