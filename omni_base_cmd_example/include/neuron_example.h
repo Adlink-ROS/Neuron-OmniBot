@@ -1,7 +1,7 @@
 #ifndef _NEURON_EXAMPLE
 #define _NEURON_EXAMPLE
 
-#define NEURON_CMD_TOPIC "neuron_cmd_topic"
+#define NEURON_CMD_TOPIC "/neuron_cmd_topic"
 
 enum {
     MOVE_F_B,

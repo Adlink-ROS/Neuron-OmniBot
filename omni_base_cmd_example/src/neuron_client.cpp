@@ -6,7 +6,7 @@
 class Neuron_CMD {
 public:
     Neuron_CMD() {
-        client = n.serviceClient<omni_base_cmd_example::BaseCmd>(NEURON_CMD_TOPIC);
+        client = nh.serviceClient<omni_base_cmd_example::BaseCmd>(NEURON_CMD_TOPIC);
     }
 
     int move_forward_backward() {
@@ -37,7 +37,7 @@ private:
         }
     }
 
-    ros::NodeHandle    n;
+    ros::NodeHandle    nh;
     ros::ServiceClient client;
 };
 

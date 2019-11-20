@@ -15,7 +15,7 @@ class NeuronCmdServer {
 public:
     NeuronCmdServer() : _nh("~") {
         _ser = _nh.advertiseService(NEURON_CMD_TOPIC, &NeuronCmdServer::neuron_cmd_server, this);
-        _pub = _nh.advertise<geometry_msgs::Twist>("cmd_vel", 1000);
+        _pub = _nh.advertise<geometry_msgs::Twist>("/cmd_vel", 1000);
         _nh.param("velocity", _velocity, 0.5);
         ROS_INFO("Velocity is set to %f.", _velocity);
         ROS_INFO("Ready to accept command from client...");
