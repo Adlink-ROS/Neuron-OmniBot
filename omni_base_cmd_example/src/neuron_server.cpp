@@ -17,6 +17,7 @@ public:
         _ser = _nh.advertiseService(NEURON_CMD_TOPIC, &NeuronCmdServer::neuron_cmd_server, this);
         _pub = _nh.advertise<geometry_msgs::Twist>("/cmd_vel", 1000);
         _nh.param("velocity", _velocity, 0.5);
+        _nh.param("loop_cnt", _loop_cnt, 2);
         ROS_INFO("Velocity is set to %f.", _velocity);
         ROS_INFO("Ready to accept command from client...");
     }
@@ -27,6 +28,7 @@ private:
     ros::Publisher     _pub;
     ros::ServiceServer _ser;
     double _velocity;
+    int    _loop_cnt;
 };
 
 bool NeuronCmdServer::neuron_cmd_server(omni_base_cmd_example::BaseCmd::Request  &req,
@@ -40,22 +42,34 @@ bool NeuronCmdServer::neuron_cmd_server(omni_base_cmd_example::BaseCmd::Request 
         case MOVE_F_B:
             ROS_INFO("Try to move forward and backward...");
             ros::Duration(0.5).sleep();
-            MOVE_ONE_STEP( _velocity, 0, 0, 1);
-            MOVE_ONE_STEP(-_velocity, 0, 0, 1);
+            for (int i = 0; i < _loop_cnt; i++) {
+                MOVE_ONE_STEP( _velocity, 0, 0, 0.5);
+                MOVE_ONE_STEP( 0, 0, 0, 0.1);
+                MOVE_ONE_STEP(-_velocity, 0, 0, 0.5);
+                MOVE_ONE_STEP( 0, 0, 0, 0.1);
+            }
             res.result = RET_OK;
             break;
         case MOVE_L_R:
             ROS_INFO("Try to move left and right...");
-            ros::Duration(1).sleep();
-            MOVE_ONE_STEP(0,  _velocity, 0, 1);
-            MOVE_ONE_STEP(0, -_velocity, 0, 1);
+            ros::Duration(0.5).sleep();
+            for (int i = 0; i < _loop_cnt; i++) {
+                MOVE_ONE_STEP(0,  _velocity, 0, 0.5);
+                MOVE_ONE_STEP( 0, 0, 0, 0.1);
+                MOVE_ONE_STEP(0, -_velocity, 0, 0.5);
+                MOVE_ONE_STEP( 0, 0, 0, 0.1);
+            }
             res.result = RET_OK;
             break;
         case TURN_AROUND:
             ROS_INFO("Try to turn around...");
-            ros::Duration(1).sleep();
-            MOVE_ONE_STEP(0, 0,  _velocity, 1);
-            MOVE_ONE_STEP(0, 0, -_velocity, 1);
+            ros::Duration(0.5).sleep();
+            for (int i = 0; i < _loop_cnt; i++) {
+                MOVE_ONE_STEP(0, 0,  _velocity, 0.5);
+                MOVE_ONE_STEP( 0, 0, 0, 0.1);
+                MOVE_ONE_STEP(0, 0, -_velocity, 0.5);
+                MOVE_ONE_STEP( 0, 0, 0, 0.1);
+            }
             res.result = RET_OK;
             break;
         default:

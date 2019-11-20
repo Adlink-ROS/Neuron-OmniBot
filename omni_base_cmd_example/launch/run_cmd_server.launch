@@ -1,6 +1,7 @@
 <launch>
     <node pkg="omni_base_cmd_example" type="neuron_server" name="omni_base_cmd_server" output="screen" clear_params="true">
         <rosparam command="load" file="$(find omni_base_cmd_example)/param/cmd_server_param.yaml" />
-        <!--<param name="velocity" value="0.2" />-->
+        <!--<param name="velocity" value="0.5" />-->
+        <!--<param name="loop_cnt" value="2" />-->
     </node>
 </launch>
