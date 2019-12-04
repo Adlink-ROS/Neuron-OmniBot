@@ -123,8 +123,8 @@ Change to any node that uses SEMA library, find the SEMA include library header 
     ```
     Build the code by `catkin_make` at ~/catkin_ws.
 7.  Add serial access
-    `sudo adduser ros dialout`
-    You need to logout and login to your computer again afterwards.
+    `sudo sh init_neuron_tty.sh`
+    You need to re-plug the USB cable which is connected to the motor controller.
 
 ## Run the demo
 The Neuron Omnibot demo can be divided into four part:
