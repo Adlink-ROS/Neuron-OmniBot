@@ -48,12 +48,12 @@ Connect all the wire properly according to this diagram: ([click to download](do
     4. Connect VDMC throw /dev/neurontty.
 2. Laser scanner (ex. YDLidar)
     1. USB wire
-    2. 5v power (from SEMA feature connector SB5V is recommand)
+    2. 5v power (from SEMA feature connector SB5V is recommend)
 3. SEMA peripherals (collision detection, state indication LEDs)
     * LEDs: positive to GPIO, Negative to GND
     * switches: across GPIO and GND
-4. Other recommandations
-    * It is recommanded to have your robot's sharp edges wraped
+4. Other recommendations
+    * It is recommended to have your robot's sharp edges wraped
     * DO NOT obstruct the view of laser scanner
     * Your two wifi antennas should be pointing perpendicular(i.e. 90 degrees) to each other
     * ALWAYS put on your balance lead monitor if your using Li-Po batteries
@@ -80,7 +80,7 @@ Your Neuron Bot should already have proper SEMA installed. Please go to [https:/
            ros-melodic-dwa-local-planner \
            ros-melodic-teb-local-planner ros-melodic-teb-local-planner-tutorials 
      ```
-    * Recommanded
+    * Recommended
         * KATE: text editor (very similar to Notepad++)
         `sudo apt-get install kate`
         * htop: a low-cost system monitor
@@ -102,7 +102,7 @@ Change to any node that uses SEMA library, find the SEMA include library header 
     Note: If you get some error like _`error: no such file as...`_, you'll need to make the setlink.sh executable by `chmod +x setlink.sh` after you've changed the command prompt to that directory.      
 
 5. Compile the source code  
-    Now, we'll use the Catkin, the ROS build management tool to build our nodes. We'll need root access for library linking for anything that uses SEMA. Root access is gained by the second step below. Great power comes with great responsibility, **it is strongly recommanded you to exit root mode** since you can to terrible stuff with that much of power.
+    Now, we'll use the Catkin, the ROS build management tool to build our nodes. We'll need root access for library linking for anything that uses SEMA. Root access is gained by the second step below. Great power comes with great responsibility, **it is strongly recommended you to exit root mode** since you can to terrible stuff with that much of power.
     ```
     cd ~/catkin_ws
     sudo -sE
