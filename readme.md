@@ -68,14 +68,15 @@ Your Neuron Bot should already have proper SEMA installed. Please go to [https:/
 3.  Install packages (ubuntu software):
     * ROS stuff
      ```
-    #robot localization
+    # Robot Localization (EKF)
     sudo apt-get install ros-melodic-robot-localization 
     
-    #laser slam
-	sudo apt-get install ros-melodic-gmapping ros-melodic-slam-gmapping \
-						 ros-melodic-navigation # laser slam
+    # Laser SLAM (gmapping)
+	sudo apt-get install ros-melodic-gmapping ros-melodic-slam-gmapping
     
-    #navigation and planning
+    # Navigation Stack
+    	sudo apt-get install ros-melodic-navigation 
+    # Navigation Planner
     sudo apt-get install ros-melodic-global-planner \
            ros-melodic-dwa-local-planner \
            ros-melodic-teb-local-planner ros-melodic-teb-local-planner-tutorials 
