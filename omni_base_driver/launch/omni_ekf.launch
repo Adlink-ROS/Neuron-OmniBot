@@ -1,22 +1,35 @@
 <launch>
 
-<arg name="imu_frame" value="base_imu"/>
+<arg name="multi_robot_name" default="omni_2"/>
+<arg name="imu_frame" default="base_imu"/>
 
+<group ns="$(arg multi_robot_name)">
 <include file="$(find omni_base_driver)/launch/omni_base_driver.launch">
 <arg name="cmd_vel_arg"  	value="cmd_vel"/>
 <arg name="odom_topic_arg"  value="base_odom"/>
-<arg name="odom_id_arg"   	value="base_odom" />
+<arg name="odom_id_arg"   	value="$(arg multi_robot_name)/base_odom" />
+<arg name="base_link_id_arg"   	value="$(arg multi_robot_name)/base_link" />
+<arg name="imu_id_arg"   	value="$(arg multi_robot_name)/base_imu" />
 <arg name="imu_topic_arg"	value="imu" />
-<arg name="enable_tf_arg"  	value="false" />
+<arg name="enable_tf_arg"  	value="true" />
 <arg name="vel_timeout_arg" value="1" />
+<arg name="multi_robot_name" value="$(arg multi_robot_name)" />
 </include>
 
-<include file="$(find omni_base_driver)/launch/omni_laser.launch"/>
+<include file="$(find omni_base_driver)/launch/omni_laser.launch" >
+	<arg name="multi_robot_name" value="$(arg multi_robot_name)" />
+</include>
 
 <node pkg="robot_localization" type="ekf_localization_node" name="ekf_se" clear_params="true" output="screen">
-<rosparam command="load" file="$(find omni_base_driver)/param/omni_imu_ekf_params.yaml" />
+	<rosparam command="load" file="$(find omni_base_driver)/param/omni_imu_ekf_params.yaml" />
+	<param name="odom0" value="base_odom" />
+	<param name="imu0" value="imu" />
+	<param name="odom_frame" value="$(arg multi_robot_name)/base_odom" /> 
+	<param name="base_link_frame" value="$(arg multi_robot_name)/base_link" /> 
+	<param name="world_frame" value="$(arg multi_robot_name)/base_odom" /> 
 <!--<remap from="/odometry/filtered" to="/odom" />-->
 </node>
 
+</group>
 
 </launch>
