@@ -1,0 +1,5 @@
+<library path="lib/libmulti_layer">
+  <class type="multi_layer_namespace::MultiLayer" base_class_type="costmap_2d::Layer">
+    <description>Costmap for multirobot's location'</description>
+  </class>
+</library>

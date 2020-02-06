@@ -14,7 +14,6 @@ from geometry_msgs.msg import Vector3
 #from geometry_msgs.msg import Point
 from nav_msgs.msg import Odometry
 from sensor_msgs.msg import Imu
-from sensor_msgs.msg import MagneticField
 
 from omni_serial_com import OmniSerialCom
 
@@ -30,15 +29,15 @@ class Omni_base_node:
 		self.param["odomId"] = rospy.get_param('~odom_id', 'odom') # odom frame id
 		self.param["imuId"] = rospy.get_param('~imu_id', 'imu') # odom frame id
 		self.param["enable_tf"] = rospy.get_param("~enable_tf", True)
-		self.param["device_port"] = rospy.get_param('~port', '/dev/ttyUSB0') # port
+		self.param["device_port"] = rospy.get_param('~port', '/dev/ttyS2') # port
 		self.param["baudrate"] = int( rospy.get_param('~baudrate', '115200') ) # baudrate
 		self.param["timeout"] = float( rospy.get_param('~serial_timeout', '10') ) #
-		self.param["odom_freq"] = float( rospy.get_param('~odom_freq', '20') ) # hz of communication
-		self.param["imu_freq"] = float( rospy.get_param('~imu_freq', '200') )  # hz of communication
+		self.param["odom_freq"] = float( rospy.get_param('~odom_freq', '10') ) # hz of communication
+		self.param["imu_freq"] = float( rospy.get_param('~imu_freq', '100') )  # hz of communication
 		self.param["tx_freq"] = float( rospy.get_param('~tx_freq', '5') )      # hz of communication
 		self.param["cmd_timeout"] = float( rospy.get_param('~cmd_vel_timeout', '3') ) #
-		self.param["vel_gain"] = float( rospy.get_param('~vel_gain', '10000') ) # to match physical world
-		self.param["omg_gain"] = float( rospy.get_param('~omg_gain', '10000') ) #
+		self.param["vel_gain"] = float( rospy.get_param('~vel_gain', '70') ) # to match physical world
+		self.param["omg_gain"] = float( rospy.get_param('~omg_gain', '500') ) #
 		
 		rospy.set_param("omni_base_driver", self.param)
 		
@@ -54,7 +53,8 @@ class Omni_base_node:
 		self.enc_sub = rospy.Subscriber(self.param["vel_cmd"], Twist, self.velcmd_cb, queue_size=10) 
 		self.odom_pub = rospy.Publisher(self.param["odom_topic"], Odometry, queue_size=10)		# pubisher
 		self.imu_pub = rospy.Publisher(self.param["imu_topic"], Imu, queue_size=10)
-		self.mag_pub = rospy.Publisher(self.param["imu_topic"]+"/mag", MagneticField, queue_size=10)
+		#self.timer_odom = rospy.Timer(rospy.Duration(1.0/self.param["odom_freq"]), self.odomPub) # timer
+		#self.timer_imu = rospy.Timer(rospy.Duration(1.0/self.param["imu_freq"]), self.imuPub)
 		self.timer_txcmd = rospy.Timer( rospy.Duration(1.0/self.param["tx_freq"]),
 														self.tx_vel_cmd)
 		
@@ -92,10 +92,6 @@ class Omni_base_node:
 		self.imu.linear_acceleration_covariance[4] = (400*10**-6*9.81)**2
 		self.imu.linear_acceleration_covariance[8] = (400*10**-6*9.81)**2
 		
-		self.mag = MagneticField()
-		self.mag.header.seq = 0
-		self.mag.header.frame_id = self.param["imuId"]
-		
 		self.x_e = float(0)
 		self.y_e = float(0)
 		self.th = float(0)
@@ -103,9 +99,8 @@ class Omni_base_node:
 		self.enc_count_per_revo = (390*4)
 		self.wheel_radius = 0.029
 		self.base_radius = 0.140 		# 14.3 cm radius
-		self.accel_sensitivity = 2*9.81	# 2g
-		self.gyro_sensitivity = math.radians(500) 	# 250deg/sec
-		self.mag_sensitivity = 0.0000001 	# tesla/micro-tesla
+		self.accel_sensitivity = 1.8*9.81	# 2g
+		self.gyro_sensitivity = math.radians(250) 	# 250deg/sec
 		
 		self.last_odom_time = time.time()+3		# 3 sec for VDMC initialization
 		self.last_cmd_vel_time = self.last_odom_time
@@ -135,6 +130,7 @@ class Omni_base_node:
 				print("serial not OK")
 				time.sleep(1)
 			
+
 			while True:
 				self.odomPub()
 				self.imuPub()
@@ -190,13 +186,16 @@ class Omni_base_node:
 					self.last_odom_time = time.time();
 					return		# disregard first data
 			self.odom_last_seq = xyt_rtn["seq"]
-			
-			self.x_e = xyt_rtn["pos_dt"][0]
-			self.y_e = xyt_rtn["pos_dt"][1]
-			self.th = xyt_rtn["pos_dt"][2]
-			vx = xyt_rtn["pos_dt"][3]
-			vy = xyt_rtn["pos_dt"][4]
-			d_th = xyt_rtn["pos_dt"][5]
+			dx_e = float(xyt_rtn["pos_dt"][0])/10000
+			dy_e = float(xyt_rtn["pos_dt"][1])/10000
+			d_th = float(xyt_rtn["pos_dt"][2])/10000
+			vx = dx_e * math.cos(self.th + d_th/2) + dy_e * math.sin(self.th + d_th/2)
+			vy = -dx_e * math.sin(self.th + d_th/2) + dy_e * math.cos(self.th + d_th/2)
+			time_now = time.time()
+			self.x_e += dx_e
+			self.y_e += dy_e
+			self.th += d_th
+			dt = time_now - self.last_odom_time
 			
 			#======= ROS topic publisher =======#
 			self.odom.header.seq += 1
@@ -207,8 +206,8 @@ class Omni_base_node:
 			self.odom.pose.pose.orientation.y = quat[1]
 			self.odom.pose.pose.orientation.z = quat[2]
 			self.odom.pose.pose.orientation.w = quat[3]
-			self.odom.twist.twist.linear = Vector3(vx, vy, 0.0)
-			self.odom.twist.twist.angular = Vector3(0.0, 0.0, d_th)
+			self.odom.twist.twist.linear = Vector3(vx / dt, vy / dt, 0.0)
+			self.odom.twist.twist.angular = Vector3(0.0, 0.0, d_th/dt)
 			
 			self.odom_pub.publish(self.odom)
 			
@@ -219,7 +218,7 @@ class Omni_base_node:
 								self.param["baseId"],
 								self.param["odomId"]			)
 			
-			self.last_odom_time = time.time();
+			self.last_odom_time = time_now;
 		elif self.first_odom:
 			if (time.time() - self.last_odom_time)>5:
 				rospy.logerr('First odom not arrived %f seconds',(time.time() - self.last_odom_time))
@@ -243,8 +242,6 @@ class Omni_base_node:
 			imu_rtn = self.data_handle.get_imu_data()
 			if imu_rtn is None:
 				return
-			self.imu.header.seq += 1
-			self.imu.header.stamp = rospy.Time.now()
 			self.imu.linear_acceleration.x = imu_rtn["accel"][0] * self.accel_sensitivity / 32768
 			self.imu.linear_acceleration.y = imu_rtn["accel"][1] * self.accel_sensitivity / 32768
 			self.imu.linear_acceleration.z = imu_rtn["accel"][2] * self.accel_sensitivity / 32768
@@ -252,17 +249,10 @@ class Omni_base_node:
 			self.imu.angular_velocity.y = imu_rtn["gyro"][1] * self.gyro_sensitivity / 32768
 			self.imu.angular_velocity.z = imu_rtn["gyro"][2] * self.gyro_sensitivity / 32768
 			
-			self.mag.header.seq += 1
-			self.mag.header.stamp = rospy.Time.now()
-			self.mag.magnetic_field.x
-			self.mag.magnetic_field.y
-			self.mag.magnetic_field.x = imu_rtn["mag"][0] * self.mag_sensitivity
-			self.mag.magnetic_field.y = imu_rtn["mag"][1] * self.mag_sensitivity
-			self.mag.magnetic_field.z = imu_rtn["mag"][2] * self.mag_sensitivity
+			self.imu.header.seq += 1
+			self.imu.header.stamp = rospy.Time.now()
 
 			self.imu_pub.publish(self.imu)
-			self.mag_pub.publish(self.mag)
-			
 			self.last_imu_time = time.time() 
 		elif (time.time() - self.last_imu_time)>self.imu_timeout : 
 			#if new_data

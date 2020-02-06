@@ -3,7 +3,7 @@
 #http://www.ros.org/wiki/dwa_local_planner
 DWAPlannerROS:
   holonomic_robot: true
-  
+
   acc_limit_trans: 4.23
   acc_lim_theta: 2.5
   acc_lim_x: 3
@@ -29,7 +29,7 @@ DWAPlannerROS:
 
   goal_distance_bias: 10
   path_distance_bias: 32
-  occdist_scale: 2.0
+  occdist_scale: 0.02
 
   stop_time_buffer: 0.4
   oscillation_reset_dist: 0.5

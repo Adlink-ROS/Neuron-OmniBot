@@ -1,14 +1,14 @@
 global_costmap:
     #footprint: [[-0.1, -0.1], [-0.1, 0.1], [0.1, 0.1], [0.1, -0.1]]
-    robot_radius: 0.20
+    robot_radius: 0.25
     footprint_padding: 0.02
     transform_tolerance: 1.0
-    update_frequency: 4
-    publish_frequency: 0.5
-    
+    update_frequency: 10
+    publish_frequency: 2
+
     global_frame: map
-    robot_base_frame: base_link
-    
+    robot_base_frame: omni_0/base_link
+
     width: 50
     height: 50
     resolution: 0.075
@@ -16,18 +16,19 @@ global_costmap:
     rolling_window: false
     track_unknown_space: true
 
-    plugins: 
-        - {name: static,           type: "costmap_2d::StaticLayer"}            
+    plugins:
+        - {name: static,           type: "costmap_2d::StaticLayer"}
+        - {name: simple_layer,     type: "simple_layer_namespace::SimpleLayer"}
         - {name: sensor,           type: "costmap_2d::ObstacleLayer"}
         - {name: inflation,        type: "costmap_2d::InflationLayer"}
 
-    static:        
-        map_topic: /map 
+    static:
+        map_topic: /omni_0/map
         subscribe_to_updates: true
 
     sensor:
         observation_sources: laser
-        laser: {sensor_frame: base_laser, data_type: LaserScan, topic: scan, marking: true, clearing: true, obstacle_range: 2.0, raytrace_range: 5.0, inf_is_valid: true}
+        laser: {sensor_frame: omni_0/base_laser, data_type: LaserScan, topic: /omni_0/scan, marking: true, clearing: true, obstacle_range: 2.0, raytrace_range: 5.0, inf_is_valid: true}
 
     inflation:
         inflation_radius: 1

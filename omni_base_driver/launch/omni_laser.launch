@@ -2,8 +2,8 @@
   <arg name="multi_robot_name" default=""/>
 
   <node name="ydlidar_node"  pkg="ydlidar"  type="ydlidar_node" output="screen">
-    <param name="port"         type="string" value="/dev/ttyUSB1"/>  
-    <param name="baudrate"     type="int"    value="115200"/>
+    <param name="port"         type="string" value="/dev/ydlidar"/>
+    <param name="baudrate"     type="int"    value="128000"/>
     <param name="frame_id"     type="string" value="$(arg multi_robot_name)/base_laser"/>
     <param name="reversion"    type="bool"   value="true"/>
     <param name="angle_fixed"  type="bool"   value="true"/>
@@ -16,5 +16,5 @@
   </node>
 
   <node pkg="tf" type="static_transform_publisher" name="base_link_to_laser"
-    args="0.0 0.0 0.235 0.0 0.0 0.0 $(arg multi_robot_name)/base_link $(arg multi_robot_name)/base_laser 20" />
+    args="0.0 0.0 0.125 0.0 0.0 0.0 $(arg multi_robot_name)/base_link $(arg multi_robot_name)/base_laser 100" />
 </launch>

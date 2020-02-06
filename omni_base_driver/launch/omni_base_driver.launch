@@ -12,9 +12,9 @@
 
 
   <node name="omni_base_driver"  pkg="omni_base_driver"  type="omni_base_driver.py" output="screen">
-      
+
     <!-- serial config -->
-    <param name="port"             type="string" value="/dev/ttyUSB0"/>  
+    <param name="port"             type="string" value="/dev/neurontty"/>
     <param name="baudrate"         type="int"    value="115200"/>
     <param name="serial_timeout"   type="double"    value="10"/>
 
@@ -22,24 +22,27 @@
     <param name="cmd_vel"  type="string"   value="$(arg cmd_vel_arg)"/>
     <param name="odom_topic"  type="string"   value="$(arg odom_topic_arg)"/>
     <param name="imu_topic"    type="string" value="$(arg imu_topic_arg)" />
-    
+
     <!-- tf id -->
     <param name="base_id"    type="string" value="$(arg base_link_id_arg)" />
     <param name="odom_id"    type="string" value="$(arg odom_id_arg)" />
     <param name="imu_id"    type="string" value="$(arg imu_id_arg)" />
     <param name="enable_tf" type="bool" value="$(arg enable_tf_arg)" />
-    
+
     <!-- frequencies -->
-    <param name="odom_freq" type="double" value="20" />
-    <param name="imu_freq" type="double" value="100" /><!--200-->
+    <param name="odom_freq" type="double" value="25" />
+    <param name="imu_freq" type="double" value="200" /><!--200-->
     <param name="tx_freq" type="double" value="5" />
-    
-    
+
+    <!-- control config -->
+    <param name="vel_gain" type="double" value="70" />
+		<param name="omg_gain" type="double" value="500" />
+
     <param name="cmd_vel_timeout" type="double" value="$(arg vel_timeout_arg)" />
 
   </node>
 
   <node pkg="tf" type="static_transform_publisher" name="base_link_to_imu"
-	args="-0.005 0.035 -0.06 1.570796327 0.0 3.14159265359 /$(arg multi_robot_name)/base_link /$(arg multi_robot_name)/base_imu 20" />  
-  
+	args="-0.005 0.035 -0.06 3.1415926 0.0 3.14159265359 /$(arg multi_robot_name)/base_link /$(arg multi_robot_name)/base_imu 20" />
+
 </launch>

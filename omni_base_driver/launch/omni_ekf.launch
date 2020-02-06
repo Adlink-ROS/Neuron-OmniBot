@@ -1,6 +1,6 @@
 <launch>
 
-<arg name="multi_robot_name" default="omni_2"/>
+<arg name="multi_robot_name" default="omni_0"/>
 <arg name="imu_frame" default="base_imu"/>
 
 <group ns="$(arg multi_robot_name)">
