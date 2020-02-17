@@ -18,7 +18,7 @@ global_costmap:
 
     plugins:
         - {name: static,           type: "costmap_2d::StaticLayer"}
-        - {name: simple_layer,     type: "simple_layer_namespace::SimpleLayer"}
+        - {name: multibot_layer,     type: "simple_layer_namespace::MultibotLayer"}
         - {name: sensor,           type: "costmap_2d::ObstacleLayer"}
         - {name: inflation,        type: "costmap_2d::InflationLayer"}
 
