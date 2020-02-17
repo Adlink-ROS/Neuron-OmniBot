@@ -1,4 +1,4 @@
-image: ting_test_map.pgm
+image: cht_map.pgm
 resolution: 0.015000
 origin: [-4.995000, -4.995000, 0.000000]
 negate: 0
