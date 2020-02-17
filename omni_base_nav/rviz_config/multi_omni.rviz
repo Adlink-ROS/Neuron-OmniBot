@@ -6,21 +6,23 @@ Panels:
       Expanded:
         - /TF1/Frames1
         - /TF1/Tree1
-        - /Global Map_11/Costmap1
-        - /Local Map_11/Polygon1
-        - /Local Map_11/Costmap1
-        - /Local Map_11/Costmap1/Position1
-        - /Local Map_11/Costmap1/Orientation1
-        - /Local Map_11/Planner1
-        - /Local Map_01/Polygon1
-        - /Local Map_01/Costmap1
-        - /Global Map_01/Costmap1
-        - /Global Map_01/Planner1
-        - /Global Map_21/Costmap1
-        - /Global Map_21/Planner1
-        - /Local Map_21/Polygon1
-        - /Local Map_21/Costmap1
-        - /Local Map_21/Planner1
+        - /omni_01/LaserScan_01/Status1
+        - /omni_01/Local Map_01
+        - /omni_01/Local Map_01/Planner1
+        - /omni_01/Global Map_01
+        - /omni_01/Global Map_01/Planner1
+        - /omni_01/Goal_01
+        - /omni_11/Local Map_11
+        - /omni_11/Global Map_11
+        - /omni_11/Global Map_11/Planner1
+        - /omni_11/Goal_11
+        - /omni_21/Local Map_21
+        - /omni_21/Local Map_21/Polygon1/Status1
+        - /omni_21/Global Map_21
+        - /omni_21/Global Map_21/Planner1
+        - /omni_21/Amcl Particles_21
+        - /omni_21/Goal_21
+        - /omni_21/Map1
       Splitter Ratio: 0.5
     Tree Height: 295
   - Class: rviz/Selection
@@ -40,7 +42,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: LaserScan_0
+    SyncSource: ""
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -53,144 +55,13 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: false
-        map:
-          Value: true
-        omni_0/base_footprint:
-          Value: true
-        omni_0/base_link:
-          Value: true
-        omni_0/base_scan:
-          Value: true
-        omni_0/camera_link:
-          Value: true
-        omni_0/camera_rgb_frame:
-          Value: true
-        omni_0/camera_rgb_optical_frame:
-          Value: true
-        omni_0/caster_back_left_link:
-          Value: true
-        omni_0/caster_back_right_link:
-          Value: true
-        omni_0/imu_link:
-          Value: true
-        omni_0/odom:
-          Value: true
-        omni_0/wheel_left_link:
-          Value: true
-        omni_0/wheel_right_link:
-          Value: true
-        omni_1/base_footprint:
-          Value: true
-        omni_1/base_link:
-          Value: true
-        omni_1/base_scan:
-          Value: true
-        omni_1/camera_link:
-          Value: true
-        omni_1/camera_rgb_frame:
-          Value: true
-        omni_1/camera_rgb_optical_frame:
-          Value: true
-        omni_1/caster_back_left_link:
-          Value: true
-        omni_1/caster_back_right_link:
-          Value: true
-        omni_1/imu_link:
-          Value: true
-        omni_1/odom:
-          Value: true
-        omni_1/wheel_left_link:
-          Value: true
-        omni_1/wheel_right_link:
-          Value: true
-        omni_2/base_footprint:
-          Value: true
-        omni_2/base_link:
-          Value: true
-        omni_2/base_scan:
-          Value: true
-        omni_2/camera_link:
-          Value: true
-        omni_2/camera_rgb_frame:
-          Value: true
-        omni_2/camera_rgb_optical_frame:
-          Value: true
-        omni_2/caster_back_left_link:
-          Value: true
-        omni_2/caster_back_right_link:
-          Value: true
-        omni_2/imu_link:
-          Value: true
-        omni_2/odom:
-          Value: true
-        omni_2/wheel_left_link:
-          Value: true
-        omni_2/wheel_right_link:
-          Value: true
       Marker Scale: 1
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: false
       Tree:
-        map:
-          omni_0/odom:
-            omni_0/base_footprint:
-              omni_0/base_link:
-                omni_0/base_scan:
-                  {}
-                omni_0/camera_link:
-                  omni_0/camera_rgb_frame:
-                    omni_0/camera_rgb_optical_frame:
-                      {}
-                omni_0/caster_back_left_link:
-                  {}
-                omni_0/caster_back_right_link:
-                  {}
-                omni_0/imu_link:
-                  {}
-                omni_0/wheel_left_link:
-                  {}
-                omni_0/wheel_right_link:
-                  {}
-          omni_1/odom:
-            omni_1/base_footprint:
-              omni_1/base_link:
-                omni_1/base_scan:
-                  {}
-                omni_1/camera_link:
-                  omni_1/camera_rgb_frame:
-                    omni_1/camera_rgb_optical_frame:
-                      {}
-                omni_1/caster_back_left_link:
-                  {}
-                omni_1/caster_back_right_link:
-                  {}
-                omni_1/imu_link:
-                  {}
-                omni_1/wheel_left_link:
-                  {}
-                omni_1/wheel_right_link:
-                  {}
-          omni_2/odom:
-            omni_2/base_footprint:
-              omni_2/base_link:
-                omni_2/base_scan:
-                  {}
-                omni_2/camera_link:
-                  omni_2/camera_rgb_frame:
-                    omni_2/camera_rgb_optical_frame:
-                      {}
-                omni_2/caster_back_left_link:
-                  {}
-                omni_2/caster_back_right_link:
-                  {}
-                omni_2/imu_link:
-                  {}
-                omni_2/wheel_left_link:
-                  {}
-                omni_2/wheel_right_link:
-                  {}
+        {}
       Update Interval: 0
       Value: true
     - Alpha: 0.5
@@ -211,553 +82,477 @@ Visualization Manager:
       Plane Cell Count: 20
       Reference Frame: <Fixed Frame>
       Value: true
-    - Alpha: 1
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
-        Value: true
-      Axis: Z
-      Channel Name: intensity
-      Class: rviz/LaserScan
-      Color: 239; 41; 41
-      Color Transformer: FlatColor
-      Decay Time: 0
-      Enabled: true
-      Invert Rainbow: false
-      Max Color: 255; 255; 255
-      Max Intensity: 13069
-      Min Color: 0; 0; 0
-      Min Intensity: 28
-      Name: LaserScan
-      Position Transformer: XYZ
-      Queue Size: 10
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.10000000149011612
-      Style: Boxes
-      Topic: /omni_1/scan
-      Unreliable: false
-      Use Fixed Frame: true
-      Use rainbow: true
-      Value: true
-    - Alpha: 0.699999988079071
-      Class: rviz/Map
-      Color Scheme: map
-      Draw Behind: false
-      Enabled: true
-      Name: Map
-      Topic: /omni_0/map
-      Unreliable: false
-      Use Timestamp: false
-      Value: true
     - Class: rviz/Group
       Displays:
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/LaserScan
+          Color: 206; 92; 0
+          Color Transformer: FlatColor
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 13069
+          Min Color: 0; 0; 0
+          Min Intensity: 28
+          Name: LaserScan_0
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.05000000074505806
+          Style: Boxes
+          Topic: /omni_0/scan
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+        - Class: rviz/Group
+          Displays:
+            - Alpha: 1
+              Class: rviz/Polygon
+              Color: 0; 0; 0
+              Enabled: true
+              Name: Polygon
+              Topic: /omni_0/move_base/local_costmap/footprint
+              Unreliable: false
+              Value: true
+            - Alpha: 0.699999988079071
+              Class: rviz/Map
+              Color Scheme: costmap
+              Draw Behind: false
+              Enabled: true
+              Name: Costmap
+              Topic: /omni_0/move_base/local_costmap/costmap
+              Unreliable: false
+              Use Timestamp: false
+              Value: true
+            - Alpha: 1
+              Buffer Length: 10
+              Class: rviz/Path
+              Color: 255; 255; 0
+              Enabled: true
+              Head Diameter: 0.30000001192092896
+              Head Length: 0.20000000298023224
+              Length: 0.30000001192092896
+              Line Style: Billboards
+              Line Width: 0.05000000074505806
+              Name: Planner
+              Offset:
+                X: 0
+                Y: 0
+                Z: 0
+              Pose Color: 255; 85; 255
+              Pose Style: None
+              Radius: 0.029999999329447746
+              Shaft Diameter: 0.10000000149011612
+              Shaft Length: 0.10000000149011612
+              Topic: /omni_0/move_base/DWAPlannerROS/local_plan
+              Unreliable: false
+              Value: true
+          Enabled: true
+          Name: Local Map_0
+        - Class: rviz/Group
+          Displays:
+            - Alpha: 0.699999988079071
+              Class: rviz/Map
+              Color Scheme: costmap
+              Draw Behind: true
+              Enabled: true
+              Name: Costmap
+              Topic: /omni_0/move_base/global_costmap/costmap
+              Unreliable: false
+              Use Timestamp: false
+              Value: true
+            - Alpha: 1
+              Buffer Length: 1
+              Class: rviz/Path
+              Color: 32; 74; 135
+              Enabled: true
+              Head Diameter: 0.30000001192092896
+              Head Length: 0.20000000298023224
+              Length: 0.30000001192092896
+              Line Style: Billboards
+              Line Width: 0.05000000074505806
+              Name: Planner
+              Offset:
+                X: 0
+                Y: 0
+                Z: 0
+              Pose Color: 255; 85; 255
+              Pose Style: None
+              Radius: 0.029999999329447746
+              Shaft Diameter: 0.10000000149011612
+              Shaft Length: 0.10000000149011612
+              Topic: /omni_0/move_base/GlobalPlanner/plan
+              Unreliable: false
+              Value: true
+          Enabled: true
+          Name: Global Map_0
+        - Alpha: 1
+          Arrow Length: 0.05000000074505806
+          Axes Length: 0.30000001192092896
+          Axes Radius: 0.009999999776482582
+          Class: rviz/PoseArray
+          Color: 0; 192; 0
+          Enabled: true
+          Head Length: 0.07000000029802322
+          Head Radius: 0.029999999329447746
+          Name: Amcl Particles_0
+          Shaft Length: 0.23000000417232513
+          Shaft Radius: 0.009999999776482582
+          Shape: Arrow (Flat)
+          Topic: /omni_0/particlecloud
+          Unreliable: false
+          Value: true
+        - Alpha: 1
+          Axes Length: 1
+          Axes Radius: 0.10000000149011612
+          Class: rviz/Pose
+          Color: 32; 74; 135
+          Enabled: true
+          Head Length: 0.30000001192092896
+          Head Radius: 0.699999988079071
+          Name: Goal_0
+          Shaft Length: 0.699999988079071
+          Shaft Radius: 0.20000000298023224
+          Shape: Arrow
+          Topic: /omni_0/move_base/current_goal
+          Unreliable: false
+          Value: true
         - Alpha: 0.699999988079071
           Class: rviz/Map
-          Color Scheme: costmap
-          Draw Behind: true
-          Enabled: true
-          Name: Costmap
-          Topic: /omni_1/move_base/global_costmap/costmap
-          Unreliable: false
-          Use Timestamp: false
-          Value: true
-        - Alpha: 1
-          Buffer Length: 1
-          Class: rviz/Path
-          Color: 255; 0; 0
-          Enabled: true
-          Head Diameter: 0.30000001192092896
-          Head Length: 0.20000000298023224
-          Length: 0.30000001192092896
-          Line Style: Lines
-          Line Width: 0.029999999329447746
-          Name: Planner
-          Offset:
-            X: 0
-            Y: 0
-            Z: 0
-          Pose Color: 255; 85; 255
-          Pose Style: None
-          Radius: 0.029999999329447746
-          Shaft Diameter: 0.10000000149011612
-          Shaft Length: 0.10000000149011612
-          Topic: /move_base/DWAPlannerROS/global_plan
-          Unreliable: false
-          Value: true
-      Enabled: true
-      Name: Global Map_1
-    - Class: rviz/Group
-      Displays:
-        - Alpha: 1
-          Class: rviz/Polygon
-          Color: 0; 0; 0
-          Enabled: true
-          Name: Polygon
-          Topic: /omni_1/move_base/local_costmap/footprint
-          Unreliable: false
-          Value: true
-        - Alpha: 1
-          Class: rviz/Map
-          Color Scheme: costmap
+          Color Scheme: map
           Draw Behind: false
           Enabled: true
-          Name: Costmap
-          Topic: /omni_1/move_base/local_costmap/costmap
+          Name: Map
+          Topic: /omni_0/map
           Unreliable: false
           Use Timestamp: false
           Value: true
-        - Alpha: 1
-          Buffer Length: 10
-          Class: rviz/Path
-          Color: 255; 255; 0
-          Enabled: true
-          Head Diameter: 0.30000001192092896
-          Head Length: 0.20000000298023224
-          Length: 0.30000001192092896
-          Line Style: Lines
-          Line Width: 0.029999999329447746
-          Name: Planner
-          Offset:
-            X: 0
-            Y: 0
-            Z: 0
-          Pose Color: 255; 85; 255
-          Pose Style: None
-          Radius: 0.029999999329447746
-          Shaft Diameter: 0.10000000149011612
-          Shaft Length: 0.10000000149011612
-          Topic: /move_base/DWAPlannerROS/global_plan
-          Unreliable: false
-          Value: true
       Enabled: true
-      Name: Local Map_1
-    - Alpha: 1
-      Arrow Length: 0.05000000074505806
-      Axes Length: 0.30000001192092896
-      Axes Radius: 0.009999999776482582
-      Class: rviz/PoseArray
-      Color: 0; 192; 0
-      Enabled: true
-      Head Length: 0.07000000029802322
-      Head Radius: 0.029999999329447746
-      Name: Amcl Particles_1
-      Shaft Length: 0.23000000417232513
-      Shaft Radius: 0.009999999776482582
-      Shape: Arrow (Flat)
-      Topic: /omni_1/particlecloud
-      Unreliable: false
-      Value: true
-    - Alpha: 1
-      Axes Length: 1
-      Axes Radius: 0.10000000149011612
-      Class: rviz/Pose
-      Color: 25; 255; 0
-      Enabled: true
-      Head Length: 0.30000001192092896
-      Head Radius: 0.699999988079071
-      Name: Goal_1
-      Shaft Length: 0.699999988079071
-      Shaft Radius: 0.20000000298023224
-      Shape: Arrow
-      Topic: /omni_1/move_base/current_goal
-      Unreliable: false
-      Value: true
-    - Alpha: 1
-      Buffer Length: 1
-      Class: rviz/Path
-      Color: 239; 41; 41
-      Enabled: true
-      Head Diameter: 0.30000001192092896
-      Head Length: 0.20000000298023224
-      Length: 0.30000001192092896
-      Line Style: Billboards
-      Line Width: 0.10000000149011612
-      Name: Path_1
-      Offset:
-        X: 0
-        Y: 0
-        Z: 0
-      Pose Color: 255; 85; 255
-      Pose Style: None
-      Radius: 0.029999999329447746
-      Shaft Diameter: 0.10000000149011612
-      Shaft Length: 0.10000000149011612
-      Topic: /omni_1/move_base/DWAPlannerROS/local_plan
-      Unreliable: false
-      Value: true
-    - Alpha: 0.5
-      Buffer Length: 1
-      Class: rviz/Path
-      Color: 138; 226; 52
-      Enabled: true
-      Head Diameter: 0.30000001192092896
-      Head Length: 0.20000000298023224
-      Length: 0.30000001192092896
-      Line Style: Billboards
-      Line Width: 0.10000000149011612
-      Name: Planner Plan_1
-      Offset:
-        X: 0
-        Y: 0
-        Z: 0
-      Pose Color: 255; 85; 255
-      Pose Style: None
-      Radius: 0.029999999329447746
-      Shaft Diameter: 0.10000000149011612
-      Shaft Length: 0.10000000149011612
-      Topic: /omni_1/move_base/NavfnROS/plan
-      Unreliable: true
-      Value: true
-    - Alpha: 1
-      Autocompute Intensity Bounds: true
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: -10
-        Value: true
-      Axis: Z
-      Channel Name: intensity
-      Class: rviz/LaserScan
-      Color: 115; 210; 22
-      Color Transformer: FlatColor
-      Decay Time: 0
-      Enabled: true
-      Invert Rainbow: false
-      Max Color: 255; 255; 255
-      Max Intensity: 13069
-      Min Color: 0; 0; 0
-      Min Intensity: 28
-      Name: LaserScan_0
-      Position Transformer: XYZ
-      Queue Size: 10
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.10000000149011612
-      Style: Boxes
-      Topic: /omni_0/scan
-      Unreliable: false
-      Use Fixed Frame: true
-      Use rainbow: true
-      Value: true
+      Name: omni_0
     - Class: rviz/Group
       Displays:
         - Alpha: 1
-          Class: rviz/Polygon
-          Color: 0; 0; 0
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/LaserScan
+          Color: 196; 160; 0
+          Color Transformer: FlatColor
+          Decay Time: 0
           Enabled: true
-          Name: Polygon
-          Topic: /omni_0/move_base/local_costmap/footprint
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 13069
+          Min Color: 0; 0; 0
+          Min Intensity: 28
+          Name: LaserScan_1
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.05000000074505806
+          Style: Boxes
+          Topic: /omni_1/scan
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+        - Class: rviz/Group
+          Displays:
+            - Alpha: 1
+              Class: rviz/Polygon
+              Color: 0; 0; 0
+              Enabled: true
+              Name: Polygon
+              Topic: /omni_1/move_base/local_costmap/footprint
+              Unreliable: false
+              Value: true
+            - Alpha: 0.699999988079071
+              Class: rviz/Map
+              Color Scheme: costmap
+              Draw Behind: false
+              Enabled: true
+              Name: Costmap
+              Topic: /omni_1/move_base/local_costmap/costmap
+              Unreliable: false
+              Use Timestamp: false
+              Value: true
+            - Alpha: 1
+              Buffer Length: 10
+              Class: rviz/Path
+              Color: 255; 255; 0
+              Enabled: true
+              Head Diameter: 0.30000001192092896
+              Head Length: 0.20000000298023224
+              Length: 0.30000001192092896
+              Line Style: Billboards
+              Line Width: 0.05000000074505806
+              Name: Planner
+              Offset:
+                X: 0
+                Y: 0
+                Z: 0
+              Pose Color: 255; 85; 255
+              Pose Style: None
+              Radius: 0.029999999329447746
+              Shaft Diameter: 0.10000000149011612
+              Shaft Length: 0.10000000149011612
+              Topic: /omni_1/move_base/DWAPlannerROS/local_plan
+              Unreliable: false
+              Value: true
+          Enabled: true
+          Name: Local Map_1
+        - Class: rviz/Group
+          Displays:
+            - Alpha: 0.699999988079071
+              Class: rviz/Map
+              Color Scheme: costmap
+              Draw Behind: true
+              Enabled: true
+              Name: Costmap
+              Topic: /omni_1/move_base/global_costmap/costmap
+              Unreliable: false
+              Use Timestamp: false
+              Value: true
+            - Alpha: 1
+              Buffer Length: 1
+              Class: rviz/Path
+              Color: 92; 53; 102
+              Enabled: true
+              Head Diameter: 0.30000001192092896
+              Head Length: 0.20000000298023224
+              Length: 0.30000001192092896
+              Line Style: Billboards
+              Line Width: 0.05000000074505806
+              Name: Planner
+              Offset:
+                X: 0
+                Y: 0
+                Z: 0
+              Pose Color: 255; 85; 255
+              Pose Style: None
+              Radius: 0.029999999329447746
+              Shaft Diameter: 0.10000000149011612
+              Shaft Length: 0.10000000149011612
+              Topic: /omni_1/move_base/GlobalPlanner/plan
+              Unreliable: false
+              Value: true
+          Enabled: true
+          Name: Global Map_1
+        - Alpha: 1
+          Arrow Length: 0.05000000074505806
+          Axes Length: 0.30000001192092896
+          Axes Radius: 0.009999999776482582
+          Class: rviz/PoseArray
+          Color: 0; 192; 0
+          Enabled: true
+          Head Length: 0.07000000029802322
+          Head Radius: 0.029999999329447746
+          Name: Amcl Particles_1
+          Shaft Length: 0.23000000417232513
+          Shaft Radius: 0.009999999776482582
+          Shape: Arrow (Flat)
+          Topic: /omni_1/particlecloud
+          Unreliable: false
+          Value: true
+        - Alpha: 1
+          Axes Length: 1
+          Axes Radius: 0.10000000149011612
+          Class: rviz/Pose
+          Color: 92; 53; 102
+          Enabled: true
+          Head Length: 0.30000001192092896
+          Head Radius: 0.699999988079071
+          Name: Goal_1
+          Shaft Length: 0.699999988079071
+          Shaft Radius: 0.20000000298023224
+          Shape: Arrow
+          Topic: /omni_1/move_base/current_goal
           Unreliable: false
           Value: true
         - Alpha: 0.699999988079071
           Class: rviz/Map
-          Color Scheme: costmap
+          Color Scheme: map
           Draw Behind: false
           Enabled: true
-          Name: Costmap
-          Topic: /omni_0/move_base/local_costmap/costmap
+          Name: Map
+          Topic: /omni_1/map
           Unreliable: false
           Use Timestamp: false
           Value: true
-        - Alpha: 1
-          Buffer Length: 10
-          Class: rviz/Path
-          Color: 255; 255; 0
-          Enabled: true
-          Head Diameter: 0.30000001192092896
-          Head Length: 0.20000000298023224
-          Length: 0.30000001192092896
-          Line Style: Lines
-          Line Width: 0.029999999329447746
-          Name: Planner
-          Offset:
-            X: 0
-            Y: 0
-            Z: 0
-          Pose Color: 255; 85; 255
-          Pose Style: None
-          Radius: 0.029999999329447746
-          Shaft Diameter: 0.10000000149011612
-          Shaft Length: 0.10000000149011612
-          Topic: /move_base/DWAPlannerROS/global_plan
-          Unreliable: false
-          Value: true
       Enabled: true
-      Name: Local Map_0
+      Name: omni_1
     - Class: rviz/Group
       Displays:
+        - Alpha: 1
+          Autocompute Intensity Bounds: true
+          Autocompute Value Bounds:
+            Max Value: 10
+            Min Value: -10
+            Value: true
+          Axis: Z
+          Channel Name: intensity
+          Class: rviz/LaserScan
+          Color: 78; 154; 6
+          Color Transformer: FlatColor
+          Decay Time: 0
+          Enabled: true
+          Invert Rainbow: false
+          Max Color: 255; 255; 255
+          Max Intensity: 13069
+          Min Color: 0; 0; 0
+          Min Intensity: 28
+          Name: LaserScan_2
+          Position Transformer: XYZ
+          Queue Size: 10
+          Selectable: true
+          Size (Pixels): 3
+          Size (m): 0.05000000074505806
+          Style: Boxes
+          Topic: /omni_2/scan
+          Unreliable: false
+          Use Fixed Frame: true
+          Use rainbow: true
+          Value: true
+        - Class: rviz/Group
+          Displays:
+            - Alpha: 1
+              Class: rviz/Polygon
+              Color: 0; 0; 0
+              Enabled: true
+              Name: Polygon
+              Topic: /omni_2/move_base/local_costmap/footprint
+              Unreliable: false
+              Value: true
+            - Alpha: 0.699999988079071
+              Class: rviz/Map
+              Color Scheme: costmap
+              Draw Behind: false
+              Enabled: true
+              Name: Costmap
+              Topic: /omni_2/move_base/local_costmap/costmap
+              Unreliable: false
+              Use Timestamp: false
+              Value: true
+            - Alpha: 1
+              Buffer Length: 10
+              Class: rviz/Path
+              Color: 255; 255; 0
+              Enabled: true
+              Head Diameter: 0.30000001192092896
+              Head Length: 0.20000000298023224
+              Length: 0.30000001192092896
+              Line Style: Billboards
+              Line Width: 0.05000000074505806
+              Name: Planner
+              Offset:
+                X: 0
+                Y: 0
+                Z: 0
+              Pose Color: 255; 85; 255
+              Pose Style: None
+              Radius: 0.029999999329447746
+              Shaft Diameter: 0.10000000149011612
+              Shaft Length: 0.10000000149011612
+              Topic: /omni_2/move_base/DWAPlannerROS/local_plan
+              Unreliable: false
+              Value: true
+          Enabled: true
+          Name: Local Map_2
+        - Class: rviz/Group
+          Displays:
+            - Alpha: 0.699999988079071
+              Class: rviz/Map
+              Color Scheme: costmap
+              Draw Behind: true
+              Enabled: true
+              Name: Costmap
+              Topic: /omni_1/move_base/global_costmap/costmap
+              Unreliable: false
+              Use Timestamp: false
+              Value: true
+            - Alpha: 1
+              Buffer Length: 1
+              Class: rviz/Path
+              Color: 143; 89; 2
+              Enabled: true
+              Head Diameter: 0.30000001192092896
+              Head Length: 0.20000000298023224
+              Length: 0.30000001192092896
+              Line Style: Billboards
+              Line Width: 0.05000000074505806
+              Name: Planner
+              Offset:
+                X: 0
+                Y: 0
+                Z: 0
+              Pose Color: 255; 85; 255
+              Pose Style: None
+              Radius: 0.029999999329447746
+              Shaft Diameter: 0.10000000149011612
+              Shaft Length: 0.10000000149011612
+              Topic: /omni_2/move_base/GlobalPlanner/plan
+              Unreliable: false
+              Value: true
+          Enabled: true
+          Name: Global Map_2
+        - Alpha: 1
+          Arrow Length: 0.05000000074505806
+          Axes Length: 0.30000001192092896
+          Axes Radius: 0.009999999776482582
+          Class: rviz/PoseArray
+          Color: 0; 192; 0
+          Enabled: true
+          Head Length: 0.07000000029802322
+          Head Radius: 0.029999999329447746
+          Name: Amcl Particles_2
+          Shaft Length: 0.23000000417232513
+          Shaft Radius: 0.009999999776482582
+          Shape: Arrow (Flat)
+          Topic: /omni_2/particlecloud
+          Unreliable: false
+          Value: true
+        - Alpha: 1
+          Axes Length: 1
+          Axes Radius: 0.10000000149011612
+          Class: rviz/Pose
+          Color: 143; 89; 2
+          Enabled: true
+          Head Length: 0.30000001192092896
+          Head Radius: 0.699999988079071
+          Name: Goal_2
+          Shaft Length: 0.699999988079071
+          Shaft Radius: 0.20000000298023224
+          Shape: Arrow
+          Topic: /omni_2/move_base/current_goal
+          Unreliable: false
+          Value: true
         - Alpha: 0.699999988079071
           Class: rviz/Map
-          Color Scheme: costmap
-          Draw Behind: true
-          Enabled: true
-          Name: Costmap
-          Topic: /omni_0/move_base/global_costmap/costmap
-          Unreliable: false
-          Use Timestamp: false
-          Value: true
-        - Alpha: 1
-          Buffer Length: 1
-          Class: rviz/Path
-          Color: 255; 0; 0
-          Enabled: true
-          Head Diameter: 0.30000001192092896
-          Head Length: 0.20000000298023224
-          Length: 0.30000001192092896
-          Line Style: Lines
-          Line Width: 0.029999999329447746
-          Name: Planner
-          Offset:
-            X: 0
-            Y: 0
-            Z: 0
-          Pose Color: 255; 85; 255
-          Pose Style: None
-          Radius: 0.029999999329447746
-          Shaft Diameter: 0.10000000149011612
-          Shaft Length: 0.10000000149011612
-          Topic: /omni_0/move_base/DWAPlannerROS/local_plan
-          Unreliable: false
-          Value: true
-      Enabled: true
-      Name: Global Map_0
-    - Alpha: 1
-      Arrow Length: 0.05000000074505806
-      Axes Length: 0.30000001192092896
-      Axes Radius: 0.009999999776482582
-      Class: rviz/PoseArray
-      Color: 0; 192; 0
-      Enabled: true
-      Head Length: 0.07000000029802322
-      Head Radius: 0.029999999329447746
-      Name: Amcl Particles_0
-      Shaft Length: 0.23000000417232513
-      Shaft Radius: 0.009999999776482582
-      Shape: Arrow (Flat)
-      Topic: /omni_0/particlecloud
-      Unreliable: false
-      Value: true
-    - Alpha: 1
-      Axes Length: 1
-      Axes Radius: 0.10000000149011612
-      Class: rviz/Pose
-      Color: 252; 175; 62
-      Enabled: true
-      Head Length: 0.30000001192092896
-      Head Radius: 0.699999988079071
-      Name: Goal_0
-      Shaft Length: 0.699999988079071
-      Shaft Radius: 0.20000000298023224
-      Shape: Arrow
-      Topic: /omni_0/move_base/current_goal
-      Unreliable: false
-      Value: true
-    - Alpha: 1
-      Buffer Length: 1
-      Class: rviz/Path
-      Color: 239; 41; 41
-      Enabled: true
-      Head Diameter: 0.30000001192092896
-      Head Length: 0.20000000298023224
-      Length: 0.30000001192092896
-      Line Style: Billboards
-      Line Width: 0.10000000149011612
-      Name: Path_0
-      Offset:
-        X: 0
-        Y: 0
-        Z: 0
-      Pose Color: 255; 85; 255
-      Pose Style: None
-      Radius: 0.029999999329447746
-      Shaft Diameter: 0.10000000149011612
-      Shaft Length: 0.10000000149011612
-      Topic: /omni_0/move_base/DWAPlannerROS/local_plan
-      Unreliable: false
-      Value: true
-    - Alpha: 0.20000000298023224
-      Buffer Length: 1
-      Class: rviz/Path
-      Color: 252; 175; 62
-      Enabled: true
-      Head Diameter: 0.30000001192092896
-      Head Length: 0.20000000298023224
-      Length: 0.30000001192092896
-      Line Style: Billboards
-      Line Width: 0.10000000149011612
-      Name: Planner Plan_0
-      Offset:
-        X: 0
-        Y: 0
-        Z: 0
-      Pose Color: 255; 85; 255
-      Pose Style: None
-      Radius: 0.029999999329447746
-      Shaft Diameter: 0.10000000149011612
-      Shaft Length: 0.10000000149011612
-      Topic: /omni_0/move_base/NavfnROS/plan
-      Unreliable: true
-      Value: true
-    - Class: rviz/Group
-      Displays:
-        - Alpha: 0.699999988079071
-          Class: rviz/Map
-          Color Scheme: costmap
-          Draw Behind: true
-          Enabled: true
-          Name: Costmap
-          Topic: /omni_2/move_base/global_costmap/costmap
-          Unreliable: false
-          Use Timestamp: false
-          Value: true
-        - Alpha: 1
-          Buffer Length: 1
-          Class: rviz/Path
-          Color: 255; 0; 0
-          Enabled: true
-          Head Diameter: 0.30000001192092896
-          Head Length: 0.20000000298023224
-          Length: 0.30000001192092896
-          Line Style: Lines
-          Line Width: 0.029999999329447746
-          Name: Planner
-          Offset:
-            X: 0
-            Y: 0
-            Z: 0
-          Pose Color: 255; 85; 255
-          Pose Style: None
-          Radius: 0.029999999329447746
-          Shaft Diameter: 0.10000000149011612
-          Shaft Length: 0.10000000149011612
-          Topic: /omni_2/move_base/NavfnROS/plan
-          Unreliable: false
-          Value: true
-      Enabled: true
-      Name: Global Map_2
-    - Class: rviz/Group
-      Displays:
-        - Alpha: 1
-          Class: rviz/Polygon
-          Color: 0; 0; 0
-          Enabled: true
-          Name: Polygon
-          Topic: /omni_2/move_base/local_costmap/footprint
-          Unreliable: false
-          Value: true
-        - Alpha: 1
-          Class: rviz/Map
-          Color Scheme: costmap
+          Color Scheme: map
           Draw Behind: false
           Enabled: true
-          Name: Costmap
-          Topic: /omni_2/move_base/local_costmap/costmap
+          Name: Map
+          Topic: /omni_2/map
           Unreliable: false
           Use Timestamp: false
           Value: true
-        - Alpha: 1
-          Buffer Length: 10
-          Class: rviz/Path
-          Color: 255; 255; 0
-          Enabled: true
-          Head Diameter: 0.30000001192092896
-          Head Length: 0.20000000298023224
-          Length: 0.30000001192092896
-          Line Style: Lines
-          Line Width: 0.029999999329447746
-          Name: Planner
-          Offset:
-            X: 0
-            Y: 0
-            Z: 0
-          Pose Color: 255; 85; 255
-          Pose Style: None
-          Radius: 0.029999999329447746
-          Shaft Diameter: 0.10000000149011612
-          Shaft Length: 0.10000000149011612
-          Topic: /omni_2/move_base/NavfnROS/plan
-          Unreliable: false
-          Value: true
       Enabled: true
-      Name: Local Map_2
-    - Alpha: 1
-      Arrow Length: 0.05000000074505806
-      Axes Length: 0.30000001192092896
-      Axes Radius: 0.009999999776482582
-      Class: rviz/PoseArray
-      Color: 0; 192; 0
-      Enabled: true
-      Head Length: 0.07000000029802322
-      Head Radius: 0.029999999329447746
-      Name: Amcl Particles_2
-      Shaft Length: 0.23000000417232513
-      Shaft Radius: 0.009999999776482582
-      Shape: Arrow (Flat)
-      Topic: /omni_2/particlecloud
-      Unreliable: false
-      Value: true
-    - Alpha: 1
-      Axes Length: 1
-      Axes Radius: 0.10000000149011612
-      Class: rviz/Pose
-      Color: 25; 255; 0
-      Enabled: true
-      Head Length: 0.30000001192092896
-      Head Radius: 0.699999988079071
-      Name: Goal_2
-      Shaft Length: 0.699999988079071
-      Shaft Radius: 0.20000000298023224
-      Shape: Arrow
-      Topic: /omni_2/move_base/current_goal
-      Unreliable: false
-      Value: true
-    - Alpha: 1
-      Buffer Length: 1
-      Class: rviz/Path
-      Color: 239; 41; 41
-      Enabled: true
-      Head Diameter: 0.30000001192092896
-      Head Length: 0.20000000298023224
-      Length: 0.30000001192092896
-      Line Style: Billboards
-      Line Width: 0.10000000149011612
-      Name: Path_2
-      Offset:
-        X: 0
-        Y: 0
-        Z: 0
-      Pose Color: 255; 85; 255
-      Pose Style: None
-      Radius: 0.029999999329447746
-      Shaft Diameter: 0.10000000149011612
-      Shaft Length: 0.10000000149011612
-      Topic: /omni_2/move_base/DWAPlannerROS/local_plan
-      Unreliable: false
-      Value: true
-    - Alpha: 0.5
-      Buffer Length: 1
-      Class: rviz/Path
-      Color: 138; 226; 52
-      Enabled: true
-      Head Diameter: 0.30000001192092896
-      Head Length: 0.20000000298023224
-      Length: 0.30000001192092896
-      Line Style: Billboards
-      Line Width: 0.10000000149011612
-      Name: Planner Plan_2
-      Offset:
-        X: 0
-        Y: 0
-        Z: 0
-      Pose Color: 255; 85; 255
-      Pose Style: None
-      Radius: 0.029999999329447746
-      Shaft Diameter: 0.10000000149011612
-      Shaft Length: 0.10000000149011612
-      Topic: /omni_2/move_base/NavfnROS/plan
-      Unreliable: true
-      Value: true
+      Name: omni_2
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -772,11 +567,11 @@ Visualization Manager:
     - Class: rviz/Select
     - Class: rviz/SetInitialPose
       Theta std deviation: 0.2617993950843811
-      Topic: omni_2/initialpose
+      Topic: omni_1/initialpose
       X std deviation: 0.5
       Y std deviation: 0.5
     - Class: rviz/SetGoal
-      Topic: omni_2/move_base_simple/goal
+      Topic: omni_1/move_base_simple/goal
     - Class: rviz/Measure
   Value: true
   Views:
@@ -791,7 +586,7 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Scale: 79.95537567138672
+      Scale: 74.08674621582031
       Target Frame: <Fixed Frame>
       Value: TopDownOrtho (rviz)
       X: 1.9324767589569092
