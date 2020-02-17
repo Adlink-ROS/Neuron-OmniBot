@@ -7,7 +7,7 @@
 <group ns = "$(arg multi_robot_name)">
 
 <!--======== map server ========-->
-	<node name="map_server" pkg="map_server" type="map_server" args="$(find omni_base_slam)/map/map.yaml" />
+	<node name="map_server" pkg="map_server" type="map_server" args="$(find omni_base_slam)/map/cht_map.yaml" />
 
 	<!--=========== amcl ===========-->
     	<!--<arg name="init_x" default="0" />
@@ -65,7 +65,7 @@
         <param name="laser_min_range" value="0.25"/>
         <param name="laser_max_range" value="5"/>
         <param name="laser_max_beams"  value="200"/>
-		<!--<param name="laser_likelihood_max_dist" value="2.0"/>-->
+	<param name="laser_likelihood_max_dist" value="16.0"/>
 
         <param name="update_min_d" value="0.025"/>
         <param name="update_min_a" value="0.06"/>
@@ -89,7 +89,7 @@
 		<remap from="odom" to="/odometry/filtered"/>
 
         <!-- params for move_base -->
-        <param name="planner_frequency" value="10.0" />
+        <param name="planner_frequency" value="2.0" />
         <param name="controller_frequency" value="10.0" />
         <param name="controller_patience" value="3.0" />
         <param name="oscillation_timeout" value="5.0" />
@@ -98,9 +98,9 @@
         <!-- params for costmap layers -->
         <rosparam file="$(find omni_base_nav)/cfg/local_costmap_params.yaml" command="load"/>
         <rosparam file="$(find omni_base_nav)/cfg/global_costmap_params.yaml" command="load"/>
-        <rosparam file="$(find omni_base_nav)/cfg/recovery_behaviors.yaml" command="load" /> 
+        <rosparam file="$(find omni_base_nav)/cfg/recovery_behaviors.yaml" command="load" />
 
 </node>
-
+  <include file="$(find realsense2_camera)/launch/rs_camera.launch" />
 	</group>
 </launch>
