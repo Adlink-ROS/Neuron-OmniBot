@@ -1,16 +1,13 @@
  <launch>
  
 	<!--======== map server ========-->
-	<node name="map_server" pkg="map_server" type="map_server" args="$(find omni_base_slam)/map/map.yaml">
+	<node name="map_server" pkg="map_server" type="map_server" args="$(find omni_base_slam)/map/square2.yaml">
 		<!--<remap from="map" to="map_amcl"/>-->
     </node>
-	<node name="map_server_div2" pkg="map_server" type="map_server" args="$(find omni_base_slam)/map/map.yaml">
+	<node name="map_server_div2" pkg="map_server" type="map_server" args="$(find omni_base_slam)/map/square2.yaml">
 		<remap from="map" to="/map/div2"/>-->
     </node>
-    <!-- Map server (for nav)
-	<node name="map_server_nav" pkg="map_server" type="map_server" args="$(find hypharos_minibot)/map/map_nav.yaml"/>-->
 
-	
 	<!--=========== amcl ===========-->
     <!--<arg name="init_x" default="0" />
     <arg name="init_y" default="0" />
@@ -64,7 +61,7 @@
 		<param name="laser_sigma_hit" value="0.02"/>
 		<param name="laser_lambda_short" value="0.1"/>
 		<param name="laser_min_range" value="0.25"/>
-		<param name="laser_max_range" value="5.0"/>
+		<param name="laser_max_range" value="10.0"/>
 		<param name="laser_model_type" value="likelihood_field"/>
 
 		<param name="laser_likelihood_max_dist" value="16.0"/>

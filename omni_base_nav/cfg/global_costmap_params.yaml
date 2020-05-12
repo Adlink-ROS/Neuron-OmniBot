@@ -17,19 +17,19 @@ global_costmap:
     track_unknown_space: true
 
     plugins: 
-        - {name: static,           type: "costmap_2d::StaticLayer"}            
-        - {name: sensor,           type: "costmap_2d::ObstacleLayer"}
-        - {name: inflation,        type: "costmap_2d::InflationLayer"}
+        - {name: static_layer,           type: "costmap_2d::StaticLayer"}      
+        - {name: obstacle_layer,           type: "costmap_2d::ObstacleLayer"}
+        - {name: inflation_layer,        type: "costmap_2d::InflationLayer"}
 
-    static:        
+    static_layer:        
         map_topic: /map/div2
         #map_topic: /map
         subscribe_to_updates: true
 
-    sensor:
+    obstacle_layer:
         observation_sources: laser
         laser: {sensor_frame: base_laser, data_type: LaserScan, topic: /scan, marking: true, clearing: true, obstacle_range: 2.0, raytrace_range: 5.0, inf_is_valid: true}
 
-    inflation:
+    inflation_layer:
         inflation_radius: 0.4
         cost_scaling_factor: 8
