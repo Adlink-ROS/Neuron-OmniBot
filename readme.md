@@ -42,17 +42,18 @@ Connect all the wire properly according to this diagram: ([click to download](do
 <p align="center"><img src="doc/OmniBot%20wiring.jpg?raw=true" width="500"></p>  
 
 1. <abbr title="Vehicle Dynamic and Motor Controller">VDMC</abbr> <sup>[manual](#reference)</sup>
-    1. connect 12V power from Neuron PSU
+    1. Connect 12V power from Neuron PSU
     2. Connect UART port to MAX232 or any equivilant UART-RS232 bridge chip (**NOTE: some manufacture may have their RX/TX label reversed**)
-    3. connect to Neuron serial port 2
+    3. Setup udev rule to fix ttyUSB with /dev/neurontty.
+    4. Connect VDMC throw /dev/neurontty.
 2. Laser scanner (ex. YDLidar)
     1. USB wire
-    2. 5v power (from SEMA feature connector SB5V is recommand)
+    2. 5v power (from SEMA feature connector SB5V is recommend)
 3. SEMA peripherals (collision detection, state indication LEDs)
     * LEDs: positive to GPIO, Negative to GND
     * switches: across GPIO and GND
-4. Other recommandations
-    * It is recommanded to have your robot's sharp edges wraped
+4. Other recommendations
+    * It is recommended to have your robot's sharp edges wraped
     * DO NOT obstruct the view of laser scanner
     * Your two wifi antennas should be pointing perpendicular(i.e. 90 degrees) to each other
     * ALWAYS put on your balance lead monitor if your using Li-Po batteries
@@ -61,26 +62,26 @@ Connect all the wire properly according to this diagram: ([click to download](do
 1. Install ADLINK SEMA
 Your Neuron Bot should already have proper SEMA installed. Please go to [https://neuron.adlinktech.com](https://neuron.adlinktech.com) if you have any questions.
 
-2. Install ROS kinetic and setup workspace
-	Your Neuron Bot should already have ROS set. If not, you mar refer to [the install guide](http://wiki.ros.org/kinetic/Installation/Ubuntu), and [catkin_ws setup guide](http://wiki.ros.org/catkin/Tutorials/create_a_workspace). Make sure you have environmental path add to .bashrc to save time
+2. Install ROS melodic and setup workspace
+	Your Neuron Bot should already have ROS set. If not, you mar refer to [the install guide](http://wiki.ros.org/melodic/Installation/Ubuntu), and [catkin_ws setup guide](http://wiki.ros.org/catkin/Tutorials/create_a_workspace). Make sure you have environmental path add to .bashrc to save time
 
 3.  Install packages (ubuntu software):
     * ROS stuff
      ```
-    #robot localization
-    sudo apt-get install ros-kinetic-robot-localization 
+    # Robot Localization (EKF)
+    sudo apt-get install ros-melodic-robot-localization 
     
-    #laser slam
-	sudo apt-get install ros-kinetic-gmapping ros-kinetic-slam-gmapping ros-kinetic-scan-tools \
-						 ros-kinetic-navigation # laser slam
+    # Laser SLAM (gmapping)
+	sudo apt-get install ros-melodic-gmapping ros-melodic-slam-gmapping
     
-    #navigation and planning
-    sudo apt-get install ros-kinetic-global-planner \
-           ros-kinetic-dwa-local-planner \
-           ros-kinetic-teb-local-planner ros-kinetic-teb-local-planner-tutorials \
-		   ros-kinetic-eband-local-planner
+    # Navigation Stack
+    	sudo apt-get install ros-melodic-navigation 
+    # Navigation Planner
+    sudo apt-get install ros-melodic-global-planner \
+           ros-melodic-dwa-local-planner \
+           ros-melodic-teb-local-planner ros-melodic-teb-local-planner-tutorials 
      ```
-    * Recommanded
+    * Recommended
         * KATE: text editor (very similar to Notepad++)
         `sudo apt-get install kate`
         * htop: a low-cost system monitor
@@ -102,7 +103,7 @@ Change to any node that uses SEMA library, find the SEMA include library header 
     Note: If you get some error like _`error: no such file as...`_, you'll need to make the setlink.sh executable by `chmod +x setlink.sh` after you've changed the command prompt to that directory.      
 
 5. Compile the source code  
-    Now, we'll use the Catkin, the ROS build management tool to build our nodes. We'll need root access for library linking for anything that uses SEMA. Root access is gained by the second step below. Great power comes with great responsibility, **it is strongly recommanded you to exit root mode** since you can to terrible stuff with that much of power.
+    Now, we'll use the Catkin, the ROS build management tool to build our nodes. We'll need root access for library linking for anything that uses SEMA. Root access is gained by the second step below. Great power comes with great responsibility, **it is strongly recommended you to exit root mode** since you can to terrible stuff with that much of power.
     ```
     cd ~/catkin_ws
     sudo -sE
@@ -113,18 +114,20 @@ Change to any node that uses SEMA library, find the SEMA include library header 
     Clone the YDLidar repository to your roskspace source:
     ```
     cd ~/catkin_ws/src
-    git clone https://github.com/EAIBOT/ydlidar.git
+    git clone https://github.com/Adlink-ROS/ydlidar_ros.git
     ```
-    Setup Laser scanner port (from [YDLidar github](https://github.com/EAIBOT/ydlidar))
+    Setup Laser scanner port (from [YDLidar github](https://github.com/Adlink-ROS/ydlidar_ros.git))
     ```
     roscd ydlidar/startup
-    sudo chmod 777 ./*
+    sudo chmod +x ./*
     sudo sh initenv.sh
     ```
     Build the code by `catkin_make` at ~/catkin_ws.
 7.  Add serial access
-    `sudo adduser ros dialout`
-    You need to logout and login to your computer again afterwards.
+    ```
+    sudo sh init_neuron_tty.sh
+    ```
+    You need to re-plug the USB cable which is connected to the motor controller.
 
 ## Run the demo
 The Neuron Omnibot demo can be divided into four part:

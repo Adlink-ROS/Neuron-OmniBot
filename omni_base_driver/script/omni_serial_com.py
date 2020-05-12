@@ -69,8 +69,9 @@ class OmniSerialCom:
 			raise
 			return
 		
-		# sent start signal
+		# sent pause and start signal
 		self._serialOK = True
+
 		rospy.loginfo("Sending starting signal \"SSSS\"")
 		self.serial.write( "SSSS".encode('ascii') )
 		# time.sleep(0.01)		# for Arduino to reboot
