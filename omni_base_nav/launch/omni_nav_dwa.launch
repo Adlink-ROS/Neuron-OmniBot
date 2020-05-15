@@ -12,18 +12,20 @@
 		<!-- local planner -->   
         <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS"/>      
         <rosparam file="$(find omni_base_nav)/cfg/dwa_local_planner_params.yaml" command="load"/>
-		<remap from="odom" to="/odometry/filtered"/>
+	<!-- <remap from="odom" to="/odometry/filtered"/> -->
 		
         <!-- params for move_base -->
-        <param name="planner_frequency" value="0.5" />
+        <param name="planner_frequency" value="2" />
         <param name="controller_frequency" value="10.0" />
         <param name="controller_patience" value="3.0" />
         <param name="oscillation_timeout" value="5.0" />
         <param name="oscillation_distance" value="0.3" />
-        <param name="clearing_rotation_allowed" value="false" />
+	<param name="clearing_rotation_allowed" value="false" />
+	<param name="recovery_behavior_enabled" value="true" /> 
         <!-- params for costmap layers --> 
         <rosparam file="$(find omni_base_nav)/cfg/local_costmap_params.yaml" command="load"/>
-        <rosparam file="$(find omni_base_nav)/cfg/global_costmap_params.yaml" command="load"/>
+	<rosparam file="$(find omni_base_nav)/cfg/global_costmap_params.yaml" command="load"/>
+	<rosparam file="$(find omni_base_nav)/cfg/recovery_params.yaml" command="load" />
     </node>
 	
 </launch>
