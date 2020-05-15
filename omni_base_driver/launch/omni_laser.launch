@@ -3,7 +3,7 @@
     <param name="port"         type="string" value="/dev/ydlidar"/>  
     <param name="baudrate"     type="int"    value="128000"/>
     <param name="frame_id"     type="string" value="base_laser"/>
-    <param name="reversion"    type="bool"   value="false"/>
+    <param name="reversion"    type="bool"   value="true"/>
     <param name="angle_fixed"  type="bool"   value="true"/>
     <param name="intensities"  type="bool"   value="false"/>
     <param name="angle_min"    type="double" value="-180" />
