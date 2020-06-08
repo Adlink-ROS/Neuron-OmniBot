@@ -5,4 +5,5 @@ service udev reload
 sleep 2
 service udev restart
 
-echo "Successfully initialized"
+status=$?
+[ $status -eq 0 ] && echo "Initialized successfully" || echo "Failed to initilized!"
