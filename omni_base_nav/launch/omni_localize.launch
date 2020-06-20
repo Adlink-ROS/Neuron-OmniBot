@@ -1,10 +1,10 @@
  <launch>
  
 	<!--======== map server ========-->
-	<node name="map_server" pkg="map_server" type="map_server" args="$(find omni_base_slam)/map/square2.yaml">
+	<node name="map_server" pkg="map_server" type="map_server" args="$(find omni_base_slam)/map/map.yaml">
 		<!--<remap from="map" to="map_amcl"/>-->
     </node>
-	<node name="map_server_div2" pkg="map_server" type="map_server" args="$(find omni_base_slam)/map/square2.yaml">
+	<node name="map_server_div2" pkg="map_server" type="map_server" args="$(find omni_base_slam)/map/map.yaml">
 		<remap from="map" to="/map/div2"/>-->
     </node>
 
