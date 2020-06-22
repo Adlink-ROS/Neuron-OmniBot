@@ -131,7 +131,7 @@ Change to any node that uses SEMA library, find the SEMA include library header 
 
 ## Run the demo
 The Neuron Omnibot demo can be divided into four part:
-* [Omnibot IO](#omnibot-driver): motor controller, laser scanner, LED indecators, and servos
+* [Omnibot driver](#aomnibot-driver): motor controller, laser scanner, LED indecators, and servos
 * [SLAM](#blaser-slam): simultaneous localization and mapping
 * [Localization](#crobot-localization): after we build our 2D map
 * [Move!](#dnavigation): Obstacle detecting, planning, trajectory generation, and vehicle control  
