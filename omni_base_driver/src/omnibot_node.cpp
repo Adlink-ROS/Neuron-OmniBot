@@ -200,24 +200,25 @@ namespace omnibot_base
       } ODOM_DATA;
 
       ODOM_DATA *odom_data = (ODOM_DATA *) payload_vector.data();
+
       static bool first_time = true;
       static uint8_t last_seq = 255;
 
-#if 0
       if (first_time)
       {
         last_seq = odom_data->seq;
         first_time = false;
       }
       else if ((uint8_t) (odom_data->seq - last_seq) == 1) {
-        RCLCPP_INFO(this->get_logger(), "odom_data->seq correct %d", odom_data->seq);
+        // RCLCPP_INFO(this->get_logger(), "odom_data->seq correct %d", odom_data->seq);
         last_seq = odom_data->seq;
       }
       else {
-        RCLCPP_INFO(this->get_logger(), "odom_data->seq error %d", odom_data->seq);
+        RCLCPP_WARN(this->get_logger(), "odom_data->seq error %d", odom_data->seq);
+        last_seq = odom_data->seq;
         return;
       }
-#endif
+
       double dx_e = double(CHANGE_ENDIAN_INT16(odom_data->x_e))/10000,
              dy_e = double(CHANGE_ENDIAN_INT16(odom_data->y_e))/10000,
              d_th = double(CHANGE_ENDIAN_INT16(odom_data->th_e))/10000,
@@ -349,9 +350,9 @@ namespace omnibot_base
       imu_msg->angular_velocity_covariance[4] = pow(RADIANS(0.05), 2);
       imu_msg->angular_velocity_covariance[8] = pow(RADIANS(0.05), 2);
 
-      imu_msg->linear_acceleration_covariance[0] = pow(pow(400*10, -6*9.81), 2);
-      imu_msg->linear_acceleration_covariance[4] = pow(pow(400*10, -6*9.81), 2);
-      imu_msg->linear_acceleration_covariance[8] = pow(pow(400*10, -6*9.81), 2);
+      imu_msg->linear_acceleration_covariance[0] = pow(9.81*400*pow(10, -6), 2);
+      imu_msg->linear_acceleration_covariance[4] = pow(9.81*400*pow(10, -6), 2);
+      imu_msg->linear_acceleration_covariance[8] = pow(9.81*400*pow(10, -6), 2);
 
       this->imu_pub->publish(std::move(imu_msg));
     };
