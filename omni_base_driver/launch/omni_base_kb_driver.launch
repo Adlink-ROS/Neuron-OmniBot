@@ -1,8 +1,0 @@
-<launch>
-	
-	<include file="$(find omni_base_driver)/launch/omni_base_driver.launch"/>
- 
-	<node name="keyboard_driver" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" output="screen"/>
-
-  
-</launch>

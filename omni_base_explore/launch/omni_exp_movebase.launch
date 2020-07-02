@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-
-<launch>
-	<!-- for nav -->
-	<include file="$(find omni_base_nav)/launch/omni_nav_dwa.launch"/>
-</launch>

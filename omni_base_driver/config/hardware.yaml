@@ -1,0 +1,21 @@
+ydlidar_node:
+  ros__parameters:
+    port: /dev/ydlidar
+    frame_id: laser_frame
+    ignore_array: ""
+    baudrate: 128000
+    samp_rate: 5
+    resolution_fixed: true
+    singleChannel: false
+    auto_reconnect: true
+    reversion: false
+    isToFLidar: false
+    angle_max: 180.0
+    angle_min: -180.0
+    max_range: 10.0
+    min_range: 0.17
+    frequency: 10.0
+
+robot_state_publisher:
+  ros__parameters:
+    use_tf_static: true

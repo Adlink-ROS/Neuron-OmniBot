@@ -1,0 +1,20 @@
+ydlidar_node:
+        ros__parameters:
+                angle_fixed: true
+                resolution_fixed: true
+                heartbeat: false
+                low_exposure: false
+                baudrate: 115200
+                angle_max: 180.0
+                angle_min: -180.0
+                samp_rate: 4
+                range_max: 16.0
+                range_min: 0.08
+                frequency: 5.0
+                port: /dev/ydlidar
+                frame_id: laser_frame
+
+robot_state_publisher:
+        ros__parameters:
+                use_tf_static: true
+
