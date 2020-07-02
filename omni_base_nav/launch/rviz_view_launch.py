@@ -15,7 +15,7 @@ def generate_launch_description():
     open_rviz = LaunchConfiguration('open_rviz', default='true')
 
     rviz_config_dir = os.path.join(
-            get_package_share_directory('neuronbot2_nav'),
+            get_package_share_directory('omni_base_nav'),
             'rviz',
             'nav2_default_view.rviz')
 
@@ -33,8 +33,8 @@ def generate_launch_description():
 
         Node(
             package='rviz2',
-            executable='rviz2',
-            name='rviz2',
+            node_executable='rviz2',
+            node_name='rviz2',
             arguments=['-d', rviz_config_dir],
             parameters=[{'use_sim_time': use_sim_time}],
             condition=IfCondition(LaunchConfiguration("open_rviz"))
