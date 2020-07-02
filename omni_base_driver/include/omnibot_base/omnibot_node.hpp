@@ -58,10 +58,11 @@ namespace omnibot_base
       double accel_sensitivity = 1.8*9.81; // 2g
       double gyro_sensitivity = RADIANS(250); // 250deg/sec
       bool enable_tf = true;
-      std::string base_id;
-      std::string odom_id;
-      std::string imu_id;
+      std::string odom_topic;
+      std::string imu_topic;
+      std::string base_frame_id;
       std::string odom_frame_id;
+      std::string imu_frame_id;
       std::shared_ptr<base_controller> controller;
       std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster = nullptr;
       rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_sub;

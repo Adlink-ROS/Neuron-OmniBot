@@ -28,11 +28,11 @@ namespace omnibot_base
 
     /* create odom publisher */
     rclcpp::QoS odom_pub_qos(rclcpp::KeepLast(10));
-    this->odom_pub = this->create_publisher<nav_msgs::msg::Odometry>(this->odom_id, odom_pub_qos);
+    this->odom_pub = this->create_publisher<nav_msgs::msg::Odometry>(this->odom_topic, odom_pub_qos);
 
     /* create imu publisher */
     rclcpp::QoS imu_pub_qos(rclcpp::KeepLast(10));
-    this->imu_pub = this->create_publisher<sensor_msgs::msg::Imu>(this->imu_id, imu_pub_qos);
+    this->imu_pub = this->create_publisher<sensor_msgs::msg::Imu>(this->imu_topic, imu_pub_qos);
 
     /*
      * initial base controller
@@ -94,13 +94,15 @@ namespace omnibot_base
         rcl_interfaces::msg::ParameterDescriptor());
     this->declare_parameter("omnibot_node.baseId", "base_link",
         rcl_interfaces::msg::ParameterDescriptor());
-    this->declare_parameter("omnibot_node.odomId", "odom",
+    this->declare_parameter("omnibot_node.odom_topic", "odom",
         rcl_interfaces::msg::ParameterDescriptor());
-    this->declare_parameter("omnibot_node.imuId", "imu",
+    this->declare_parameter("omnibot_node.imu_topic", "imu",
         rcl_interfaces::msg::ParameterDescriptor());
-    this->declare_parameter("omnibot_node.odomFrameId", "odom",
+    this->declare_parameter("omnibot_node.odom_frame_id", "odom",
         rcl_interfaces::msg::ParameterDescriptor());
-    this->declare_parameter("omnibot_node.enable_tf", true,
+    this->declare_parameter("omnibot_node.imu_frame_id", "imu",
+        rcl_interfaces::msg::ParameterDescriptor());        
+    this->declare_parameter("omnibot_node.enable_tf", false,
         rcl_interfaces::msg::ParameterDescriptor());
     this->declare_parameter("omnibot_node.tx_freq", 5,
         rcl_interfaces::msg::ParameterDescriptor());
@@ -109,10 +111,11 @@ namespace omnibot_base
     this->declare_parameter("omnibot_node.omg_gain", this->_omg_gain,
         rcl_interfaces::msg::ParameterDescriptor());
 
-    this->get_parameter("omnibot_node.baseId", this->base_id);
-    this->get_parameter("omnibot_node.odomId", this->odom_id);
-    this->get_parameter("omnibot_node.imuId", this->imu_id);
-    this->get_parameter("omnibot_node.odomFrameId", this->odom_frame_id);
+    this->get_parameter("omnibot_node.baseId", this->base_frame_id);
+    this->get_parameter("omnibot_node.odom_topic", this->odom_topic);
+    this->get_parameter("omnibot_node.imu_topic", this->imu_topic);
+    this->get_parameter("omnibot_node.odom_frame_id", this->odom_frame_id);
+    this->get_parameter("omnibot_node.imu_frame_id", this->imu_frame_id);
     this->get_parameter("omnibot_node.enable_tf", this->enable_tf);
   }
 
@@ -234,7 +237,7 @@ namespace omnibot_base
 
       nav_msgs::msg::Odometry odom_msg;
       odom_msg.header.frame_id = this->odom_frame_id;
-      odom_msg.child_frame_id = this->base_id;
+      odom_msg.child_frame_id = this->base_frame_id;
 #if 0
       RCLCPP_INFO(this->get_logger(), "odom_msg.header.frame_id = %s", odom_msg.header.frame_id.c_str());
 #endif
@@ -274,7 +277,7 @@ namespace omnibot_base
         geometry_msgs::msg::TransformStamped transformStamped;
         transformStamped.header.stamp = now;
         transformStamped.header.frame_id = '/'+this->odom_frame_id;
-        transformStamped.child_frame_id =  '/'+this->base_id;
+        transformStamped.child_frame_id =  '/'+this->base_frame_id;
         transformStamped.transform.translation.x = this->x_e;
         transformStamped.transform.translation.y = this->y_e;
         transformStamped.transform.translation.z = 0.0;
@@ -323,7 +326,7 @@ namespace omnibot_base
       std::unique_ptr<sensor_msgs::msg::Imu> imu_msg =
         std::make_unique<sensor_msgs::msg::Imu>();
 
-      imu_msg->header.frame_id = this->imu_id;
+      imu_msg->header.frame_id = this->imu_frame_id;
 #if 0
       RCLCPP_INFO(this->get_logger(), "imu_msg.header.frame_id = %s", imu_msg->header.frame_id.c_str());
 #endif
