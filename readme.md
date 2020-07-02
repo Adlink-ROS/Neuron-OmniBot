@@ -1,3 +1,16 @@
+
+## ROS 2 Instructions
+
+```
+mkdir -p ~/omnibot_ros2_ws/src
+cd ~/omnibot_ros2_ws/
+wget https://raw.githubusercontent.com/Adlink-ROS/neuron-omnibot_ros2.repos/master/neuron-omnibot_ros2.repos
+vcs import src < neuron-omnibot_ros2.repos
+```
+
+## Note: Below document is for ROS 1
+---
+
 # Neuron Omni Bot
 This is a demo package of Neuron Omni Bot's autonomous and fast integration capability using ROS  
 <p align="center"><img src="doc/Omnibot_bare.jpg?raw=true" height="450"></p>
