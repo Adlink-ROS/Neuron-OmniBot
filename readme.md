@@ -1,5 +1,10 @@
+# Neuron Omni Bot
 
 ## ROS 2 Instructions
+
+1. Install ROS 2 [Eloquent](https://index.ros.org/doc/ros2/Installation/Eloquent/)
+
+2. Git clone this package and others source
 
 ```
 mkdir -p ~/omnibot_ros2_ws/src
@@ -8,10 +13,27 @@ wget https://raw.githubusercontent.com/Adlink-ROS/neuron-omnibot_ros2.repos/mast
 vcs import src < neuron-omnibot_ros2.repos
 ```
 
+3. Install dependencies
+
+```
+cd ~/omnibot_ros2_ws/
+source /opt/ros/eloquent/setup.bash
+rosdep update
+rosdep install --from-paths src --ignore-src -r -y --rosdistro eloquent
+```
+
+4. Colcon build the package
+
+```
+cd ~/omnibot_ros2_ws/
+source /opt/ros/eloquent/setup.bash
+colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
+source ~/omnibot_ros2_ws/install/local_setup.bash
+```
+
+---
 ## Note: Below document is for ROS 1
 ---
-
-# Neuron Omni Bot
 This is a demo package of Neuron Omni Bot's autonomous and fast integration capability using ROS  
 <p align="center"><img src="doc/Omnibot_bare.jpg?raw=true" height="450"></p>
 
