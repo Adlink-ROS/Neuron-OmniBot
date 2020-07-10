@@ -2,6 +2,8 @@
 
 ## ROS 2 Instructions
 
+### Install and Build
+
 1. Install ROS 2 [Eloquent](https://index.ros.org/doc/ros2/Installation/Eloquent/)
 
 2. Git clone this package and others source
@@ -29,6 +31,29 @@ cd ~/omnibot_ros2_ws/
 source /opt/ros/eloquent/setup.bash
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
 source ~/omnibot_ros2_ws/install/local_setup.bash
+```
+
+### Bringup Base Driver
+```
+source /opt/ros/eloquent/setup.bash
+source ~/omnibot_ros2_ws/install/local_setup.bash
+ros2 launch omni_base_driver bringup_launch.py
+```   
+   
+### Bringup Navigation
+
+For each launch command, make sure you have sourced the local_setup.bash from ROS 2 and OmniBot.
+
+**Option 1**: all-in-one
+```
+ros2 launch omni_base_nav bringup_launch.py map:=<full_path_to_your_map_name.yaml> open_rviz:=true
+```
+
+**Option 2**: individual launch files
+```
+ros2 launch omni_base_nav localization_launch.py map:=<full_path_to_your_map_name.yaml>
+ros2 launch omni_base_nav navigation_launch.py
+ros2 launch omni_base_nav rviz_view_launch.py
 ```
 
 ---
