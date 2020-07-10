@@ -11,7 +11,7 @@
 ```
 mkdir -p ~/omnibot_ros2_ws/src
 cd ~/omnibot_ros2_ws/
-wget https://raw.githubusercontent.com/Adlink-ROS/neuron-omnibot_ros2.repos/eloquent-devel/neuron-omnibot_ros2.repos
+wget https://raw.githubusercontent.com/Adlink-ROS/neuron-omnibot_ros2.repos/foxy-devel/neuron-omnibot_ros2.repos
 vcs import src < neuron-omnibot_ros2.repos
 ```
 
@@ -19,23 +19,23 @@ vcs import src < neuron-omnibot_ros2.repos
 
 ```
 cd ~/omnibot_ros2_ws/
-source /opt/ros/eloquent/setup.bash
+source /opt/ros/foxy/setup.bash
 rosdep update
-rosdep install --from-paths src --ignore-src -r -y --rosdistro eloquent
+rosdep install --from-paths src --ignore-src -r -y --rosdistro foxy
 ```
 
 4. Colcon build the package
 
 ```
 cd ~/omnibot_ros2_ws/
-source /opt/ros/eloquent/setup.bash
+source /opt/ros/foxy/setup.bash
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
 source ~/omnibot_ros2_ws/install/local_setup.bash
 ```
 
 ### Bringup Base Driver
 ```
-source /opt/ros/eloquent/setup.bash
+source /opt/ros/foxy/setup.bash
 source ~/omnibot_ros2_ws/install/local_setup.bash
 ros2 launch omni_base_driver bringup_launch.py
 ```   
@@ -55,6 +55,17 @@ ros2 launch omni_base_nav localization_launch.py map:=<full_path_to_your_map_nam
 ros2 launch omni_base_nav navigation_launch.py
 ros2 launch omni_base_nav rviz_view_launch.py
 ```
+
+### Run Navigation and SLAM Simultaneously
+```
+ros2 launch omni_base_nav slam_launch.py
+ros2 launch omni_base_nav navigation_launch.py
+ros2 launch omni_base_nav rviz_view_launch.py
+
+# For saving a map, run below command in **Eloquent** because foxy has some bugs!
+ros2 run nav2_map_server map_saver -f <map_dir>/<map_name>
+```
+
 
 ---
 ## Note: Below document is for ROS 1
