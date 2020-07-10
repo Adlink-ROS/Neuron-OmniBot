@@ -11,7 +11,7 @@
 ```
 mkdir -p ~/omnibot_ros2_ws/src
 cd ~/omnibot_ros2_ws/
-wget https://raw.githubusercontent.com/Adlink-ROS/neuron-omnibot_ros2.repos/master/neuron-omnibot_ros2.repos
+wget https://raw.githubusercontent.com/Adlink-ROS/neuron-omnibot_ros2.repos/eloquent-devel/neuron-omnibot_ros2.repos
 vcs import src < neuron-omnibot_ros2.repos
 ```
 
