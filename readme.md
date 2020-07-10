@@ -62,8 +62,8 @@ Connect all the wire properly according to this diagram: ([click to download](do
 1. Install ADLINK SEMA
 Your Neuron Bot should already have proper SEMA installed. Please go to [https://neuron.adlinktech.com](https://neuron.adlinktech.com) if you have any questions.
 
-2. Install ROS melodic and setup workspace
-	Your Neuron Bot should already have ROS set. If not, you mar refer to [the install guide](http://wiki.ros.org/melodic/Installation/Ubuntu), and [catkin_ws setup guide](http://wiki.ros.org/catkin/Tutorials/create_a_workspace). Make sure you have environmental path add to .bashrc to save time
+2. Install ROS kinetic and setup workspace
+	Your Neuron Bot should already have ROS set. If not, you may refer to [the install guide](http://wiki.ros.org/kinetic/Installation/Ubuntu), and [catkin_ws setup guide](http://wiki.ros.org/catkin/Tutorials/create_a_workspace). Make sure you have environmental path add to .bashrc to save time
 
 3.  Install packages (ubuntu software):
     * ROS stuff
@@ -103,7 +103,7 @@ Change to any node that uses SEMA library, find the SEMA include library header 
     Note: If you get some error like _`error: no such file as...`_, you'll need to make the setlink.sh executable by `chmod +x setlink.sh` after you've changed the command prompt to that directory.      
 
 5. Compile the source code  
-    Now, we'll use the Catkin, the ROS build management tool to build our nodes. We'll need root access for library linking for anything that uses SEMA. Root access is gained by the second step below. Great power comes with great responsibility, **it is strongly recommended you to exit root mode** since you can to terrible stuff with that much of power.
+    Now, we'll use the Catkin, the ROS build management tool to build our nodes. We'll need root access for library linking for anything that uses SEMA. Root access is gained by the second step below. Great power comes with great responsibility, **it is strongly recommanded you to exit root mode** since you can do terrible stuff with that much of power.
     ```
     cd ~/catkin_ws
     sudo -sE
