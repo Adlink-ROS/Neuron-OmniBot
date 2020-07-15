@@ -50,15 +50,15 @@ namespace omnibot_base
 
     try {
       this->controller->init();
-      // "P" signal controller to stop
-      std::string stop_cmd = "P";
-      this->controller->send_cmd(
-          std::vector<uint8_t>(stop_cmd.begin(), stop_cmd.end()), stop_cmd.size());
-
-      // "SSSS" signal controller to reset
-      std::string reset_cmd = "SSSS";
+      // "R" signal controller to reset
+      std::string reset_cmd = "R";
       this->controller->send_cmd(
           std::vector<uint8_t>(reset_cmd.begin(), reset_cmd.end()), reset_cmd.size());
+
+      // "SSSS" signal controller to start
+      std::string start_cmd = "SSSS";
+      this->controller->send_cmd(
+          std::vector<uint8_t>(start_cmd.begin(), start_cmd.end()), start_cmd.size());
 
     } catch (const std::exception& ex) {
       // TODO(YuSheng) open device failed, should we try to recover here ?
@@ -76,10 +76,10 @@ namespace omnibot_base
     RCLCPP_INFO(this->get_logger(), "shutting down OmniBotNode");
     if (this->controller != nullptr)
     {
-      // "P" signal controller to stop
-      std::string stop_cmd = "P";
+      // "R" signal controller to reset
+      std::string reset_cmd = "R";
       this->controller->send_cmd(
-          std::vector<uint8_t>(stop_cmd.begin(), stop_cmd.end()), stop_cmd.size());
+          std::vector<uint8_t>(reset_cmd.begin(), reset_cmd.end()), reset_cmd.size());
       RCLCPP_INFO(this->get_logger(), "deinit the base controller");
       this->controller->deinit();
     }
