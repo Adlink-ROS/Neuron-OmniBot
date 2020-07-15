@@ -59,7 +59,7 @@ def generate_launch_description():
                     node_plugin='omnibot_base::OmniBotNode',
                     node_name='omni_driver',
                     parameters=[{
-                        'omnibot_node.device_port': '/dev/neurontty',
+                        'omnibot_node.device_port': '/dev/ttyS2',
                         'omnibot_node.device_baudrate': 115200,
                         'omnibot_node.odom_topic': 'raw_odom',
                         'omnibot_node.imu_topic': 'imu',
@@ -94,7 +94,7 @@ def generate_launch_description():
                     node_plugin='omnibot_base::OmniBotNode',
                     node_name='omni_driver',
                     parameters=[{
-                        'omnibot_node.device_port': '/dev/neurontty',
+                        'omnibot_node.device_port': '/dev/ttyS2',
                         'omnibot_node.device_baudrate': 115200,
                         'omnibot_node.odom_topic': 'odom',
                         'omnibot_node.imu_topic': 'imu',

@@ -3,8 +3,8 @@ ydlidar_node:
     port: /dev/ydlidar
     frame_id: laser_frame
     ignore_array: ""
-    baudrate: 128000
-    samp_rate: 5
+    baudrate: 230400 # for YDLidar G4
+    samp_rate: 9     # for YDLidar G4
     resolution_fixed: true
     singleChannel: false
     auto_reconnect: true
