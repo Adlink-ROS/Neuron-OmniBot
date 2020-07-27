@@ -135,6 +135,20 @@ namespace omnibot_base
 
         auto buffer = std::vector<uint8_t>(9, 0);
 
+        // limit maximum and minimum speed
+        if (msg->linear.x > 0.5)
+          msg->linear.x = 0.5;
+        else if (msg->linear.x < -0.5)
+          msg->linear.x = -0.5;
+        if (msg->linear.y > 0.5) 
+          msg->linear.y = 0.5;
+        else if (msg->linear.y < -0.5) 
+          msg->linear.y = -0.5;
+        if (msg->angular.z > 0.5)
+          msg->angular.z = 0.5;
+        else if (msg->angular.z < -0.5)
+          msg->angular.z = -0.5;
+
         // float -> int16_t -> uint8_t (big endian)
         vel_x.int16_val = (int16_t) std::max(-32768.0,
             std::min(msg->linear.x * this->_vel_gain, 32768.0));
@@ -224,7 +238,7 @@ namespace omnibot_base
 
       double dx_e = double(CHANGE_ENDIAN_INT16(odom_data->x_e))/10000,
              dy_e = double(CHANGE_ENDIAN_INT16(odom_data->y_e))/10000,
-             d_th = double(CHANGE_ENDIAN_INT16(odom_data->th_e))/10000,
+	     d_th = double(CHANGE_ENDIAN_INT16(odom_data->th_e))/10000,
              vx =  dx_e * cos(this->th + d_th/2) + dy_e * sin(this->th + d_th/2),
              vy = -dx_e * sin(this->th + d_th/2) + dy_e * cos(this->th + d_th/2);
 #if 0
