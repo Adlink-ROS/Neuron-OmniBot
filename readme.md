@@ -1,10 +1,10 @@
-# Neuron Omni Bot
+# Neuron OmniBot
 
 ## ROS 2 Instructions
 
 ### Install and Build
 
-1. Install ROS 2 [Eloquent](https://index.ros.org/doc/ros2/Installation/Eloquent/)
+1. Install ROS 2 [Foxy](https://index.ros.org/doc/ros2/Installation/Foxy/)
 
 2. Git clone this package and others source
 
