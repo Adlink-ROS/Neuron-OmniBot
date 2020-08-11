@@ -31,7 +31,7 @@ def generate_launch_description():
         # YDLidar node
         Node(
             package='ydlidar',
-            node_executable='ydlidar_node',
+            executable='ydlidar_node',
             output='screen',
             parameters=[hardware_config],
         ),
@@ -40,8 +40,8 @@ def generate_launch_description():
         Node(
             condition=IfCondition(use_camera),
             package='realsense_node',
-            node_executable='realsense_node',
-            node_namespace='',
+            executable='realsense_node',
+            namespace='',
             output='screen',
             parameters=[camera_config]
         ),
@@ -49,15 +49,15 @@ def generate_launch_description():
         # If we use EKF:
         ComposableNodeContainer(
             condition=IfCondition(use_ekf),
-            node_name='omni_base_driver',
-            node_namespace='',
+            name='omni_base_driver',
+            namespace='',
             package='rclcpp_components',
-            node_executable='component_container',
+            executable='component_container',
             composable_node_descriptions=[
                 ComposableNode(
                     package='omni_base_driver',
-                    node_plugin='omnibot_base::OmniBotNode',
-                    node_name='omni_driver',
+                    plugin='omnibot_base::OmniBotNode',
+                    name='omni_driver',
                     parameters=[{
                         'omnibot_node.device_port': '/dev/neurontty',
                         'omnibot_node.device_baudrate': 115200,
@@ -75,7 +75,7 @@ def generate_launch_description():
         Node(
             condition=IfCondition(use_ekf),
             package='robot_localization',
-            node_executable='ekf_node',
+            executable='ekf_node',
             output='screen',
             parameters=[ekf_config],
             remappings=[("odometry/filtered", "odom")]
@@ -84,15 +84,15 @@ def generate_launch_description():
         # If we don't use EKF:
         ComposableNodeContainer(
             condition=UnlessCondition(use_ekf),
-            node_name='omni_base_driver',
-            node_namespace='',
+            name='omni_base_driver',
+            namespace='',
             package='rclcpp_components',
-            node_executable='component_container',
+            executable='component_container',
             composable_node_descriptions=[
                 ComposableNode(
                     package='omni_base_driver',
-                    node_plugin='omnibot_base::OmniBotNode',
-                    node_name='omni_driver',
+                    plugin='omnibot_base::OmniBotNode',
+                    name='omni_driver',
                     parameters=[{
                         'omnibot_node.device_port': '/dev/neurontty',
                         'omnibot_node.device_baudrate': 115200,
@@ -111,8 +111,8 @@ def generate_launch_description():
         # Robot state publiser
         Node(
             package='robot_state_publisher',
-            node_executable='robot_state_publisher',
-            node_name='robot_state_publisher',
+            executable='robot_state_publisher',
+            name='robot_state_publisher',
             output='screen',
             arguments=[str(urdf_path)],
             parameters=[hardware_config]
