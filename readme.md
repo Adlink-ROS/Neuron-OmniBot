@@ -33,13 +33,20 @@ colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release
 source ~/omnibot_ros2_ws/install/local_setup.bash
 ```
 
+5. Init TTY for OmniBot and YDLidar
+
+```sh
+cd ~/omnibot_ros2_ws/src/Neuron-OmniBot/init/
+sudo ./omnibot_init.sh
+```
+
 ### Bringup Base Driver
 ```
 source /opt/ros/foxy/setup.bash
 source ~/omnibot_ros2_ws/install/local_setup.bash
 ros2 launch omni_base_driver bringup_launch.py
-```   
-   
+```
+
 ### Bringup Navigation
 
 For each launch command, make sure you have sourced the local_setup.bash from ROS 2 and OmniBot.
@@ -70,7 +77,7 @@ ros2 run nav2_map_server map_saver -f <map_dir>/<map_name>
 ---
 ## Note: Below document is for ROS 1
 ---
-This is a demo package of Neuron Omni Bot's autonomous and fast integration capability using ROS  
+This is a demo package of Neuron Omni Bot's autonomous and fast integration capability using ROS
 <p align="center"><img src="doc/Omnibot_bare.jpg?raw=true" height="450"></p>
 
 ### Features
@@ -93,24 +100,24 @@ This is a demo package of Neuron Omni Bot's autonomous and fast integration capa
 
 # Getting Started
 These instructions will get you a copy of this demo and running on your local machine. If you're unfamiliar with ROS operation, there are some usefull trick you may want to try in the [section below](#useful-tricks) For multiple machine remote control, please visit [multi-machines](#multiple-machines) section below.
-<p align="center"><img src="doc/Neuron%20OmniBot.jpg?raw=true" width="500"></p>  
+<p align="center"><img src="doc/Neuron%20OmniBot.jpg?raw=true" width="500"></p>
 
 ## Prerequisites
-1. Neuron hardware and SEMA library  
+1. Neuron hardware and SEMA library
 You'll need the ADLINK SEMA library and a compatible motherboard to run this example. You can visit [https://neuron.adlinktech.com](https://neuron.adlinktech.com) for more information.
-2. Download the source of this project to your ROS (catkin) workspace  
+2. Download the source of this project to your ROS (catkin) workspace
     ```
     cd catkin_ws/src
     git clone https://github.com/EwingKang/Neuron-OmniBot.git neuron_omnibot
-    ```  
+    ```
 3. Some electronics hardware: 3 LEDs, 3 contact switches, 1 tactile(push) switch
 4. Laser scanner with its corresponding ROS node properly installed.
 5. Wires properly connected (see [hardware setup section](#hardware-setup) below)
 
 ## Installing
-### a) hardware setup 
+### a) hardware setup
 Connect all the wire properly according to this diagram: ([click to download](doc/OmniBot%20wiring.jpg?raw=true))
-<p align="center"><img src="doc/OmniBot%20wiring.jpg?raw=true" width="500"></p>  
+<p align="center"><img src="doc/OmniBot%20wiring.jpg?raw=true" width="500"></p>
 
 1. <abbr title="Vehicle Dynamic and Motor Controller">VDMC</abbr> <sup>[manual](#reference)</sup>
     1. connect 12V power from Neuron PSU
@@ -139,12 +146,12 @@ Your Neuron Bot should already have proper SEMA installed. Please go to [https:/
     * ROS stuff
      ```
     #robot localization
-    sudo apt-get install ros-kinetic-robot-localization 
-    
+    sudo apt-get install ros-kinetic-robot-localization
+
     #laser slam
 	sudo apt-get install ros-kinetic-gmapping ros-kinetic-slam-gmapping ros-kinetic-scan-tools \
 						 ros-kinetic-navigation # laser slam
-    
+
     #navigation and planning
     sudo apt-get install ros-kinetic-global-planner \
            ros-kinetic-dwa-local-planner \
@@ -156,30 +163,30 @@ Your Neuron Bot should already have proper SEMA installed. Please go to [https:/
         `sudo apt-get install kate`
         * htop: a low-cost system monitor
         `sudo apt-get install htop`
-        * serial port terminoa (GUI monitor) 
+        * serial port terminoa (GUI monitor)
         `sudo apt-get install gtkterm`
         * OBS
         * SSH server
 	`sudo apt-get install openssh-server`
-  
 
-4. Set up SEMA soft link
-Change to any node that uses SEMA library, find the SEMA include library header location, and run the auto shell command file. 
+
+4. Set up SEMA soft link (for GPIO)
+Change to any node that uses SEMA library, find the SEMA include library header location, and run the auto shell command file.
     ```
     cd ${project_root}/lib
         e.g.: cd catkin_ws/src/neuron_omnibot/neuron_demo_gpio/lib
     ./setlink.sh
-    ```  
-    Note: If you get some error like _`error: no such file as...`_, you'll need to make the setlink.sh executable by `chmod +x setlink.sh` after you've changed the command prompt to that directory.      
+    ```
+    Note: If you get some error like _`error: no such file as...`_, you'll need to make the setlink.sh executable by `chmod +x setlink.sh` after you've changed the command prompt to that directory.
 
-5. Compile the source code  
+5. Compile the source code
     Now, we'll use the Catkin, the ROS build management tool to build our nodes. We'll need root access for library linking for anything that uses SEMA. Root access is gained by the second step below. Great power comes with great responsibility, **it is strongly recommanded you to exit root mode** since you can to terrible stuff with that much of power.
     ```
     cd ~/catkin_ws
     sudo -sE
     catkin_make
     exit   #exit root mode
-    ```  
+    ```
 6. (If you are using YDLidar)
     Clone the YDLidar repository to your roskspace source:
     ```
@@ -202,16 +209,16 @@ The Neuron Omnibot demo can be divided into four part:
 * [Omnibot IO](#omnibot-driver): motor controller, laser scanner, LED indecators, and servos
 * [SLAM](#blaser-slam): simultaneous localization and mapping
 * [Localization](#crobot-localization): after we build our 2D map
-* [Move!](#dnavigation): Obstacle detecting, planning, trajectory generation, and vehicle control  
+* [Move!](#dnavigation): Obstacle detecting, planning, trajectory generation, and vehicle control
 
-Each of the above function is wraped as a single ROS launch file for user's easy execution. We'll have a step-by-step tutorial below. For each launch file, we'll open a new terminal. You can do that by pressing _`ctrl + alt + t`_  
+Each of the above function is wraped as a single ROS launch file for user's easy execution. We'll have a step-by-step tutorial below. For each launch file, we'll open a new terminal. You can do that by pressing _`ctrl + alt + t`_
 
-### a)OmniBot driver  
-In this section, we'll start our ROS omnibot driver. The driver includes all the IO and sensory device including motor controller, encoder odometry, laser scanner, and IMU state estimation.  
-<p align="center"><img src="doc/screenshots/omni_base_driver.jpg" height="350?raw=true"></p>  
+### a)OmniBot driver
+In this section, we'll start our ROS omnibot driver. The driver includes all the IO and sensory device including motor controller, encoder odometry, laser scanner, and IMU state estimation.
+<p align="center"><img src="doc/screenshots/omni_base_driver.jpg" height="350?raw=true"></p>
 <p align="center"><img src="doc/ROS%20graphs/nodegraph_omni_base_driver.svg" height="150"><img src="doc/ROS%20graphs/frames_omni_base_driver.svg" height="150"></p>
 
-1. roscore  
+1. roscore
 roscore is the core of the ROS as its name suggest. We encourage you to manually start the core on a seperate window because it gives user the power and responsibility to control everything.
     ```
     roscore
@@ -223,7 +230,7 @@ roscore is the core of the ROS as its name suggest. We encourage you to manually
     roslaunch omni_base_driver omni_ekf.launch
     ```
 3. Keyboard controller node
-We use [teleop_twist_keyboard](http://wiki.ros.org/teleop_twist_keyboard) as our manual driver. The default command is a little too fast, so use `x` and `c` to reduce velocity to around 0.3. 
+We use [teleop_twist_keyboard](http://wiki.ros.org/teleop_twist_keyboard) as our manual driver. The default command is a little too fast, so use `x` and `c` to reduce velocity to around 0.3.
     ```
     rosrun teleop_twist_keyboard teleop_twist_keyboard.py
     ```
@@ -238,12 +245,12 @@ We use [teleop_twist_keyboard](http://wiki.ros.org/teleop_twist_keyboard) as our
      rviz -d "/home/ros/catkin_ws/src/neuron_omnibot/omni_base_slam/rviz_config/omni_slam.rviz"
      ```
 
-### b)Laser Slam  
-In this section, we'll build our map with our 2D laser scanner.  
-<p align="center"><img src="doc/screenshots/omni_slam.jpg?raw=true" height="350"></p>  
+### b)Laser Slam
+In this section, we'll build our map with our 2D laser scanner.
+<p align="center"><img src="doc/screenshots/omni_slam.jpg?raw=true" height="350"></p>
 <p align="center"><img src="doc/ROS%20graphs/nodegraph_omni_slam.svg" height="150"><img src="doc/ROS%20graphs/frames_omni_slam.svg" height="150"></p>
- 
-1. Make sure you have everything in the [base driver](#omni-bot-driver)  launched. This includes all the robot TF, motor driver, and laser scanner. 
+
+1. Make sure you have everything in the [base driver](#omni-bot-driver)  launched. This includes all the robot TF, motor driver, and laser scanner.
 3. Setup rviz correctly so we can see everything:
    you can open `($ omni_base_slam)/rviz_config/omni_slam.rviz` manually, or by running the following command:
    ```
@@ -261,13 +268,13 @@ In this section, we'll build our map with our 2D laser scanner.
     A map file(.x)  and a config file (.xxx) will be saved under your user home `~/`, make sure to move both of these files to `($ omni_base_slam)/map/`
 7. Stop the gmapping by `ctrl + c` on the gmapping terminal (terminal of the step.4).
 
-### c)Robot Localization  
+### c)Robot Localization
 After we acquired a static map, it is often that we do not run a SLAM package all the time due to its comutational load. In this step, we'll uses the the AMCL package to help us find the robot's location given previously generated map and current laser scan.
-<p align="center"><img src="doc/screenshots/localize.jpg?raw=true" height="350"></p>  
+<p align="center"><img src="doc/screenshots/localize.jpg?raw=true" height="350"></p>
 <p align="center"><img src="doc/ROS%20graphs/nodegraph_localize.svg" height="150"><img src="doc/ROS%20graphs/frames_localize.svg" height="150"></p>
 
 
-1.  Make sure you have everything in the [base driver](#omni-bot-driver)  launched. This includes all the robot TF, motor driver, and laser scanner. 
+1.  Make sure you have everything in the [base driver](#omni-bot-driver)  launched. This includes all the robot TF, motor driver, and laser scanner.
 2. Setup rviz correctly so we can see everything:
    you can open `($ omni_base_nav)/rviz_config/omni_amcl.rviz` with rviz gui, or by running the following command:
      ```
@@ -291,11 +298,11 @@ After we acquired a static map, it is often that we do not run a SLAM package al
     ```
 
 
-### d)Navigation  
+### d)Navigation
 With OmniBot localized, we can now do our planning. In this demonstratino, we utilize the [move base](http://wiki.ros.org/move_base) structure in the ROS [navigation stack](http://wiki.ros.org/navigation). This is a very textbook and complete structure of such system.
-<p align="center"><img src="doc/screenshots/nav.jpg?raw=true" height="350"></p>  
-<p align="center"><img src="doc/ROS%20graphs/nodegraph_nav.svg" height="150"><img src="doc/ROS%20graphs/frames_nav.svg" height="150"></p>  
-  
+<p align="center"><img src="doc/screenshots/nav.jpg?raw=true" height="350"></p>
+<p align="center"><img src="doc/ROS%20graphs/nodegraph_nav.svg" height="150"><img src="doc/ROS%20graphs/frames_nav.svg" height="150"></p>
+
 1. [base driver](#omni-bot-driver) is started
 2. [localization](#robot-loclization) is initilized
 3. RVIZ is set to `($ omni_base_nav)/rviz_config/omni_nav.rviz`
@@ -306,13 +313,13 @@ With OmniBot localized, we can now do our planning. In this demonstratino, we ut
     roslaunch omni_base_nav omni_nav_eband.launch
     ```
 5. After the planner is started, you should see something like the graph below in the RVIZ. You can choose the "2D nav goal" tools on the top banner of the RVIZ. Click on the map and drage to specify the target orientation. The robot should drive toward the goal by itself.
-<p align="center"><img src="doc/screenshots/nav_arrow.jpg?raw=true" height="350"></p>  
+<p align="center"><img src="doc/screenshots/nav_arrow.jpg?raw=true" height="350"></p>
 The background gray map is the global map, while the colorful blue-pink-red one is the 1.5x1.5 meter local map. The global path is drawn in cyan while the local planner is draw in blue. Different local planner will have different representation.
 
 # Multiple Machines
-Typically, it is not so convenient to have your mouse, keyboard and monitor connect to the robot while the robot move around. Fortunately, ROS is constructed in such a way that running the same ROS across multiple machines is very easy. In fact, there is a [simple official tutorial](http://wiki.ros.org/ROS/Tutorials/MultipleMachines) about it.  
+Typically, it is not so convenient to have your mouse, keyboard and monitor connect to the robot while the robot move around. Fortunately, ROS is constructed in such a way that running the same ROS across multiple machines is very easy. In fact, there is a [simple official tutorial](http://wiki.ros.org/ROS/Tutorials/MultipleMachines) about it.
 The physical Networking can be easily achieved (and expanded) with a single wifi router as shown below:
-<p align="center"><img src="doc/TwoMachines.jpg?raw=true" height="200"></p>  
+<p align="center"><img src="doc/TwoMachines.jpg?raw=true" height="200"></p>
 
 1. First, findout the OmniBot's IP address. This can be done with linux command `ifconfg`.
 2. setup environmental variable. We'll add the variable to the hidden file "**.bashrc**". You can `ctrl+h` to show hidden file, and edit the "**.bashrc**" manually or by following command:
@@ -320,7 +327,7 @@ The physical Networking can be easily achieved (and expanded) with a single wifi
     echo 'export ROS_IP=YOUR_OMNIBOT_IP' >> ~/.bashrc
     echo 'export ROS_MASTER_URI=http://$ROS_IP:11311' >> ~/.bashrc
     ```
-    This step should be done on both station and the OmniBot.  
+    This step should be done on both station and the OmniBot.
 3. Since we don't have monitor nor keyboard connected, everything will be executed remotely. First, Let's make sure our machines can reach each other by
     ```
     ping NeuronBot.local
@@ -339,7 +346,7 @@ The physical Networking can be easily achieved (and expanded) with a single wifi
     byobu
     ```
     now, you can add new terminal with `F2`, switch between terminals with `F3` and `F4`, exit with command `exit`
-6. Run omniBot nodes on the Omni Bot through SSH terminal. 
+6. Run omniBot nodes on the Omni Bot through SSH terminal.
 7. RVIZ and all the other things on the station machine
 8. Play and fun!
 
@@ -352,7 +359,7 @@ The physical Networking can be easily achieved (and expanded) with a single wifi
 ### ROS tools
 * `rqt` ROS - QT, ROS information visualization tools
 * `rostopic`: ROS topic server functions
-    * `rostopic list`  to list all topics 
+    * `rostopic list`  to list all topics
     * `rostopic echo /SOME_TOPIC` to print the topic directly.
 * `rosservice`  : ROS service server functions
 
@@ -373,11 +380,11 @@ The physical Networking can be easily achieved (and expanded) with a single wifi
 This project is licensed under the Apache License, Version 2.0
 
 ## Acknowledgments
-The development of this project is under support and collabration of ADLINK Advanced Robotic Platform Group(ARPG). 
+The development of this project is under support and collabration of ADLINK Advanced Robotic Platform Group(ARPG).
 
 ## future roadmap
 - [ ] Object recgonition and tracking using movidius
 - [ ] Peripheral sensors and robot casing (with fully SEMA integration)
-- [ ] VDMC 
+- [ ] VDMC
     - [ ] On-board Kalman filter with full state omniBot dynamics estimater
     - [ ] High performance nonlinear-dynamic inversion controller
