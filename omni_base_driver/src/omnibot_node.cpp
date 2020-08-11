@@ -34,6 +34,12 @@ namespace omnibot_base
     rclcpp::QoS imu_pub_qos(rclcpp::KeepLast(10));
     this->imu_pub = this->create_publisher<sensor_msgs::msg::Imu>(this->imu_topic, imu_pub_qos);
 
+    // Reset VDMC port
+    auto ret = system("echo \"R\" > /dev/neurontty");
+    if (ret) {
+      // do nothing, it's used to ignore the compiler warnings
+    }
+
     /*
      * initial base controller
      * TODO(YuSheng) If there are more controller type,
@@ -101,7 +107,7 @@ namespace omnibot_base
     this->declare_parameter("omnibot_node.odom_frame_id", "odom",
         rcl_interfaces::msg::ParameterDescriptor());
     this->declare_parameter("omnibot_node.imu_frame_id", "imu",
-        rcl_interfaces::msg::ParameterDescriptor());        
+        rcl_interfaces::msg::ParameterDescriptor());
     this->declare_parameter("omnibot_node.enable_tf", false,
         rcl_interfaces::msg::ParameterDescriptor());
     this->declare_parameter("omnibot_node.tx_freq", 5,
@@ -140,9 +146,9 @@ namespace omnibot_base
           msg->linear.x = 0.5;
         else if (msg->linear.x < -0.5)
           msg->linear.x = -0.5;
-        if (msg->linear.y > 0.5) 
+        if (msg->linear.y > 0.5)
           msg->linear.y = 0.5;
-        else if (msg->linear.y < -0.5) 
+        else if (msg->linear.y < -0.5)
           msg->linear.y = -0.5;
         if (msg->angular.z > 0.5)
           msg->angular.z = 0.5;
@@ -175,8 +181,8 @@ namespace omnibot_base
     // TODO(YuSheng) Should set deadline qos and it's callback
     this->cmd_vel_sub = this->create_subscription<geometry_msgs::msg::Twist>
       ("cmd_vel", 10, cmd_vel_cb);
-    
-    auto cmd_vel_timout_cb = 
+
+    auto cmd_vel_timout_cb =
       [this]() -> void
       {
         // union to convert endian
@@ -306,7 +312,7 @@ namespace omnibot_base
 #if 0
       // when received odom
       RCLCPP_INFO(this->get_logger(), "received odom data.buffer len = %d", payload_vector.size());
-      RCLCPP_INFO(this->get_logger(), "x_e= %x, y_e= %x", 
+      RCLCPP_INFO(this->get_logger(), "x_e= %x, y_e= %x",
         CHANGE_ENDIAN_INT16(odom_data->x_e), CHANGE_ENDIAN_INT16(odom_data->y_e));
       RCLCPP_INFO(this->get_logger(), "dx_e= %f, dy_e= %f ", dx_e, dy_e);
       RCLCPP_INFO(this->get_logger(), "position x= %f, y= %f", this->x_e, this->y_e);
