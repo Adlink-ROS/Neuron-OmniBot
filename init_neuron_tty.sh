@@ -9,7 +9,7 @@ else
     exit 1
 fi
 
-# Trgiier udev
+# Trigger udev
 sudo udevadm control --reload
 sudo udevadm trigger
 status=$?
